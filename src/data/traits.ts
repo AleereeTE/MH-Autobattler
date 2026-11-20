@@ -15,7 +15,9 @@ export type TraitEffect =
   /** Les coups des unités du trait ralentissent la cible (Glace). */
   | { readonly kind: 'chill'; readonly attackSpeedPercent: number; readonly duration: number }
   /** Un éclair frappe régulièrement un ennemi au hasard (Foudre). */
-  | { readonly kind: 'lightning'; readonly damage: number; readonly interval: number };
+  | { readonly kind: 'lightning'; readonly damage: number; readonly interval: number }
+  /** Tant qu'une unité du trait est en vie, les ennemis infligent moins de dégâts (Dragon noir : 0,15 = −15 %). */
+  | { readonly kind: 'terror'; readonly enemyDamageReduction: number };
 
 export interface TraitTier {
   /** Nombre d'unités différentes nécessaire. */
@@ -74,6 +76,40 @@ export const TRAITS: readonly TraitDefinition[] = [
     tiers: [
       { count: 2, effect: { kind: 'statBonus', bonus: { attackPercent: 0.15 } }, description: '+15 % d’attaque brute' },
       { count: 3, effect: { kind: 'statBonus', bonus: { attackPercent: 0.3 } }, description: '+30 % d’attaque brute' },
+    ],
+  },
+  {
+    id: 'water',
+    name: 'Eau',
+    category: 'element',
+    tiers: [
+      {
+        count: 2,
+        effect: { kind: 'statBonus', bonus: { lifeSourceRatio: 0.15 } },
+        description: 'Source de vie : les unités Eau soignent l’allié le plus blessé de 15 % des dégâts qu’elles infligent',
+      },
+      {
+        count: 3,
+        effect: { kind: 'statBonus', bonus: { lifeSourceRatio: 0.3 } },
+        description: 'Source de vie : les unités Eau soignent l’allié le plus blessé de 30 % des dégâts qu’elles infligent',
+      },
+    ],
+  },
+  {
+    id: 'dragon',
+    name: 'Dragon',
+    category: 'element',
+    tiers: [
+      {
+        count: 2,
+        effect: { kind: 'statBonus', bonus: { lowHpDamageBonus: 0.2 } },
+        description: 'Rage draconique : +20 % de dégâts pour les unités Dragon sous 50 % de leurs PV',
+      },
+      {
+        count: 3,
+        effect: { kind: 'statBonus', bonus: { lowHpDamageBonus: 0.4 } },
+        description: 'Rage draconique : +40 % de dégâts pour les unités Dragon sous 50 % de leurs PV',
+      },
     ],
   },
   {
@@ -137,6 +173,52 @@ export const TRAITS: readonly TraitDefinition[] = [
     tiers: [
       { count: 2, effect: { kind: 'statBonus', bonus: { attackSpeedPercent: 0.15 } }, description: '+15 % de vitesse d’attaque' },
       { count: 3, effect: { kind: 'statBonus', bonus: { attackSpeedPercent: 0.3 } }, description: '+30 % de vitesse d’attaque' },
+    ],
+  },
+  {
+    id: 'elder-dragon',
+    name: 'Dragon ancien',
+    category: 'secondary',
+    restrictedTo: 'monster',
+    tiers: [
+      {
+        count: 1,
+        effect: { kind: 'statBonus', bonus: { startingEnergyRatio: 0.4 } },
+        description: 'Calamité : les Dragons anciens commencent le combat avec 40 % de leur énergie',
+      },
+      {
+        count: 2,
+        effect: { kind: 'statBonus', bonus: { startingEnergyRatio: 0.7 } },
+        description: 'Calamité : les Dragons anciens commencent le combat avec 70 % de leur énergie',
+      },
+      {
+        count: 3,
+        effect: { kind: 'statBonus', bonus: { startingEnergyRatio: 1 } },
+        description: 'Calamité : les Dragons anciens commencent le combat avec toute leur énergie',
+      },
+    ],
+  },
+  {
+    id: 'black-dragon',
+    name: 'Dragon noir',
+    category: 'secondary',
+    restrictedTo: 'monster',
+    tiers: [
+      {
+        count: 1,
+        effect: { kind: 'terror', enemyDamageReduction: 0.15 },
+        description: 'Terreur : tant qu’un Dragon noir est en vie, tous les ennemis infligent −15 % de dégâts',
+      },
+      {
+        count: 2,
+        effect: { kind: 'terror', enemyDamageReduction: 0.25 },
+        description: 'Terreur : tant qu’un Dragon noir est en vie, tous les ennemis infligent −25 % de dégâts',
+      },
+      {
+        count: 3,
+        effect: { kind: 'terror', enemyDamageReduction: 0.35 },
+        description: 'Terreur : tant qu’un Dragon noir est en vie, tous les ennemis infligent −35 % de dégâts',
+      },
     ],
   },
 ];

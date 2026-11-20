@@ -19,4 +19,6 @@ export const BALANCE = {
   maxDamageReduction: 0.75,
   /** ⚠️ Un ralentissement ne peut pas descendre sous 25 % de la vitesse d'attaque. */
   minAttackSpeedMultiplier: 0.25,
+  /** ✅ Rage draconique : bonus de dégâts sous 50 % des PV. */
+  rageHpThreshold: 0.5,
 } as const;

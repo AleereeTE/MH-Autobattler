@@ -77,7 +77,12 @@ function readTheme(element: Element): BoardTheme {
       3: color('--cost-3'),
       4: color('--cost-4'),
       5: color('--cost-5'),
+      6: color('--cost-6'),
     },
+    prismatic: color('--prismatic')
+      .split(',')
+      .map((stop) => stop.trim())
+      .filter((stop) => stop.length > 0),
     ranks: {
       1: color('--rank-1'),
       2: color('--rank-2'),

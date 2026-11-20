@@ -5,13 +5,13 @@
 
 ## Périmètre
 
-- **12 unités** : 6 chasseurs, 6 monstres, coûts 1 à 3.
-- **4 traits d'élément** : Feu, Foudre, Glace, Sans élément (3 unités chacun).
-- **5 traits secondaires** : Guilde, Berserker, Bastion, Catalyseur, Wyverne volante.
+- **23 unités** : 8 chasseurs, 15 monstres (dont 3 Dragons anciens au coût 5 et 3 Dragons noirs au coût 6), coûts 1 à 6.
+- **6 traits d'élément** : Feu (5 unités), Foudre, Glace et Dragon (4 chacun), Sans élément et Eau (3 chacun).
+- **7 traits secondaires** : Guilde, Berserker, Bastion, Catalyseur, Wyverne volante, Dragon ancien, Dragon noir.
 - **8 matériaux**, **8 objets avec effet propre**, et une fusion générique pour les 28 autres combinaisons.
 - **Mode bac à sable** : composition libre des deux camps, escouades ennemies prédéfinies, replay du combat et statistiques par unité mises à jour en direct pendant le replay (le résultat n'est annoncé qu'à la fin).
 
-Plus tard : unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon, nouveaux traits. Les traits de certaines unités pourront changer.
+Plus tard : autres unités (armes restantes, monstres, Dragons anciens), nouveaux traits. Les traits de certaines unités pourront changer.
 
 ---
 
@@ -33,6 +33,17 @@ Les noms des chasseurs sont provisoires. Les valeurs « a/b/c » des compétence
 | Rathalos | Monstre | DPS | Feu | Wyverne volante, Catalyseur | 3 | 3 | **Boule de feu** : 120/180/270 + 250 % puiss. élém. sur la cible et ses voisins |
 | Odette (Corne de chasse) | Chasseur | Support | Feu | Guilde | 2 | 2 | **Mélodie de soin** : soigne de 80/120/180 + 200 % puiss. élém. les alliés à 2 cases ou moins |
 | Legiana | Monstre | Support | Glace | Wyverne volante, Catalyseur | 3 | 3 | **Vent glacial** : 70/105/160 + 160 % puiss. élém. sur la cible et ses voisins, −30 % de vitesse d'attaque pendant 3 s |
+| Zinogre | Monstre | Bruiser | Foudre | Berserker | 4 | 1 | **Supercharge** : bondit sur la cible, 100/150/225 + 220 % puiss. élém. sur elle et ses voisins |
+| Deviljho | Monstre | Bruiser | Dragon | Berserker | 4 | 1 | **Souffle draconique** : 110/165/250 + 200 % puiss. élém. sur la cible et ses voisins |
+| Mizutsune | Monstre | Support | Eau | Catalyseur | 4 | 3 | **Danse des bulles** : soigne de 120/180/270 + 220 % puiss. élém. les alliés à 2 cases ou moins |
+| Brann (Lancecanon) | Chasseur | Tank | Dragon | Guilde, Bastion | 4 | 1 | **Canon de wyverne** : 100/150/225 + 150 % puiss. élém. aux ennemis adjacents, puis bouclier de 150/225/340 + 15 % des PV max pendant 4 s |
+| Ondine (Morpho-hache) | Chasseur | Bruiser | Eau | Guilde | 4 | 1 | **Décharge élémentaire** : incantation de 1 s, puis 150/225/340 + 250 % puiss. élém. sur la cible |
+| Teostra | Monstre | Bruiser | Feu | Dragon ancien | 5 | 1 | **Supernova** : incantation de 1,5 s, puis 250/375/565 + 350 % puiss. élém. aux ennemis à 2 cases ou moins |
+| Namielle | Monstre | Support | Eau | Dragon ancien, Catalyseur | 5 | 3 | **Marée luminescente** : 150/225/340 + 250 % puiss. élém. sur la cible et les ennemis à 2 cases d'elle, et soigne les alliés à 2 cases de 100/150/225 + 150 % puiss. élém. |
+| Safi'jiiva | Monstre | DPS | Dragon | Dragon ancien | 5 | 3 | **Rayon draconique** : 220/330/495 + 300 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
+| Fatalis | Monstre | Bruiser | Dragon | Dragon noir | 6 | 1 | **Souffle du Fatalis** : incantation de 1,5 s, puis 300/450/675 + 400 % puiss. élém. sur la cible et les ennemis à 2 cases d'elle |
+| Alatreon | Monstre | DPS | Glace | Dragon noir | 6 | 3 | **Jugement d'Escaton** : incantation de 2 s, puis 220/330/495 + 280 % puiss. élém. à tous les ennemis, et −30 % de vitesse d'attaque pendant 3 s |
+| Dire Miralis | Monstre | Tank | Feu | Dragon noir | 6 | 1 | **Éruption** : 200/300/450 + 250 % puiss. élém. aux ennemis à 2 cases ou moins, puis bouclier de 400/600/900 + 20 % des PV max pendant 5 s |
 
 ### Rangs ★
 
@@ -44,7 +55,7 @@ Règle validée (voir [game-design.md](game-design.md), section 3.4) : PV et att
 
 ## Traits
 
-Paliers : 2 et 3 unités, sauf la Guilde (2 et 4). ⚠️ Comme dans TFT, deux exemplaires de la même unité ne comptent qu'une fois.
+Paliers : 2 et 3 unités, sauf la Guilde (2 et 4), Dragon ancien et Dragon noir (1, 2 et 3). ⚠️ Comme dans TFT, deux exemplaires de la même unité ne comptent qu'une fois.
 
 ### Éléments (mécanique propre à chaque élément)
 
@@ -54,6 +65,8 @@ Paliers : 2 et 3 unités, sauf la Guilde (2 et 4). ⚠️ Comme dans TFT, deux e
 | Foudre | Toutes les 4 s, un éclair frappe un ennemi au hasard (80 dégâts élémentaires) | Toutes les 3 s, 150 dégâts |
 | Glace | Les coups des unités Glace réduisent la vitesse d'attaque de la cible de 20 % pendant 2 s | −35 % |
 | Sans élément | +15 % d'attaque brute pour les unités sans élément | +30 % |
+| Eau (Source de vie) | Les unités Eau soignent l'allié le plus blessé de 15 % des dégâts qu'elles infligent | 30 % |
+| Dragon (Rage draconique) | Les unités Dragon infligent +20 % de dégâts quand leurs PV sont sous 50 % | +40 % |
 
 ### Traits secondaires
 
@@ -64,6 +77,10 @@ Paliers : 2 et 3 unités, sauf la Guilde (2 et 4). ⚠️ Comme dans TFT, deux e
 | Bastion | — | (2) −15 % de dégâts subis | (3) −30 % |
 | Catalyseur | — | (2) +20 puissance élémentaire | (3) +45 |
 | Wyverne volante | Monstres | (2) +15 % de vitesse d'attaque | (3) +30 % |
+| Dragon ancien (Calamité) | Monstres | (1) Les Dragons anciens commencent le combat avec 40 % de leur énergie | (2) 70 % · (3) 100 % |
+| Dragon noir (Terreur) | Monstres | (1) Tant qu'un Dragon noir est en vie, tous les ennemis infligent −15 % de dégâts | (2) −25 % · (3) −35 % |
+
+⚠️ Source de vie : « l'allié le plus blessé » est celui qui a le plus petit pourcentage de PV (l'unité elle-même comprise) ; seuls les attaques et les compétences des unités Eau comptent.
 
 Pour la Wyverne volante, c'est l'option « vitesse d'attaque » qui a été retenue pour l'instant. L'esquive reste possible plus tard.
 
@@ -124,16 +141,21 @@ Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. �
 | Relance | 2 zennys (gratuite au début de chaque tour) |
 | Amélioration de la boutique | 2→3 : 4 · 3→4 : 8 · 4→5 : 12 · 5→6 : 20 · 6→7 : 28 · 7→8 : 36 · 8→9 : 48 |
 | Revente | Coût × exemplaires : ★1 = coût, ★2 = 3 × coût, ★3 = 9 × coût |
-| Exemplaires par unité | Coût 1 : 18 · coût 2 : 15 · coût 3 : 12 |
+| Exemplaires par unité | Coût 1 : 18 · coût 2 : 15 · coût 3 : 12 · coût 4 : 10 · coût 5 : 8 · coût 6 : 3 (validé) |
 | Réserve | 10 places (validé) |
 
-### Probabilités de la boutique (coût 1 / 2 / 3)
+### Probabilités de la boutique (en %)
 
-| Niveau | 1-2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-|---|---|---|---|---|---|---|---|---|
-| % | 100 / 0 / 0 | 75 / 25 / 0 | 55 / 35 / 10 | 45 / 40 / 15 | 35 / 40 / 25 | 25 / 40 / 35 | 20 / 35 / 45 | 15 / 35 / 50 |
-
-Les unités de coût 4 et 5 n'existent pas encore : la table sera complétée avec elles.
+| Niveau | Coût 1 | Coût 2 | Coût 3 | Coût 4 | Coût 5 | Coût 6 |
+|---|---|---|---|---|---|---|
+| 1-2 | 100 | 0 | 0 | 0 | 0 | 0 |
+| 3 | 75 | 25 | 0 | 0 | 0 | 0 |
+| 4 | 55 | 30 | 15 | 0 | 0 | 0 |
+| 5 | 45 | 33 | 20 | 2 | 0 | 0 |
+| 6 | 30 | 40 | 25 | 5 | 0 | 0 |
+| 7 | 19 | 30 | 35 | 15 | 1 | 0 |
+| 8 | 18 | 25 | 32 | 22 | 3 | 0 |
+| 9 | 10 | 20 | 25 | 33 | 9 | 3 (validé) |
 
 ### Ennemis
 
@@ -142,10 +164,11 @@ Les unités de coût 4 et 5 n'existent pas encore : la table sera complétée av
 | Budget de la chasse n | 2 + 1,25 × (n − 1), arrondi à l'inférieur (2 à la chasse 1, 12 à la chasse 9, 38 à la chasse 30) |
 | Valeur d'un monstre | Coût × exemplaires : ★1 = coût, ★2 = 3 × coût, ★3 = 9 × coût |
 | Nombre de monstres | 2 + 1 toutes les 4 chasses, 8 au maximum |
-| Monstres possibles | Stage 1 : coût 1 et 2, rang ★2 au maximum · stages 2 et 3 : coût 1 à 3, rang ★3 au maximum |
+| Monstres possibles | Stage 1 : coût 1 et 2, rang ★2 au maximum · stages 2 et 3 : coût 1 à 4, rang ★3 au maximum (jamais de Dragon ancien hors boss) |
 | Utilisation du budget | D'abord recruter des monstres au hasard jusqu'au nombre maximum, puis monter leur rang avec ce qui reste |
 | Placement | Tanks et bruisers devant (rangées 3 puis 2), DPS et supports derrière (rangées 0 puis 1) |
-| Boss (chasses 10, 20, 30) | Un monstre de coût 3 au ★3, plus une escorte générée avec le budget de la chasse (une place de moins) |
+| Boss (chasses 10 et 20) | Un monstre de coût 3 au ★3, plus une escorte générée avec le budget de la chasse (une place de moins) |
+| Boss (chasse 30) | Un Dragon ancien au ★2, plus une escorte générée de la même façon ; 15 % de chances que ce soit plutôt un Dragon noir au ★1 |
 
 ### Récompenses (1 parmi 3)
 

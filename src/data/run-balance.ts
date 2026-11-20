@@ -34,23 +34,23 @@ export const ECONOMY = {
   levelUpCosts: { 2: 4, 3: 8, 4: 12, 5: 20, 6: 28, 7: 36, 8: 48 } as Readonly<Partial<Record<number, number>>>,
 } as const;
 
-/** ⚠️ Exemplaires de chaque unité dans le stock commun, selon son coût (coûts 4 et 5 : à venir). */
-export const COPIES_BY_COST: Readonly<Partial<Record<UnitCost, number>>> = { 1: 18, 2: 15, 3: 12 };
+/** ⚠️ Exemplaires de chaque unité dans le stock commun, selon son coût. */
+export const COPIES_BY_COST: Readonly<Partial<Record<UnitCost, number>>> = { 1: 18, 2: 15, 3: 12, 4: 10, 5: 8, 6: 3 };
 
 /**
- * ⚠️ Probabilités (en %) de chaque coût dans la boutique, selon son niveau : [coût 1, coût 2, coût 3].
- * Les unités de coût 4 et 5 n'existent pas encore.
+ * ⚠️ Probabilités (en %) de chaque coût dans la boutique, selon son niveau : [coût 1, 2, 3, 4, 5, 6].
+ * ✅ Les Dragons noirs (coût 6) n'apparaissent qu'au niveau 9, à 3 %.
  */
 export const SHOP_ODDS: Readonly<Record<number, readonly number[]>> = {
-  1: [100, 0, 0],
-  2: [100, 0, 0],
-  3: [75, 25, 0],
-  4: [55, 35, 10],
-  5: [45, 40, 15],
-  6: [35, 40, 25],
-  7: [25, 40, 35],
-  8: [20, 35, 45],
-  9: [15, 35, 50],
+  1: [100, 0, 0, 0, 0, 0],
+  2: [100, 0, 0, 0, 0, 0],
+  3: [75, 25, 0, 0, 0, 0],
+  4: [55, 30, 15, 0, 0, 0],
+  5: [45, 33, 20, 2, 0, 0],
+  6: [30, 40, 25, 5, 0, 0],
+  7: [19, 30, 35, 15, 1, 0],
+  8: [18, 25, 32, 22, 3, 0],
+  9: [10, 20, 25, 33, 9, 3],
 };
 
 /** ⚠️ Génération des escouades ennemies. */
@@ -62,13 +62,29 @@ export const ENEMY_BUDGET = {
   startUnits: 2,
   huntsPerExtraUnit: 4,
   maxUnits: 8,
-  /** Coût et rang maximum des monstres, par stage (1, 2, 3). */
-  maxCostByStage: [2, 3, 3] as readonly UnitCost[],
+  /** Coût et rang maximum des monstres, par stage (1, 2, 3). Les Dragons anciens (coût 5) ne sont que des boss. */
+  maxCostByStage: [2, 4, 4] as readonly UnitCost[],
   maxRankByStage: [2, 3, 3] as readonly number[],
-  /** Boss : un monstre de ce coût, à ce rang, plus une escorte. */
-  bossCost: 3 as UnitCost,
-  bossRank: 3,
 } as const;
+
+/** Boss : un monstre tiré parmi ceux qui ont ce coût (ou ce trait), à ce rang. */
+export interface BossRule {
+  readonly cost?: UnitCost;
+  readonly trait?: string;
+  readonly rank: number;
+  /** Boss plus rare, tiré à la place du boss habituel avec cette probabilité. */
+  readonly rare?: BossRule & { readonly chance: number };
+}
+
+/**
+ * ⚠️ Boss de chaque stage (plus une escorte).
+ * ✅ Le boss du stage 3 est un Dragon ancien, ou parfois un Dragon noir (⚠️ 15 % de chances).
+ */
+export const BOSSES_BY_STAGE: readonly BossRule[] = [
+  { cost: 3, rank: 3 },
+  { cost: 3, rank: 3 },
+  { trait: 'elder-dragon', rank: 2, rare: { trait: 'black-dragon', rank: 1, chance: 0.15 } },
+];
 
 /** ⚠️ Récompenses (1 parmi 3) ; quantités multipliées après un boss. */
 export const REWARDS = {

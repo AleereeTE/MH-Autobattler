@@ -39,13 +39,45 @@ describe('escouades ennemies', () => {
     for (const placement of squad) expect(placement.position.row).toBeLessThanOrEqual(3);
   });
 
-  it('donne au boss un monstre de coût 3 au ★3, avec une escorte', () => {
-    for (const hunt of [10, 20, 30]) {
+  it('donne aux boss des stages 1 et 2 un monstre de coût 3 au ★3, avec une escorte', () => {
+    for (const hunt of [10, 20]) {
       const squad = generateSquad(hunt, createRng(hunt));
       expect(squad[0]).toMatchObject({ rank: 3 });
       expect(squad[0]?.unit.cost).toBe(3);
       expect(squad.length).toBeGreaterThan(1);
     }
+  });
+
+  it('fait du boss du stage 3 un Dragon ancien ★2, ou parfois (15 %) un Dragon noir ★1', () => {
+    let blackDragons = 0;
+    for (let seed = 1; seed <= 400; seed++) {
+      const boss = generateSquad(30, createRng(seed))[0];
+      if (boss?.unit.traits.includes('black-dragon')) {
+        blackDragons += 1;
+        expect(boss.rank).toBe(1);
+      } else {
+        expect(boss?.unit.traits).toContain('elder-dragon');
+        expect(boss?.rank).toBe(2);
+      }
+    }
+    expect(blackDragons / 400).toBeGreaterThan(0.1);
+    expect(blackDragons / 400).toBeLessThan(0.2);
+  });
+
+  it('peut mettre des monstres de coût 4 aux stages 2 et 3, mais jamais de Dragon ancien hors boss', () => {
+    const costs = new Set<number>();
+    for (let hunt = 11; hunt <= 29; hunt++) {
+      if (hunt === 20) continue;
+      for (const seed of [1, 2, 3]) {
+        for (const placement of generateSquad(hunt, createRng(seed * 100 + hunt))) {
+          costs.add(placement.unit.cost);
+          expect(placement.unit.traits).not.toContain('elder-dragon');
+          expect(placement.unit.traits).not.toContain('black-dragon');
+        }
+      }
+    }
+    expect(costs.has(4)).toBe(true);
+    expect(costs.has(5)).toBe(false);
   });
 
   it('donne la même escouade avec la même graine', () => {

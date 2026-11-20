@@ -23,6 +23,9 @@
   --cost-3: #2f74c0;
   --cost-4: #8e4cc2;
   --cost-5: #d0a32a;
+  /* Coût 6 (Dragons noirs) : fond prismatique ; --cost-6 sert si le dégradé n'est pas disponible. */
+  --cost-6: #b48cff;
+  --prismatic: #ff5f6d, #ffb347, #ffe66d, #6ee7a8, #5ec8ff, #8f7bff, #e070ff;
 
   /* Étoiles de rang sur les jetons : bronze, argent, or. */
   --rank-1: #c98a4b;
@@ -39,7 +42,8 @@
   --element-water: #2f8fd6;
   --element-thunder: #e3b81c;
   --element-ice: #5fc4dc;
-  --element-dragon: #7d4bb3;
+  /* Rouge sombre (fléau du dragon) : distinct du fond violet des unités de coût 4. */
+  --element-dragon: #8c1d33;
   --element-none: #8c8577;
 
   color-scheme: light;
@@ -74,6 +78,9 @@
     --area-heal: #57c178;
     --area-shield: #b9c9da;
     --area-buff: #e3b81c;
+
+    /* Un peu plus clair pour rester visible sur fond sombre. */
+    --element-dragon: #b8304a;
 
     color-scheme: dark;
   }
@@ -661,6 +668,9 @@ details {
 .cost-5 {
   background-color: var(--cost-5);
 }
+.cost-6 {
+  background: conic-gradient(from 0deg, #ff5f6d, #ffb347, #ffe66d, #6ee7a8, #5ec8ff, #8f7bff, #e070ff, #ff5f6d);
+}
 
 /* Réserve */
 .bench-slots {
@@ -784,6 +794,9 @@ details {
 }
 .cost-border-5 {
   border-top-color: var(--cost-5);
+}
+.cost-border-6 {
+  border-image: linear-gradient(90deg, #ff5f6d, #ffb347, #ffe66d, #6ee7a8, #5ec8ff, #8f7bff, #e070ff) 1;
 }
 
 /* Inventaire */

@@ -9,6 +9,9 @@ export interface CombatStats extends Stats {
   readonly energyRefundOnCast: number;
   readonly attackSpeedRampPerSecond: number;
   readonly attackSpeedRampMax: number;
+  readonly lifeSourceRatio: number;
+  readonly lowHpDamageBonus: number;
+  readonly startingEnergyRatio: number;
 }
 
 type NumericKey = Exclude<keyof StatBonus, 'skillsCanCrit'>;
@@ -31,6 +34,9 @@ const NUMERIC_KEYS: readonly NumericKey[] = [
   'energyRefundOnCast',
   'attackSpeedRampPerSecond',
   'attackSpeedRampMax',
+  'lifeSourceRatio',
+  'lowHpDamageBonus',
+  'startingEnergyRatio',
 ];
 
 /** Additionne plusieurs bonus, champ par champ. */
@@ -75,5 +81,8 @@ export function computeCombatStats(base: Stats, bonuses: readonly StatBonus[]): 
     energyRefundOnCast: b.energyRefundOnCast,
     attackSpeedRampPerSecond: b.attackSpeedRampPerSecond,
     attackSpeedRampMax: b.attackSpeedRampMax,
+    lifeSourceRatio: b.lifeSourceRatio,
+    lowHpDamageBonus: b.lowHpDamageBonus,
+    startingEnergyRatio: Math.min(1, Math.max(0, b.startingEnergyRatio)),
   };
 }

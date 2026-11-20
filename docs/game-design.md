@@ -26,7 +26,7 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 | Longueur | 30 chasses réparties en 3 stages |
 | Un stage | 9 chasses classiques, puis 1 boss |
 | Boss des stages 1 et 2 | Tiré au hasard parmi plusieurs grands monstres |
-| Boss du stage 3 | Tiré au hasard parmi plusieurs Dragons anciens |
+| Boss du stage 3 | Tiré au hasard parmi plusieurs Dragons anciens ; avec un peu de chance (ou de malchance), un Dragon noir |
 | Carte | À chaque étape, le joueur choisit entre 2 ou 3 chasses |
 | Durée visée | 45 à 60 minutes |
 | Défaite de la run | 3 combats perdus (chasses classiques et boss confondus) |
@@ -115,7 +115,7 @@ La vitesse de déplacement est identique pour toutes les unités.
 
 ### 3.4 Coût, exemplaires et rangs
 
-- Chaque unité coûte de **1 à 5 zennys**.
+- Chaque unité coûte de **1 à 5 zennys**, sauf les **Dragons noirs** (Fatalis, Alatreon, Dire Miralis) qui coûtent **6 zennys** : très difficiles à obtenir (boutique au niveau 9 seulement, 3 exemplaires chacun), mais très puissants. Leur jeton a un fond prismatique.
 - Le nombre d'exemplaires de chaque unité est **limité selon son coût** (valeurs de départ dans [prototype-content.md](prototype-content.md), section « Mode run »).
 - 3 exemplaires identiques du même rang donnent un exemplaire du rang supérieur :
 
@@ -150,7 +150,7 @@ La vitesse de déplacement est identique pour toutes les unités.
 
 - Chaque unité possède **1 compétence**, lancée automatiquement quand son énergie atteint le maximum.
 - L'énergie maximale est **propre à chaque unité**.
-- Toutes les unités commencent le combat avec **0 énergie**.
+- Toutes les unités commencent le combat avec **0 énergie**, sauf effet de trait (Calamité des Dragons anciens, section 4).
 - L'énergie est **bloquée pendant qu'une compétence s'exécute**.
 - La façon de générer de l'énergie dépend du rôle :
 
@@ -182,7 +182,11 @@ L'Extrait ajoute **+1 énergie par seconde** au gain passif de l'unité qui le p
   - **Feu** : les coups des unités Feu brûlent la cible (dégâts sur la durée) ;
   - **Foudre** : à intervalles réguliers, un éclair frappe un ennemi au hasard ;
   - **Glace** : les coups des unités Glace ralentissent la vitesse d'attaque de la cible ;
-  - **Sans élément** : bonus d'attaque brute.
+  - **Sans élément** : bonus d'attaque brute ;
+  - **Eau (Source de vie)** : les unités Eau soignent l'allié le plus blessé d'une partie des dégâts qu'elles infligent ;
+  - **Dragon (Rage draconique)** : les unités Dragon infligent plus de dégâts quand leurs PV passent sous 50 %.
+- **Dragon ancien (Calamité)** : trait secondaire des Dragons anciens (monstres de coût 5), avec des paliers à 1, 2 et 3 unités. Les Dragons anciens commencent le combat avec une partie de leur énergie, donc lancent leur compétence plus tôt.
+- **Dragon noir (Terreur)** : trait secondaire des Dragons noirs (monstres de coût 6), avec des paliers à 1, 2 et 3 unités. Tant qu'un Dragon noir est en vie, tous les ennemis infligent moins de dégâts. Les Dragons noirs ne sont pas des Dragons anciens dans le jeu (ils n'ont pas le trait Dragon ancien).
 - Les traits secondaires renforcent les unités du trait.
 - Paliers et valeurs du prototype : voir [prototype-content.md](prototype-content.md). Ils évolueront avec l'arrivée de nouvelles unités.
 
@@ -287,6 +291,7 @@ Le prototype contient 8 objets avec un effet propre ; les autres combinaisons do
 | Actions | Acheter, vendre, relancer (payant), améliorer la boutique (coût croissant) |
 | Niveau de boutique | De 1 à 9 ; le niveau donne le nombre d'unités sur la grille |
 | Apparition des unités chères | Par probabilités selon le niveau (comme TFT) |
+| Dragons noirs (coût 6) | Seulement au niveau 9 de la boutique, 3 exemplaires de chacun : le ★2 est un exploit, le ★3 est impossible |
 | Unités obtenues au ★3 | **Plus proposées** par la boutique ni par les récompenses (les offres déjà affichées disparaissent dès que le ★3 se forme). Si le ★3 est revendu, l'unité peut de nouveau apparaître |
 | Réserve | 10 places pour les unités achetées mais non placées |
 
@@ -303,7 +308,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 
 - **Chasses classiques** : escouades de monstres **générées selon un budget**, qui augmente au fil de la run.
 - **Chasses de boss** : la **version boss** d'un grand monstre, plus puissante que sa version unité **[contenu exact à définir]**.
-- **Première version** : uniquement des monstres. Le budget sert à recruter des monstres (selon leur coût) puis à monter leur rang. Les boss sont une **escouade renforcée** : un grand monstre ★3 entouré d'une escorte. Les règles de calcul sont dans [prototype-content.md](prototype-content.md) ⚠️.
+- **Première version** : uniquement des monstres. Le budget sert à recruter des monstres (selon leur coût) puis à monter leur rang. Les boss sont une **escouade renforcée** : un grand monstre ★3 entouré d'une escorte aux stages 1 et 2, un **Dragon ancien ★2** entouré d'une escorte au stage 3 — ou, une fois sur quelques-unes, un **Dragon noir ★1**. Les monstres de coût 4 apparaissent dans les escouades des stages 2 et 3 ; les Dragons anciens ne sont que des boss. Les règles de calcul sont dans [prototype-content.md](prototype-content.md) ⚠️.
 - L'escouade de la prochaine chasse est visible sur le plateau pendant la préparation.
 - Boss sur plusieurs hexagones et parties cassables : reportés à plus tard.
 
@@ -371,7 +376,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 ### Règles
 1. Les ennemis sont-ils uniquement des monstres ?
 2. Les monstres qui ne sont pas des Dragons anciens sont-ils tous disponibles en boutique **et** par capture, ou certains uniquement par capture ?
-3. Les Dragons anciens en boutique : quel coût (5 ?)
+3. ~~Les Dragons anciens en boutique : quel coût ?~~ Tranché : coût 5.
 4. La capture du boss fait-elle toujours partie des choix de récompense après un boss ?
 5. Formule des ratios de compétence : valeur de base + ratio × statistique, ou pourcentage d'amplification comme la puissance magique de TFT ?
 6. Contenu de la version boss d'un monstre (PV, plusieurs compétences, état enragé ?).
@@ -384,7 +389,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 
 ### Contenu
 10. Effets des 36 objets (conçus par Théo).
-11. Unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon.
+11. Unités supplémentaires : armes de chasseur restantes (Épée et bouclier, Épée longue, Fusarbalètes), autres monstres et Dragons anciens.
 
 ---
 
@@ -396,4 +401,6 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-20** : début de l'étape 5. Progression par rang ★ : PV et attaque brute ×1,8 à chaque rang, autres statistiques inchangées ; chaque compétence a une valeur de base par rang, les ratios restent identiques (section 3.4).
 - **2026-11-20** : rangs ★ — les durées et pourcentages des compétences ne changent pas avec le rang pour l'instant. Rangs implémentés dans le moteur et le bac à sable.
 - **2026-11-20** : première version du mode run — suite imposée de 30 chasses, escouades générées selon un budget, boss en escouade renforcée, récompenses 1 parmi 3 simplifiées ; fusion automatique comme TFT (plateau + réserve, objets regroupés, achat possible réserve pleine) ; valeurs de départ de l'économie (provisoires).
+- **2026-11-20** : Dragons noirs — coût 6 (fond prismatique) pour Fatalis, Alatreon et Dire Miralis ; boutique au niveau 9 seulement, 3 exemplaires chacun ; trait Dragon noir (Terreur) ; le boss de la chasse 30 peut être un Dragon noir ★1.
+- **2026-11-20** : unités de coût 4 et 5 — 8 unités (dont 3 Dragons anciens au coût 5), traits Eau (Source de vie), Dragon (Rage draconique) et Dragon ancien (Calamité), boutique à 5 coûts, monstres de coût 4 dans les escouades des stages 2 et 3, Dragon ancien ★2 en boss du stage 3.
 - **2026-11-20** : ciblage — une unité vise toujours l'ennemi le plus proche, réévalué en permanence (elle ne garde plus sa cible jusqu'au K.O.). Boutique — une unité obtenue au ★3 n'est plus proposée (boutique et récompenses).

@@ -77,6 +77,8 @@ export interface CombatState {
   readonly rng: Rng;
   readonly events: CombatEvent[];
   readonly lightning: Record<Side, LightningState | null>;
+  /** Terreur (Dragon noir) : réduction des dégâts que ce camp impose au camp adverse (0 = aucune). */
+  readonly terror: Record<Side, number>;
 }
 
 /** Une unité peut être ciblée tant qu'elle n'est pas K.O. et qu'il lui reste des PV. */

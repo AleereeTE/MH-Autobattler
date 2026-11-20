@@ -169,7 +169,7 @@ Les statistiques de combat sont calculées au début du combat : statistiques de
 
 | Partie du jeton | Signification |
 |---|---|
-| Fond | Coût : gris (1), vert (2), bleu (3), violet (4), doré (5) |
+| Fond | Coût : gris (1), vert (2), bleu (3), violet (4), doré (5), prismatique (6) |
 | Image | Portrait de l'unité, ou ses initiales s'il n'y en a pas |
 | Anneau | Élément (gris = sans élément) |
 | Barre de vie | Camp : bleue pour le joueur, rouge pour l'ennemi |

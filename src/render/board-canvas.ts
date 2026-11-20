@@ -25,6 +25,8 @@ export interface BoardTheme {
   readonly elements: Readonly<Record<Element | 'none', string>>;
   /** Fond des jetons selon le coût : gris, vert, bleu, violet, doré. */
   readonly costs: Readonly<Record<UnitCost, string>>;
+  /** Couleurs du fond prismatique (coût 6, Dragons noirs), dans l'ordre du dégradé. */
+  readonly prismatic: readonly string[];
   /** Couleur des étoiles selon le rang (bronze, argent, or) et fond de leur pastille. */
   readonly ranks: Readonly<Record<StarRank, string>>;
   readonly rankBadge: string;
@@ -113,7 +115,7 @@ function drawUnit(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   // Le camp se lit sur la barre de vie (voir drawBars).
   ctx.beginPath();
   ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-  ctx.fillStyle = theme.costs[unit.cost];
+  ctx.fillStyle = unit.cost === 6 ? prismaticFill(ctx, center, theme) : theme.costs[unit.cost];
   ctx.fill();
   const portrait = unit.portrait ?? null;
   if (portrait !== null) drawPortrait(ctx, portrait, center, radius - 2);
@@ -145,6 +147,15 @@ function drawUnit(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   drawRank(ctx, layout, theme, unit, center, radius);
   drawStatusDots(ctx, theme, unit, center, radius);
   ctx.globalAlpha = 1;
+}
+
+/** Fond prismatique (coût 6) : un dégradé arc-en-ciel qui fait le tour du jeton. */
+function prismaticFill(ctx: CanvasRenderingContext2D, center: Point, theme: BoardTheme): CanvasGradient | string {
+  if (theme.prismatic.length < 2) return theme.costs[6];
+  const gradient = ctx.createConicGradient(-Math.PI / 2, center.x, center.y);
+  theme.prismatic.forEach((color, index) => gradient.addColorStop(index / theme.prismatic.length, color));
+  gradient.addColorStop(1, theme.prismatic[0] ?? theme.costs[6]);
+  return gradient;
 }
 
 /** Dessine le portrait dans le cercle, en le recadrant pour qu'il le remplisse. */

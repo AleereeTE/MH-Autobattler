@@ -9,7 +9,7 @@ import { computeCombatStats } from '../rules/stats.ts';
 import { traitStatuses, type TraitStatus } from '../rules/traits.ts';
 import type { TraitSummary, UnitSnapshot } from './events.ts';
 import { SIDES, type CombatState, type CombatUnit, type LightningState, type Side } from './state.ts';
-import { lightningFor, traitLoadout } from './traits/loadout.ts';
+import { lightningFor, terrorFor, traitLoadout } from './traits/loadout.ts';
 
 export interface Placement {
   readonly unit: UnitDefinition;
@@ -35,6 +35,7 @@ export function createCombatState(setup: CombatSetup, seed: number): CombatState
 
   const units: CombatUnit[] = [];
   const lightning: Record<Side, LightningState | null> = { player: null, enemy: null };
+  const terror: Record<Side, number> = { player: 0, enemy: 0 };
   const traits: Record<Side, TraitSummary[]> = { player: [], enemy: [] };
 
   for (const side of SIDES) {
@@ -45,10 +46,11 @@ export function createCombatState(setup: CombatSetup, seed: number): CombatState
 
     traits[side] = statuses.map(summarizeTrait);
     lightning[side] = lightningFor(active);
+    terror[side] = terrorFor(active);
     for (const placement of placements) units.push(createUnit(units.length + 1, side, placement, active));
   }
 
-  const state: CombatState = { tick: 0, units, rng: createRng(seed), events: [], lightning };
+  const state: CombatState = { tick: 0, units, rng: createRng(seed), events: [], lightning, terror };
   state.events.push({ type: 'combatStart', tick: 0, units: units.map(snapshot), traits });
   return state;
 }
@@ -71,7 +73,8 @@ function createUnit(uid: number, side: Side, placement: Placement, active: Reado
     onHit: loadout.onHit,
     position: { ...position },
     hp: stats.hp,
-    energy: 0, // ✅ toutes les unités commencent à 0 énergie
+    // ✅ Les unités commencent à 0 énergie, sauf trait (Calamité des Dragons anciens).
+    energy: stats.maxEnergy * stats.startingEnergyRatio,
     alive: true,
     targetUid: null,
     attackProgress: 0,

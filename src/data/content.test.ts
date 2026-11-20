@@ -10,10 +10,27 @@ import { UNITS } from './units/index.ts';
 
 /** Vérifie que le contenu du prototype respecte ce qui a été validé (docs/prototype-content.md). */
 describe('contenu du prototype', () => {
-  it('contient 6 chasseurs et 6 monstres, de coût 1 à 3', () => {
-    expect(UNITS.filter((u) => u.kind === 'hunter')).toHaveLength(6);
-    expect(UNITS.filter((u) => u.kind === 'monster')).toHaveLength(6);
-    for (const unit of UNITS) expect([1, 2, 3]).toContain(unit.cost);
+  it('contient 8 chasseurs et 15 monstres, de coût 1 à 6', () => {
+    expect(UNITS.filter((u) => u.kind === 'hunter')).toHaveLength(8);
+    expect(UNITS.filter((u) => u.kind === 'monster')).toHaveLength(15);
+    const count = (cost: number) => UNITS.filter((u) => u.cost === cost).length;
+    expect([1, 2, 3, 4, 5, 6].map(count)).toEqual([5, 4, 3, 5, 3, 3]);
+  });
+
+  it('réserve le coût 6 aux 3 Dragons noirs, qui ne sont pas Dragons anciens', () => {
+    const blackDragons = UNITS.filter((u) => u.cost === 6);
+    expect(blackDragons.map((u) => u.id).sort()).toEqual(['alatreon', 'dire-miralis', 'fatalis']);
+    for (const unit of blackDragons) {
+      expect(unit.kind).toBe('monster');
+      expect(unit.traits).toEqual(['black-dragon']);
+    }
+  });
+
+  it('réserve le coût 5 aux 3 Dragons anciens, qui sont des monstres', () => {
+    const elders = UNITS.filter((u) => u.traits.includes('elder-dragon'));
+    expect(elders.map((u) => u.id).sort()).toEqual(['namielle', 'safi-jiiva', 'teostra']);
+    expect(UNITS.filter((u) => u.cost === 5)).toEqual(elders);
+    for (const elder of elders) expect(elder).toMatchObject({ kind: 'monster', cost: 5 });
   });
 
   it('donne à chaque compétence une valeur de base croissante pour ★1, ★2 et ★3', () => {
@@ -32,14 +49,15 @@ describe('contenu du prototype', () => {
     expect(new Set(UNITS.map((u) => u.id)).size).toBe(UNITS.length);
   });
 
-  it('répartit les rôles : 3 tanks, 3 bruisers, 4 DPS, 2 supports', () => {
+  it('répartit les rôles : 5 tanks, 8 bruisers, 6 DPS, 4 supports', () => {
     const count = (role: string) => UNITS.filter((u) => u.role === role).length;
-    expect([count('tank'), count('bruiser'), count('dps'), count('support')]).toEqual([3, 3, 4, 2]);
+    expect([count('tank'), count('bruiser'), count('dps'), count('support')]).toEqual([5, 8, 6, 4]);
   });
 
-  it('a 3 unités par trait d’élément', () => {
-    for (const id of ['fire', 'thunder', 'ice', 'neutral']) {
-      expect(UNITS.filter((u) => unitTraitIds(u)[0] === id), id).toHaveLength(3);
+  it('a 5 unités Feu, 4 Foudre, Glace et Dragon, 3 Sans élément et Eau', () => {
+    const expected: Record<string, number> = { fire: 5, thunder: 4, ice: 4, neutral: 3, water: 3, dragon: 4 };
+    for (const [id, count] of Object.entries(expected)) {
+      expect(UNITS.filter((u) => unitTraitIds(u)[0] === id), id).toHaveLength(count);
     }
   });
 

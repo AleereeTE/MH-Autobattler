@@ -3,7 +3,7 @@ import { BOARD_COLS, hexKey, type Hex } from '../core/hex.ts';
 import { pickOne } from '../core/random.ts';
 import type { Rng } from '../core/rng.ts';
 import type { StarRank, UnitDefinition } from '../data/definitions.ts';
-import { ENEMY_BUDGET } from '../data/run-balance.ts';
+import { BOSSES_BY_STAGE, ENEMY_BUDGET } from '../data/run-balance.ts';
 import { UNITS } from '../data/units/index.ts';
 import { copiesForRank } from './economy.ts';
 import { huntInfo } from './structure.ts';
@@ -62,10 +62,15 @@ export function generateSquad(hunt: number, rng: Rng): Placement[] {
   let slots = maxEnemyUnits(hunt);
 
   const members: Member[] = [];
-  if (info.isBoss) {
-    const boss = pickOne(rng, MONSTERS.filter((unit) => unit.cost === ENEMY_BUDGET.bossCost));
+  const usualBoss = info.isBoss ? BOSSES_BY_STAGE[stageIndex] : undefined;
+  const bossRule = usualBoss?.rare !== undefined && rng.chance(usualBoss.rare.chance) ? usualBoss.rare : usualBoss;
+  if (bossRule !== undefined) {
+    const candidates = MONSTERS.filter(
+      (unit) => (bossRule.cost === undefined || unit.cost === bossRule.cost) && (bossRule.trait === undefined || unit.traits.includes(bossRule.trait)),
+    );
+    const boss = pickOne(rng, candidates);
     if (boss !== undefined) {
-      members.push({ unit: boss, rank: ENEMY_BUDGET.bossRank as StarRank });
+      members.push({ unit: boss, rank: bossRule.rank as StarRank });
       slots = Math.max(1, slots - 1);
     }
   }

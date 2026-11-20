@@ -43,7 +43,8 @@ export function traitLoadout(
         };
         break;
       case 'lightning':
-        break; // effet de camp : voir lightningFor
+      case 'terror':
+        break; // effets de camp : voir lightningFor et terrorFor
     }
   }
   return { bonuses, onHit };
@@ -58,4 +59,12 @@ export function lightningFor(active: ReadonlyMap<TraitId, TraitTier>): Lightning
     }
   }
   return null;
+}
+
+/** Réduction des dégâts ennemis due à la Terreur (Dragon noir) si ce camp l'a activée, sinon 0. */
+export function terrorFor(active: ReadonlyMap<TraitId, TraitTier>): number {
+  for (const tier of active.values()) {
+    if (tier.effect.kind === 'terror') return tier.effect.enemyDamageReduction;
+  }
+  return 0;
 }

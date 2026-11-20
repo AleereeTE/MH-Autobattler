@@ -6,8 +6,8 @@
 export type Element = 'fire' | 'water' | 'thunder' | 'ice' | 'dragon';
 export type Role = 'tank' | 'bruiser' | 'dps' | 'support';
 export type UnitKind = 'hunter' | 'monster';
-/** Coût en zennys, de 1 à 5. */
-export type UnitCost = 1 | 2 | 3 | 4 | 5;
+/** Coût en zennys, de 1 à 5 ; 6 pour les Dragons noirs. */
+export type UnitCost = 1 | 2 | 3 | 4 | 5 | 6;
 /** Rang ★ : 1 = Rang Bas, 2 = Rang Haut, 3 = Rang Maître. */
 export type StarRank = 1 | 2 | 3;
 /** Une valeur par rang : [★1, ★2, ★3]. */
@@ -66,6 +66,12 @@ export interface StatBonus {
   readonly attackSpeedRampPerSecond?: number;
   /** … jusqu'à ce maximum (0,45 = +45 %). */
   readonly attackSpeedRampMax?: number;
+  /** Part des dégâts infligés rendue en soin à l'allié le plus blessé (Eau : 0,15 = 15 %). */
+  readonly lifeSourceRatio?: number;
+  /** Dégâts en plus quand l'unité est sous le seuil de PV de la Rage (Dragon : 0,2 = +20 %). */
+  readonly lowHpDamageBonus?: number;
+  /** Énergie au début du combat, en part de l'énergie maximale (Dragon ancien : 0,4 = 40 %). */
+  readonly startingEnergyRatio?: number;
 }
 
 /** Statistique sur laquelle un ratio de compétence peut s'appuyer ('hp' = PV max). */

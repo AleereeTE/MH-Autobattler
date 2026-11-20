@@ -129,4 +129,46 @@ export const ODETTE: UnitDefinition = {
   },
 };
 
-export const HUNTERS: readonly UnitDefinition[] = [GARRICK, HELGA, AKIRA, LYSA, SYLVAIN, ODETTE];
+export const BRANN: UnitDefinition = {
+  id: 'brann',
+  name: 'Brann',
+  kind: 'hunter',
+  weapon: 'Lancecanon',
+  role: 'tank',
+  element: 'dragon',
+  cost: 4,
+  traits: ['guild', 'bastion'],
+  stats: { hp: 900, attack: 50, elementalPower: 40, critChance: 0.05, armor: 60, elementalResist: 50, attackSpeed: 0.65, range: 1, maxEnergy: 80, energyRegenBonus: 0 },
+  skill: {
+    id: 'canon-de-wyverne',
+    name: 'Canon de wyverne',
+    description:
+      '100/150/225 + 150 % de la puissance élémentaire aux ennemis adjacents, puis bouclier de 150/225/340 + 15 % des PV max pendant 4 s.',
+    castTime: 0.5,
+    effects: [
+      { kind: 'damage', target: 'self', damageType: 'elemental', base: [100, 150, 225], ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 1 },
+      { kind: 'shield', base: [150, 225, 340], ratios: [{ stat: 'hp', ratio: 0.15 }], duration: 4 },
+    ],
+  },
+};
+
+export const ONDINE: UnitDefinition = {
+  id: 'ondine',
+  name: 'Ondine',
+  kind: 'hunter',
+  weapon: 'Morpho-hache',
+  role: 'bruiser',
+  element: 'water',
+  cost: 4,
+  traits: ['guild'],
+  stats: { hp: 800, attack: 62, elementalPower: 45, critChance: 0.1, armor: 35, elementalResist: 30, attackSpeed: 0.75, range: 1, maxEnergy: 70, energyRegenBonus: 0 },
+  skill: {
+    id: 'decharge-elementaire',
+    name: 'Décharge élémentaire',
+    description: 'Incantation de 1 s, puis 150/225/340 + 250 % de la puissance élémentaire sur la cible.',
+    castTime: 1,
+    effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [150, 225, 340], ratios: [{ stat: 'elementalPower', ratio: 2.5 }] }],
+  },
+};
+
+export const HUNTERS: readonly UnitDefinition[] = [GARRICK, HELGA, AKIRA, LYSA, SYLVAIN, ODETTE, BRANN, ONDINE];

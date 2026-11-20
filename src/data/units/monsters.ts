@@ -132,4 +132,62 @@ export const LEGIANA: UnitDefinition = {
   },
 };
 
-export const MONSTERS: readonly UnitDefinition[] = [BARROTH, KHEZU, ANJANATH, TOBI_KADACHI, RATHALOS, LEGIANA];
+export const ZINOGRE: UnitDefinition = {
+  id: 'zinogre',
+  name: 'Zinogre',
+  kind: 'monster',
+  role: 'bruiser',
+  element: 'thunder',
+  cost: 4,
+  traits: ['berserker'],
+  stats: { hp: 1000, attack: 70, elementalPower: 50, critChance: 0.15, armor: 40, elementalResist: 35, attackSpeed: 0.8, range: 1, maxEnergy: 70, energyRegenBonus: 0 },
+  skill: {
+    id: 'supercharge',
+    name: 'Supercharge',
+    description: 'Bondit sur la cible et inflige 100/150/225 + 220 % de la puissance élémentaire à elle et à ses voisins.',
+    castTime: 0.25,
+    effects: [
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [100, 150, 225], ratios: [{ stat: 'elementalPower', ratio: 2.2 }], radius: 1, leap: true },
+    ],
+  },
+};
+
+export const DEVILJHO: UnitDefinition = {
+  id: 'deviljho',
+  name: 'Deviljho',
+  kind: 'monster',
+  role: 'bruiser',
+  element: 'dragon',
+  cost: 4,
+  traits: ['berserker'],
+  stats: { hp: 1150, attack: 72, elementalPower: 45, critChance: 0.1, armor: 45, elementalResist: 35, attackSpeed: 0.7, range: 1, maxEnergy: 80, energyRegenBonus: 0 },
+  skill: {
+    id: 'souffle-draconique',
+    name: 'Souffle draconique',
+    description: '110/165/250 + 200 % de la puissance élémentaire sur la cible et ses voisins.',
+    castTime: 0.5,
+    effects: [
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [110, 165, 250], ratios: [{ stat: 'elementalPower', ratio: 2 }], radius: 1 },
+    ],
+  },
+};
+
+export const MIZUTSUNE: UnitDefinition = {
+  id: 'mizutsune',
+  name: 'Mizutsune',
+  kind: 'monster',
+  role: 'support',
+  element: 'water',
+  cost: 4,
+  traits: ['catalyst'],
+  stats: { hp: 900, attack: 50, elementalPower: 55, critChance: 0.05, armor: 30, elementalResist: 45, attackSpeed: 0.7, range: 3, maxEnergy: 80, energyRegenBonus: 0 },
+  skill: {
+    id: 'danse-des-bulles',
+    name: 'Danse des bulles',
+    description: 'Soigne de 120/180/270 + 220 % de la puissance élémentaire les alliés à 2 cases ou moins.',
+    castTime: 0.5,
+    effects: [{ kind: 'heal', base: [120, 180, 270], ratios: [{ stat: 'elementalPower', ratio: 2.2 }], radius: 2 }],
+  },
+};
+
+export const MONSTERS: readonly UnitDefinition[] = [BARROTH, KHEZU, ANJANATH, TOBI_KADACHI, RATHALOS, LEGIANA, ZINOGRE, DEVILJHO, MIZUTSUNE];
