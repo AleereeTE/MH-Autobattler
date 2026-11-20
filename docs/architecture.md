@@ -225,8 +225,7 @@ Ces choix ont été nécessaires pour faire tourner le moteur. Ils sont isolés 
 | Lancement d'une compétence | Seulement quand la cible est à portée | `combat/unit-turn.ts` |
 | Incantation | Ni attaque ni déplacement ; effet appliqué à la fin du temps d'incantation | `combat/skills/cast.ts` |
 | Première attaque | Après un intervalle complet (1 / vitesse d'attaque) | `combat/unit-turn.ts` |
-| Changement de cible | La cible est conservée jusqu'à son K.O., puis l'unité choisit l'ennemi le plus proche | `combat/behaviors/targeting.ts` |
-| Égalités de distance | L'unité au plus petit identifiant est choisie | `combat/behaviors/targeting.ts` |
+| Égalités de distance | L'unité garde sa cible actuelle si elle fait partie des plus proches, sinon l'ennemi au plus petit identifiant est choisi | `combat/behaviors/targeting.ts` |
 | Limite de sécurité | 10 minutes de combat simulé | `combat/constants.ts` |
 | Comptage des traits | Deux exemplaires de la même unité ne comptent qu'une fois | `rules/traits.ts` |
 | Ralentissement maximal | La vitesse d'attaque ne descend pas sous 25 % | `data/balance.ts` |

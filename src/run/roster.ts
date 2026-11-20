@@ -2,6 +2,7 @@ import { isInSideArea, type Placement } from '../combat/index.ts';
 import { hexKey, isOnBoard, type Hex } from '../core/hex.ts';
 import { RUN_STRUCTURE } from '../data/run-balance.ts';
 import { findUnit } from '../data/units/index.ts';
+import { withdrawCompletedOffers } from './completed.ts';
 import { copiesForRank, sellValue } from './economy.ts';
 import { resolveMerges } from './merge.ts';
 import { returnCopies } from './pool.ts';
@@ -66,9 +67,14 @@ export function canReceive(state: RunState, unitId: string, copies = 1): boolean
   return true;
 }
 
-/** Ajoute un exemplaire ★1 (déjà retiré du stock) : en réserve, puis fusions automatiques. */
+/**
+ * Ajoute un exemplaire ★1 (déjà retiré du stock) : en réserve, puis fusions automatiques.
+ * Si une fusion donne un ★3, cette unité disparaît aussitôt de la boutique affichée.
+ */
 export function receiveUnit(state: RunState, unitId: string): ActionResult {
-  return placeOrMerge(state, unitId) ? OK : fail('La réserve est pleine.');
+  if (!placeOrMerge(state, unitId)) return fail('La réserve est pleine.');
+  withdrawCompletedOffers(state);
+  return OK;
 }
 
 /**

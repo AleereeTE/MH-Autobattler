@@ -34,14 +34,17 @@ export function nearestEnemy(unit: CombatUnit, units: readonly CombatUnit[]): Co
 }
 
 /**
- * ✅ Cible par défaut : l'ennemi le plus proche.
- * ⚠️ La cible est conservée jusqu'à son K.O., puis l'unité en choisit une nouvelle.
+ * ✅ Cible : toujours l'ennemi le plus proche, réévalué à chaque décision de l'unité
+ * (avant chaque pas et pendant qu'elle attaque). Si un autre ennemi devient plus proche, elle change de cible.
+ * ⚠️ À égalité de distance, elle garde sa cible actuelle (pas d'hésitation entre deux ennemis),
+ * sinon elle prend le plus petit identifiant.
  */
 export function acquireTarget(unit: CombatUnit, units: readonly CombatUnit[]): CombatUnit | null {
-  const current = units.find((other) => other.uid === unit.targetUid);
-  if (current !== undefined && isTargetable(current)) return current;
-
-  const next = nearestEnemy(unit, units);
+  const enemies = livingEnemies(unit, units);
+  const next = pickFirst(enemies, [
+    (enemy) => hexDistance(unit.position, enemy.position),
+    (enemy) => (enemy.uid === unit.targetUid ? 0 : 1),
+  ]);
   unit.targetUid = next?.uid ?? null;
   return next;
 }

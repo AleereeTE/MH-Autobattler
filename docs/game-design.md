@@ -195,7 +195,7 @@ L'Extrait ajoute **+1 énergie par seconde** au gain passif de l'unité qui le p
 | Grille | Hexagonale, 7 colonnes × 4 rangées par camp (comme TFT) |
 | Écoulement du temps | Temps réel simulé par ticks |
 | Contrôle du joueur | Aucun pendant le combat |
-| Ciblage | L'ennemi le plus proche par défaut ; certaines compétences visent l'ennemi le plus faible ou la ligne arrière |
+| Ciblage | Toujours **l'ennemi le plus proche** de l'unité, réévalué en permanence : si un autre ennemi devient plus proche, l'unité change de cible. Certaines compétences visent l'ennemi le plus faible ou la ligne arrière |
 | Durée normale | 60 secondes |
 | Mort subite | Après 60 s, les dégâts infligés augmentent progressivement et les soins diminuent progressivement |
 | Limite absolue de durée | Aucune |
@@ -287,6 +287,7 @@ Le prototype contient 8 objets avec un effet propre ; les autres combinaisons do
 | Actions | Acheter, vendre, relancer (payant), améliorer la boutique (coût croissant) |
 | Niveau de boutique | De 1 à 9 ; le niveau donne le nombre d'unités sur la grille |
 | Apparition des unités chères | Par probabilités selon le niveau (comme TFT) |
+| Unités obtenues au ★3 | **Plus proposées** par la boutique ni par les récompenses (les offres déjà affichées disparaissent dès que le ★3 se forme). Si le ★3 est revendu, l'unité peut de nouveau apparaître |
 | Réserve | 10 places pour les unités achetées mais non placées |
 
 ### 8.3 Valeurs de départ
@@ -395,3 +396,4 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-20** : début de l'étape 5. Progression par rang ★ : PV et attaque brute ×1,8 à chaque rang, autres statistiques inchangées ; chaque compétence a une valeur de base par rang, les ratios restent identiques (section 3.4).
 - **2026-11-20** : rangs ★ — les durées et pourcentages des compétences ne changent pas avec le rang pour l'instant. Rangs implémentés dans le moteur et le bac à sable.
 - **2026-11-20** : première version du mode run — suite imposée de 30 chasses, escouades générées selon un budget, boss en escouade renforcée, récompenses 1 parmi 3 simplifiées ; fusion automatique comme TFT (plateau + réserve, objets regroupés, achat possible réserve pleine) ; valeurs de départ de l'économie (provisoires).
+- **2026-11-20** : ciblage — une unité vise toujours l'ennemi le plus proche, réévalué en permanence (elle ne garde plus sa cible jusqu'au K.O.). Boutique — une unité obtenue au ★3 n'est plus proposée (boutique et récompenses).

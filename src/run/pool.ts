@@ -32,12 +32,19 @@ export function costOdds(level: number): readonly number[] {
 /**
  * Tire une unité comme la boutique : d'abord un coût selon le niveau (parmi les coûts encore en stock),
  * puis une unité de ce coût, proportionnellement à ses exemplaires restants.
+ * Les unités de `excluded` (déjà obtenues au ★3) ne sortent jamais.
  * Ne retire rien du stock. Renvoie null si le stock est vide.
  */
-export function drawUnitId(pool: ReadonlyMap<string, number>, level: number, rng: Rng): string | null {
+export function drawUnitId(
+  pool: ReadonlyMap<string, number>,
+  level: number,
+  rng: Rng,
+  excluded: ReadonlySet<string> = new Set(),
+): string | null {
   const odds = costOdds(level);
+  const available = (unitId: string): number => (excluded.has(unitId) ? 0 : (pool.get(unitId) ?? 0));
   const remainingByCost = (cost: number): number =>
-    UNITS.filter((unit) => unit.cost === cost).reduce((sum, unit) => sum + (pool.get(unit.id) ?? 0), 0);
+    UNITS.filter((unit) => unit.cost === cost).reduce((sum, unit) => sum + available(unit.id), 0);
   const weights = odds.map((odd, index) => (remainingByCost(index + 1) > 0 ? odd : 0));
   let costIndex = weightedIndex(rng, weights);
   if (costIndex < 0) {
@@ -47,7 +54,7 @@ export function drawUnitId(pool: ReadonlyMap<string, number>, level: number, rng
   }
   const cost = (costIndex + 1) as UnitCost;
   const candidates = UNITS.filter((unit) => unit.cost === cost);
-  const picked = candidates[weightedIndex(rng, candidates.map((unit) => pool.get(unit.id) ?? 0))];
+  const picked = candidates[weightedIndex(rng, candidates.map((unit) => available(unit.id)))];
   return picked?.id ?? null;
 }
 

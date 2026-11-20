@@ -1,4 +1,5 @@
 import { ECONOMY, RUN_STRUCTURE } from '../data/run-balance.ts';
+import { completedUnitIds } from './completed.ts';
 import { levelUpCost } from './economy.ts';
 import { drawUnitId, returnCopies, takeCopies, unitCost } from './pool.ts';
 import { canReceive, receiveUnit } from './roster.ts';
@@ -12,8 +13,9 @@ import { OK, fail, type ActionResult, type RunState } from './state.ts';
 /** Renouvelle les 5 offres (gratuit : utilisé au début de chaque tour et par la relance). */
 export function refreshShop(state: RunState): void {
   for (const unitId of state.shop) if (unitId !== null) returnCopies(state.pool, unitId, 1);
+  const completed = completedUnitIds(state);
   state.shop = Array.from({ length: RUN_STRUCTURE.shopSize }, () => {
-    const unitId = drawUnitId(state.pool, state.level, state.rng);
+    const unitId = drawUnitId(state.pool, state.level, state.rng, completed);
     if (unitId === null || !takeCopies(state.pool, unitId, 1)) return null;
     return unitId;
   });

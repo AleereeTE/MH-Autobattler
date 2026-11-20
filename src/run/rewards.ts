@@ -1,6 +1,7 @@
 import { pickOne } from '../core/random.ts';
 import { MATERIAL_IDS, type MaterialId } from '../data/items.ts';
 import { REWARDS } from '../data/run-balance.ts';
+import { completedUnitIds } from './completed.ts';
 import { drawUnitId, takeCopies } from './pool.ts';
 import { canReceive, receiveUnit } from './roster.ts';
 import { OK, fail, type ActionResult, type RewardOption, type RunState } from './state.ts';
@@ -21,7 +22,7 @@ export function drawRewards(state: RunState, boss: boolean): RewardOption[] {
     { kind: 'materials', materials },
     { kind: 'zennys', amount: REWARDS.zennys * multiplier },
   ];
-  const unitId = drawUnitId(state.pool, state.level, state.rng);
+  const unitId = drawUnitId(state.pool, state.level, state.rng, completedUnitIds(state));
   if (unitId !== null) {
     const copies = Math.min(REWARDS.unitCopies * multiplier, state.pool.get(unitId) ?? 0);
     options.push({ kind: 'unit', unitId, copies });
