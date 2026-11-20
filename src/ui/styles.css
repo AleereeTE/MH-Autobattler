@@ -17,6 +17,18 @@
   --board-hp-back: #00000033;
   --board-shield: #d9d9d9;
 
+  /* Fond des jetons selon le coût de l'unité. */
+  --cost-1: #8a8a8a;
+  --cost-2: #3f9a5c;
+  --cost-3: #2f74c0;
+  --cost-4: #8e4cc2;
+  --cost-5: #d0a32a;
+
+  /* Zones d'effet des compétences (les dégâts prennent la couleur de l'élément). */
+  --area-heal: #3f9b5a;
+  --area-shield: #6f8aa6;
+  --area-buff: #d4a514;
+
   --element-fire: #e0662f;
   --element-water: #2f8fd6;
   --element-thunder: #e3b81c;
@@ -46,6 +58,16 @@
     --board-hp: #57c178;
     --board-hp-back: #ffffff26;
     --board-shield: #f0f0f0;
+
+    --cost-1: #7d7d7d;
+    --cost-2: #3c8f55;
+    --cost-3: #3474ba;
+    --cost-4: #8a50bb;
+    --cost-5: #c99c2a;
+
+    --area-heal: #57c178;
+    --area-shield: #b9c9da;
+    --area-buff: #e3b81c;
 
     color-scheme: dark;
   }

@@ -59,6 +59,17 @@ export function neighbors(hex: Hex): Hex[] {
   return CUBE_DIRECTIONS.map((d) => fromCube({ x: c.x + d.x, y: c.y + d.y, z: c.z + d.z })).filter(isOnBoard);
 }
 
+/** Cases du plateau situées à `radius` pas ou moins du centre (le centre compris). */
+export function hexesWithin(center: Hex, radius: number): Hex[] {
+  const cells: Hex[] = [];
+  for (let row = 0; row < BOARD_ROWS; row++) {
+    for (let col = 0; col < BOARD_COLS; col++) {
+      if (hexDistance(center, { col, row }) <= radius) cells.push({ col, row });
+    }
+  }
+  return cells;
+}
+
 /** Clé texte unique d'une case, utile pour les Set et les Map. */
 export function hexKey({ col, row }: Hex): string {
   return `${col},${row}`;

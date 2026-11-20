@@ -1,5 +1,5 @@
 import type { Hex } from '../core/hex.ts';
-import type { DamageType, Element, Role, TraitId, UnitKind } from '../data/definitions.ts';
+import type { DamageType, Element, Role, SkillEffect, TraitId, UnitCost, UnitKind } from '../data/definitions.ts';
 import type { Side } from './state.ts';
 
 /**
@@ -15,6 +15,7 @@ export interface UnitSnapshot {
   readonly kind: UnitKind;
   readonly role: Role;
   readonly element: Element | null;
+  readonly cost: UnitCost;
   readonly position: Hex;
   readonly maxHp: number;
   readonly maxEnergy: number;
@@ -33,6 +34,7 @@ export type Winner = Side | null;
 export type CombatEndReason = 'elimination' | 'safetyLimit';
 export type DamageCause = 'attack' | 'skill' | 'burn' | 'lightning';
 export type StatusKind = 'burn' | 'chill' | 'haste';
+export type SkillEffectKind = SkillEffect['kind'];
 
 type At<T> = T & { readonly tick: number };
 
@@ -59,6 +61,16 @@ export type CombatEvent =
   | At<{ type: 'status'; uid: number; status: StatusKind; durationTicks: number }>
   | At<{ type: 'skillCast'; uid: number; skillId: string; skillName: string; castTicks: number }>
   | At<{ type: 'skillResolve'; uid: number; skillId: string; skillName: string }>
+  | At<{
+      type: 'skillArea';
+      uid: number;
+      /** Type d'effet de la compétence (dégâts, bouclier, soin, bonus). */
+      effect: SkillEffectKind;
+      /** Centre de la zone : la cible principale, ou le lanceur. */
+      center: Hex;
+      /** Cases touchées autour du centre (0 = le centre seul). */
+      radius: number;
+    }>
   | At<{ type: 'lightning'; sourceUid: number; targetUid: number }>
   | At<{ type: 'death'; uid: number }>
   | At<{ type: 'suddenDeath' }>

@@ -7,6 +7,7 @@ import { button, el, select } from '../dom.ts';
 import { BoardView } from './board-view.ts';
 import { SandboxModel, sideOf } from './model.ts';
 import { renderPalette } from './palette-view.ts';
+import { PortraitStore } from './portraits.ts';
 import { ReplayPlayer } from './replay-player.ts';
 import { renderResults, type BatchResult } from './results-view.ts';
 import { loadComposition, saveComposition } from './storage.ts';
@@ -38,6 +39,11 @@ export function mountSandbox(root: HTMLElement): void {
     },
     () => renderToolbar(),
   );
+  // Chaque portrait chargé redessine le plateau.
+  const portraits = new PortraitStore(() => {
+    if (mode === 'edit') board.render(editScene());
+    else player.redraw();
+  });
 
   const toolbar = el('div', { className: 'toolbar' });
   const status = el('span', { className: 'status' });
@@ -56,8 +62,10 @@ export function mountSandbox(root: HTMLElement): void {
       units: model.placedUnits().map((placed) => ({
         key: hexKey(placed.position),
         label: shortLabel(placed.unit.name),
+        portrait: portraits.get(placed.unit.id),
         side: sideOf(placed.position),
         element: placed.unit.element,
+        cost: placed.unit.cost,
         position: placed.position,
         hpRatio: 1,
         alive: true,
@@ -74,8 +82,10 @@ export function mountSandbox(root: HTMLElement): void {
       units: frame.units.map((unit) => ({
         key: unit.uid,
         label: shortLabel(unit.name),
+        portrait: portraits.get(unit.defId),
         side: unit.side,
         element: unit.element,
+        cost: unit.cost,
         position: unit.position,
         moving: unit.moving,
         hpRatio: unit.hp / unit.maxHp,
@@ -87,6 +97,13 @@ export function mountSandbox(root: HTMLElement): void {
         hasted: unit.hasted,
       })),
       texts: frame.texts,
+      areas: frame.areas.map((area) => ({
+        center: area.center,
+        radius: area.radius,
+        tone: area.effect,
+        element: area.element,
+        age: area.age,
+      })),
       banner,
     };
   }

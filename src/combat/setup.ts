@@ -90,6 +90,7 @@ function snapshot(unit: CombatUnit): UnitSnapshot {
     kind: unit.def.kind,
     role: unit.def.role,
     element: unit.def.element,
+    cost: unit.def.cost,
     position: { ...unit.position },
     maxHp: unit.stats.hp,
     maxEnergy: unit.stats.maxEnergy,

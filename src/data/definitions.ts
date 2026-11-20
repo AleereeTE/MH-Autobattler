@@ -6,6 +6,8 @@
 export type Element = 'fire' | 'water' | 'thunder' | 'ice' | 'dragon';
 export type Role = 'tank' | 'bruiser' | 'dps' | 'support';
 export type UnitKind = 'hunter' | 'monster';
+/** Coût en zennys, de 1 à 5. */
+export type UnitCost = 1 | 2 | 3 | 4 | 5;
 export type DamageType = 'physical' | 'elemental';
 export type TraitId = string;
 
@@ -136,7 +138,7 @@ export interface UnitDefinition {
   readonly role: Role;
   /** null = sans élément. */
   readonly element: Element | null;
-  readonly cost: 1 | 2 | 3 | 4 | 5;
+  readonly cost: UnitCost;
   /** Traits secondaires ; le trait d'élément est déduit de `element`. */
   readonly traits: readonly TraitId[];
   /** Statistiques de base (rang ★1). */

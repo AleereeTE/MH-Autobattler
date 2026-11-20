@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hexDistance, neighbors } from './hex.ts';
+import { hexDistance, hexesWithin, neighbors } from './hex.ts';
 
 describe('hexDistance', () => {
   it('vaut 0 pour une même case', () => {
@@ -34,5 +34,19 @@ describe('neighbors', () => {
       { col: 1, row: 0 },
       { col: 0, row: 1 },
     ]);
+  });
+});
+
+describe('hexesWithin', () => {
+  it('donne le centre seul pour un rayon de 0', () => {
+    expect(hexesWithin({ col: 3, row: 3 }, 0)).toEqual([{ col: 3, row: 3 }]);
+  });
+
+  it('donne le centre et ses 6 voisins pour un rayon de 1', () => {
+    expect(hexesWithin({ col: 3, row: 3 }, 1)).toHaveLength(7);
+  });
+
+  it('ne sort pas du plateau', () => {
+    expect(hexesWithin({ col: 0, row: 0 }, 1)).toHaveLength(3);
   });
 });

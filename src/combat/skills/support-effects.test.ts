@@ -40,6 +40,19 @@ describe('effets de soutien', () => {
     expect(far.hp).toBe(400);
   });
 
+  it('soin, bouclier et bonus signalent leur zone, centrée sur le lanceur', () => {
+    const { state, caster } = setupWithAllies();
+    applySkillEffect(state, caster, { kind: 'heal', base: 10, ratios: [], radius: 2 });
+    applySkillEffect(state, caster, { kind: 'shield', base: 10, ratios: [], duration: 1 });
+    applySkillEffect(state, caster, { kind: 'buff', attackSpeedPercent: 0.1, duration: 1 });
+    const areas = state.events.filter((event) => event.type === 'skillArea');
+    expect(areas).toMatchObject([
+      { effect: 'heal', center: { col: 3, row: 6 }, radius: 2 },
+      { effect: 'shield', center: { col: 3, row: 6 }, radius: 0 },
+      { effect: 'buff', center: { col: 3, row: 6 }, radius: 0 },
+    ]);
+  });
+
   it('bonus : augmente temporairement la vitesse d’attaque du lanceur', () => {
     const { state, caster } = setupWithAllies();
     applySkillEffect(state, caster, { kind: 'buff', attackSpeedPercent: 0.6, duration: 1 });

@@ -29,7 +29,9 @@ export class BoardView {
   }
 
   render(scene: BoardScene): void {
-    const ratio = window.devicePixelRatio || 1;
+    // Résolution réelle : densité de l'écran × agrandissement du canvas par la mise en page, pour rester net.
+    const displayScale = this.element.clientWidth > 0 ? this.element.clientWidth / this.layout.width : 1;
+    const ratio = (window.devicePixelRatio || 1) * Math.max(1, displayScale);
     const width = Math.round(this.layout.width * ratio);
     const height = Math.round(this.layout.height * ratio);
     if (this.element.width !== width || this.element.height !== height) {
@@ -57,7 +59,6 @@ function readTheme(element: Element): BoardTheme {
     enemy: color('--side-enemy'),
     unitText: '#ffffff',
     hpBack: color('--board-hp-back'),
-    hp: color('--board-hp'),
     shield: color('--board-shield'),
     text: color('--fg'),
     crit: color('--accent'),
@@ -69,6 +70,18 @@ function readTheme(element: Element): BoardTheme {
       ice: color('--element-ice'),
       dragon: color('--element-dragon'),
       none: color('--element-none'),
+    },
+    costs: {
+      1: color('--cost-1'),
+      2: color('--cost-2'),
+      3: color('--cost-3'),
+      4: color('--cost-4'),
+      5: color('--cost-5'),
+    },
+    areas: {
+      heal: color('--area-heal'),
+      shield: color('--area-shield'),
+      buff: color('--area-buff'),
     },
   };
 }

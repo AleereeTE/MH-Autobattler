@@ -40,6 +40,42 @@ describe('applySkillEffect — dégâts', () => {
     expect(amounts).toEqual([110, 110]);
   });
 
+  it('signale la zone touchée, centrée sur la cible principale, avant les dégâts', () => {
+    const state = createCombatState(
+      {
+        player: [place(makeUnit(), 3, 7)],
+        enemy: [place(makeUnit({ stats: { hp: 100 } }), 3, 2), place(makeUnit(), 6, 0)],
+      },
+      1,
+    );
+    const caster = state.units[0];
+    if (caster === undefined) throw new Error('lanceur manquant');
+
+    applySkillEffect(state, caster, {
+      kind: 'damage',
+      target: 'lowestHpEnemy',
+      damageType: 'physical',
+      base: 10,
+      ratios: [],
+      radius: 1,
+    });
+
+    const types = state.events.slice(1).map((event) => event.type);
+    expect(types[0]).toBe('skillArea');
+    expect(state.events[1]).toMatchObject({ uid: caster.uid, effect: 'damage', center: { col: 3, row: 2 }, radius: 1 });
+  });
+
+  it('ne signale aucune zone sans cible', () => {
+    const state = createCombatState({ player: [place(makeUnit(), 3, 7)], enemy: [place(makeUnit(), 3, 0)] }, 1);
+    const [caster, enemy] = state.units;
+    if (caster === undefined || enemy === undefined) throw new Error('unités manquantes');
+    enemy.alive = false;
+
+    applySkillEffect(state, caster, { kind: 'damage', target: 'lowestHpEnemy', damageType: 'physical', base: 10, ratios: [] });
+
+    expect(state.events.some((event) => event.type === 'skillArea')).toBe(false);
+  });
+
   it('ne fait jamais de coup critique', () => {
     const state = createCombatState(
       { player: [place(makeUnit({ stats: { critChance: 1 } }), 3, 4)], enemy: [place(makeUnit(), 3, 3)] },

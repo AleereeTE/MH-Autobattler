@@ -12,6 +12,13 @@ describe('createCombatState', () => {
     expect(state.events[0]?.type).toBe('combatStart');
   });
 
+  it('indique le coût de chaque unité au début du combat, pour l’affichage', () => {
+    const state = createCombatState({ player: [place(makeUnit({ cost: 4 }), 3, 4)], enemy: [place(makeUnit(), 3, 3)] }, 1);
+    const start = state.events[0];
+    if (start?.type !== 'combatStart') throw new Error('événement de début manquant');
+    expect(start.units.map((unit) => unit.cost)).toEqual([4, 1]);
+  });
+
   it('refuse une unité placée dans la zone adverse', () => {
     expect(() => createCombatState({ player: [place(makeUnit(), 3, 2)], enemy: [place(makeUnit(), 3, 0)] }, 1)).toThrow(
       /hors de la zone/,

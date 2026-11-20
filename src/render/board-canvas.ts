@@ -1,10 +1,11 @@
 import { BOARD_COLS, BOARD_ROWS, ROWS_PER_SIDE, type Hex } from '../core/hex.ts';
-import type { Element } from '../data/definitions.ts';
+import type { Element, UnitCost } from '../data/definitions.ts';
 import { hexCenter, hexCorners, lerpHex, type BoardLayout, type Point } from './hex-layout.ts';
 import type { FloatingText } from './replay.ts';
+import { areaCells } from './skill-area.ts';
 
 /**
- * Rendu Canvas 2D temporaire du plateau : des hexagones et des cercles.
+ * Rendu Canvas 2D temporaire du plateau : des hexagones et des jetons (cercles avec portrait ou initiales).
  * Il ne connaît que des « scènes » (ce qu'il faut dessiner), jamais le moteur de combat.
  */
 
@@ -17,19 +18,44 @@ export interface BoardTheme {
   readonly enemy: string;
   readonly unitText: string;
   readonly hpBack: string;
-  readonly hp: string;
   readonly shield: string;
   readonly text: string;
   readonly crit: string;
   readonly heal: string;
   readonly elements: Readonly<Record<Element | 'none', string>>;
+  /** Fond des jetons selon le coût : gris, vert, bleu, violet, doré. */
+  readonly costs: Readonly<Record<UnitCost, string>>;
+  /** Couleurs des zones d'effet qui ne dépendent pas de l'élément du lanceur. */
+  readonly areas: Readonly<Record<Exclude<AreaTone, 'damage'>, string>>;
+}
+
+/** Image affichée dans le jeton d'une unité. */
+export interface Portrait {
+  readonly image: CanvasImageSource;
+  readonly width: number;
+  readonly height: number;
+}
+
+/** Nature d'une zone d'effet : les dégâts prennent la couleur de l'élément du lanceur. */
+export type AreaTone = 'damage' | 'heal' | 'shield' | 'buff';
+
+export interface SceneArea {
+  readonly center: Hex;
+  readonly radius: number;
+  readonly tone: AreaTone;
+  readonly element: Element | null;
+  /** 0 = la compétence vient de prendre effet, 1 = fin de l'animation. */
+  readonly age: number;
 }
 
 export interface SceneUnit {
   readonly key: string | number;
   readonly label: string;
+  /** Portrait affiché à la place des initiales, s'il existe. */
+  readonly portrait?: Portrait | null;
   readonly side: 'player' | 'enemy';
   readonly element: Element | null;
+  readonly cost: UnitCost;
   readonly position: Hex;
   readonly moving?: { readonly to: Hex; readonly progress: number } | null;
   readonly hpRatio: number;
@@ -45,6 +71,7 @@ export interface SceneUnit {
 export interface BoardScene {
   readonly units: readonly SceneUnit[];
   readonly texts?: readonly FloatingText[];
+  readonly areas?: readonly SceneArea[];
   readonly highlight?: Hex | null;
   readonly banner?: string | null;
 }
@@ -78,11 +105,16 @@ function drawUnit(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   const radius = layout.size * 0.62;
   ctx.globalAlpha = unit.alive ? 1 : 0.25;
 
-  // Corps : couleur du camp, anneau de la couleur de l'élément.
+  // Fond de la couleur du coût, portrait éventuel, anneau de la couleur de l'élément.
+  // Le camp se lit sur la barre de vie (voir drawBars).
   ctx.beginPath();
   ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
-  ctx.fillStyle = unit.side === 'player' ? theme.player : theme.enemy;
+  ctx.fillStyle = theme.costs[unit.cost];
   ctx.fill();
+  const portrait = unit.portrait ?? null;
+  if (portrait !== null) drawPortrait(ctx, portrait, center, radius - 2);
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
   ctx.lineWidth = 4;
   ctx.strokeStyle = theme.elements[unit.element ?? 'none'];
   ctx.stroke();
@@ -97,14 +129,68 @@ function drawUnit(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
     ctx.setLineDash([]);
   }
 
-  ctx.fillStyle = theme.unitText;
-  ctx.font = `600 ${Math.round(layout.size * 0.42)}px system-ui, sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(unit.label, center.x, center.y + 1);
+  if (portrait === null) {
+    ctx.fillStyle = theme.unitText;
+    ctx.font = `600 ${Math.round(layout.size * 0.42)}px system-ui, sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(unit.label, center.x, center.y + 1);
+  }
 
   if (unit.alive) drawBars(ctx, layout, theme, unit, center);
   drawStatusDots(ctx, theme, unit, center, radius);
+  ctx.globalAlpha = 1;
+}
+
+/** Dessine le portrait dans le cercle, en le recadrant pour qu'il le remplisse. */
+function drawPortrait(ctx: CanvasRenderingContext2D, portrait: Portrait, center: Point, radius: number): void {
+  const scale = (radius * 2) / Math.min(portrait.width, portrait.height);
+  const width = portrait.width * scale;
+  const height = portrait.height * scale;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, radius, 0, Math.PI * 2);
+  ctx.clip();
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(portrait.image, center.x - width / 2, center.y - height / 2, width, height);
+  ctx.restore();
+}
+
+function areaColor(theme: BoardTheme, area: SceneArea): string {
+  return area.tone === 'damage' ? theme.elements[area.element ?? 'none'] : theme.areas[area.tone];
+}
+
+/** Cases de la zone d'effet, qui s'allument du centre vers l'extérieur (sous les unités). */
+function drawAreaCells(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: BoardTheme, areas: readonly SceneArea[]): void {
+  for (const area of areas) {
+    const color = areaColor(theme, area);
+    for (const cell of areaCells(area.center, area.radius, area.age)) {
+      tracePath(ctx, hexCorners(layout, hexCenter(layout, cell.hex), 2));
+      ctx.globalAlpha = 0.45 * cell.intensity;
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.globalAlpha = 0.9 * cell.intensity;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = color;
+      ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
+}
+
+/** Onde circulaire qui part du centre de la zone (par-dessus les unités). */
+function drawAreaWaves(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: BoardTheme, areas: readonly SceneArea[]): void {
+  const step = Math.sqrt(3) * layout.size; // distance entre deux cases voisines
+  for (const area of areas) {
+    const center = hexCenter(layout, area.center);
+    const eased = 1 - (1 - area.age) ** 2;
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, Math.max(1, (area.radius + 0.5) * step * eased), 0, Math.PI * 2);
+    ctx.globalAlpha = 0.9 * (1 - area.age);
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = areaColor(theme, area);
+    ctx.stroke();
+  }
   ctx.globalAlpha = 1;
 }
 
@@ -114,7 +200,8 @@ function drawBars(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   const y = center.y - layout.size * 0.95;
   ctx.fillStyle = theme.hpBack;
   ctx.fillRect(x, y, width, 5);
-  ctx.fillStyle = theme.hp;
+  // Barre de vie de la couleur du camp : bleu pour le joueur, rouge pour l'ennemi.
+  ctx.fillStyle = unit.side === 'player' ? theme.player : theme.enemy;
   ctx.fillRect(x, y, width * Math.max(0, Math.min(1, unit.hpRatio)), 5);
   const shield = Math.min(1, unit.shieldRatio ?? 0);
   if (shield > 0) {
@@ -176,10 +263,13 @@ function drawBanner(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: B
 export function drawBoard(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: BoardTheme, scene: BoardScene): void {
   ctx.clearRect(0, 0, layout.width, layout.height);
   drawCells(ctx, layout, theme, scene.highlight ?? null);
+  const areas = scene.areas ?? [];
+  drawAreaCells(ctx, layout, theme, areas);
 
   // Les unités K.O. d'abord, pour que les vivantes passent par-dessus.
   const ordered = [...scene.units].sort((a, b) => Number(a.alive) - Number(b.alive));
   for (const unit of ordered) drawUnit(ctx, layout, theme, unit);
+  drawAreaWaves(ctx, layout, theme, areas);
 
   const centers = new Map(scene.units.map((unit) => [unit.key, unitCenter(layout, unit)]));
   drawTexts(ctx, layout, theme, scene, centers);

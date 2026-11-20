@@ -1,6 +1,6 @@
-import type { CombatEvent, Side, UnitSnapshot, Winner } from '../combat/index.ts';
+import type { CombatEvent, Side, SkillEffectKind, UnitSnapshot, Winner } from '../combat/index.ts';
 import type { Hex } from '../core/hex.ts';
-import type { Element } from '../data/definitions.ts';
+import type { Element, UnitCost } from '../data/definitions.ts';
 
 /**
  * Reconstitue l'état visible du combat à n'importe quel instant, à partir des seuls événements.
@@ -9,9 +9,12 @@ import type { Element } from '../data/definitions.ts';
 
 export interface FrameUnit {
   readonly uid: number;
+  /** Identifiant de la fiche (« barroth »), utile pour retrouver le portrait. */
+  readonly defId: string;
   readonly name: string;
   readonly side: Side;
   readonly element: Element | null;
+  readonly cost: UnitCost;
   readonly maxHp: number;
   position: Hex;
   /** Déplacement en cours : case d'arrivée et avancement (0 → 1). */
@@ -33,10 +36,24 @@ export interface FloatingText {
   readonly age: number;
 }
 
+/** Zone d'effet d'une compétence en train d'être animée. */
+export interface FrameArea {
+  /** Lanceur de la compétence. */
+  readonly uid: number;
+  readonly side: Side;
+  readonly element: Element | null;
+  readonly effect: SkillEffectKind;
+  readonly center: Hex;
+  readonly radius: number;
+  /** 0 = la compétence vient de prendre effet, 1 = l'animation se termine. */
+  readonly age: number;
+}
+
 export interface Frame {
   readonly tick: number;
   readonly units: readonly FrameUnit[];
   readonly texts: readonly FloatingText[];
+  readonly areas: readonly FrameArea[];
   readonly suddenDeath: boolean;
   readonly winner: Winner | undefined;
 }
@@ -47,6 +64,8 @@ export interface Replay {
 }
 
 const TEXT_LIFETIME_TICKS = 16;
+/** Durée d'affichage d'une zone d'effet (0,7 s à vitesse normale). */
+export const AREA_LIFETIME_TICKS = 14;
 
 interface Tracker {
   unit: FrameUnit;
@@ -62,9 +81,11 @@ function createTracker(snapshot: UnitSnapshot): Tracker {
   return {
     unit: {
       uid: snapshot.uid,
+      defId: snapshot.defId,
       name: snapshot.name,
       side: snapshot.side,
       element: snapshot.element,
+      cost: snapshot.cost,
       maxHp: snapshot.maxHp,
       position: snapshot.position,
       moving: null,
@@ -92,6 +113,7 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
   function frameAt(tick: number): Frame {
     const trackers = new Map<number, Tracker>();
     const texts: FloatingText[] = [];
+    const areas: FrameArea[] = [];
     let suddenDeath = false;
     let winner: Winner | undefined;
 
@@ -155,6 +177,15 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
             if (age < 1.5) texts.push({ uid: event.uid, text: event.skillName, kind: 'skill', age: age / 1.5 });
           }
           break;
+        case 'skillArea': {
+          const areaAge = (tick - event.tick) / AREA_LIFETIME_TICKS;
+          if (tracker !== undefined && areaAge < 1) {
+            const { side, element } = tracker.unit;
+            const { uid, effect, center, radius } = event;
+            areas.push({ uid, side, element, effect, center, radius, age: areaAge });
+          }
+          break;
+        }
         case 'death':
           if (tracker !== undefined) {
             tracker.unit.alive = false;
@@ -173,7 +204,7 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
     }
 
     for (const tracker of trackers.values()) finalize(tracker, tick);
-    return { tick, units: [...trackers.values()].map((tracker) => tracker.unit), texts, suddenDeath, winner };
+    return { tick, units: [...trackers.values()].map((tracker) => tracker.unit), texts, areas, suddenDeath, winner };
   }
 
   return { durationTicks, frameAt };

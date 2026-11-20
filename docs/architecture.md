@@ -61,15 +61,17 @@ src/
     traits/             Effets des traits en combat (bonus, éclairs de Foudre)
   render/               Affichage d'un combat à partir de ses événements
     replay.ts           Reconstitue l'état visible à n'importe quel instant
-    board-canvas.ts     Dessin Canvas 2D temporaire (hexagones et cercles)
+    board-canvas.ts     Dessin Canvas 2D temporaire (hexagones, jetons, zones d'effet)
+    skill-area.ts       Animation des zones d'effet (onde du centre vers l'extérieur)
     hex-layout.ts       Passage cases ↔ pixels
     combat-summary.ts   Bilan par unité (dégâts, soins, K.O.)
     text-log.ts         Journal texte
     labels.ts           Libellés français
   ui/                   Interface HTML/CSS
-    sandbox/            Page « bac à sable » (composition, équipement, replay, résultats)
+    sandbox/            Page « bac à sable » (composition, équipement, replay, résultats, portraits)
     dom.ts              Petit utilitaire de création d'éléments
     styles.css          Styles (thème clair et sombre)
+  assets/portraits/     Images des jetons, une par unité (voir la section 5)
   sandbox/              Conversion des compositions prédéfinies en combats
   test-utils/           Aides pour les tests
   main.ts               Point d'entrée du navigateur
@@ -137,13 +139,33 @@ Les statistiques de combat sont copiées depuis la fiche au début du combat. Pl
 | `lightning` | Éclair du trait Foudre | Effet d'éclair |
 | `skillCast` | Début d'incantation d'une compétence | Animation de préparation |
 | `skillResolve` | La compétence prend effet | Effet visuel de la compétence |
+| `skillArea` | Zone touchée par un effet de compétence : centre (cible principale ou lanceur), rayon et type d'effet | Animation de la zone d'effet |
 | `death` | Une unité est K.O. | Animation de K.O. |
 | `suddenDeath` | Début de la mort subite | Alerte visuelle |
 | `combatEnd` | Vainqueur et raison de la fin | Écran de résultat |
 
 ---
 
-## 5. Commandes
+## 5. Jetons des unités
+
+| Partie du jeton | Signification |
+|---|---|
+| Fond | Coût : gris (1), vert (2), bleu (3), violet (4), doré (5) |
+| Image | Portrait de l'unité, ou ses initiales s'il n'y en a pas |
+| Anneau | Élément (gris = sans élément) |
+| Barre de vie | Camp : bleue pour le joueur, rouge pour l'ennemi |
+
+Les couleurs sont des variables CSS (`--cost-1` à `--cost-5`, `--side-player`, `--side-enemy`…) dans `src/ui/styles.css`, avec une variante pour le thème sombre.
+
+### Portraits
+
+- Déposer une image dans `src/assets/portraits/`, nommée d'après l'identifiant de l'unité : `barroth.png`, `tobi-kadachi.webp`… (formats acceptés : png, webp, jpg, svg).
+- Une image carrée est idéale : elle est recadrée dans le cercle. Les parties transparentes laissent voir le fond de la couleur du coût.
+- Vite trouve les images à la compilation (`import.meta.glob`), donc aucune liste à tenir à jour.
+
+---
+
+## 6. Commandes
 
 | Commande | Effet |
 |---|---|
@@ -156,7 +178,7 @@ Les statistiques de combat sont copiées depuis la fiche au début du combat. Pl
 
 ---
 
-## 6. Choix provisoires à valider
+## 7. Choix provisoires à valider
 
 Ces choix ont été nécessaires pour faire tourner le moteur. Ils sont isolés dans le code pour pouvoir être changés facilement.
 
@@ -179,10 +201,11 @@ Ces choix ont été nécessaires pour faire tourner le moteur. Ils sont isolés 
 | Réduction de dégâts maximale | 75 % | `data/balance.ts` |
 | Brûlure | Un nouveau coup relance la durée sans décaler le prochain tic de dégâts | `combat/status/burn.ts` |
 | Éclairs de Foudre | Attribués à la première unité Foudre debout ; plus d'éclairs si toutes sont K.O. | `combat/traits/lightning.ts` |
+| Animation des zones d'effet | 0,7 s, chaque anneau s'allume avec un léger retard | `render/replay.ts`, `render/skill-area.ts` |
 
 ---
 
-## 7. Prochaines étapes techniques
+## 8. Prochaines étapes techniques
 
 - **Rangs ★** : progression des statistiques entre Rang Bas, Rang Haut et Rang Maître.
 - **Événements d'énergie** : pour afficher les barres d'énergie dans le rendu.

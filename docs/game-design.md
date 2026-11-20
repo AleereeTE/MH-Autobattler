@@ -1,7 +1,7 @@
 # Monster Hunter Autobattler — Game design
 
 > Document de référence des décisions de game design.
-> Étape en cours : **Étape 3 — Moteur de combat** (règles principales validées ; contenu du prototype à définir). Architecture : voir [architecture.md](architecture.md).
+> Étape en cours : **Étape 5 — Extension du gameplay** (moteur de combat et bac à sable en place). Architecture : voir [architecture.md](architecture.md).
 > Dernière mise à jour : 2026-11-20.
 
 Les points marqués **[à définir]** ne sont pas encore tranchés ; ils sont repris dans la section [Questions ouvertes](#14-questions-ouvertes).
@@ -114,6 +114,18 @@ La vitesse de déplacement est identique pour toutes les unités.
 | ★1 Rang Bas | Achat en boutique, capture |
 | ★2 Rang Haut | 3 exemplaires ★1 |
 | ★3 Rang Maître | 3 exemplaires ★2 |
+
+#### Progression par rang
+
+| Élément | ★1 | ★2 | ★3 |
+|---|---|---|---|
+| PV et attaque brute | ×1 | ×1,8 | ×3,24 (×1,8 à chaque rang, comme TFT) |
+| Autres statistiques | Inchangées | Inchangées | Inchangées |
+| Compétence | Valeur de base ★1 | Valeur de base ★2 | Valeur de base ★3 |
+
+- **Statistiques** : seuls les PV et l'attaque brute augmentent. La puissance élémentaire, l'armure, la résistance, la vitesse d'attaque, la portée et l'énergie ne changent pas.
+- **Compétences** : chaque fiche définit **une valeur de base par rang** (exemple : 60 / 90 / 140). Les ratios (pourcentage d'attaque brute ou de puissance élémentaire) restent identiques. Ce choix permet de régler chaque unité finement ; c'est aussi par ce biais que les unités élémentaires progressent, puisque leur puissance élémentaire ne monte pas.
+- **[à définir]** : les durées et pourcentages des compétences (bonus, ralentissement) progressent-ils aussi avec le rang ?
 
 ### 3.5 Énergie et compétences
 
@@ -317,11 +329,11 @@ Zennys de base, bonus de victoire, coût d'une relance, coûts d'amélioration d
 - Le rendu temporaire doit pouvoir être remplacé par un moteur graphique plus avancé sans reconstruire les systèmes de combat.
 
 ### Feuille de route
-1. **Game design** : règles, combats, unités, progression. ← règles validées, contenu du prototype à définir
+1. **Game design** : règles, combats, unités, progression. ← règles validées
 2. **Architecture** : structure technique et responsabilités des modules. ← fait (architecture.md)
-3. **Moteur de combat** : règles validées, tests automatisés, journal des événements. ← en cours
-4. **Prototype jouable** : préparer une équipe et observer un combat avec des formes temporaires.
-5. **Extension du gameplay** : armes, compétences, monstres, mécaniques avancées.
+3. **Moteur de combat** : règles validées, tests automatisés, journal des événements. ← fait
+4. **Prototype jouable** : préparer une équipe et observer un combat avec des formes temporaires. ← fait (bac à sable)
+5. **Extension du gameplay** : armes, compétences, monstres, mécaniques avancées. ← en cours
 6. **Intégration graphique** : modèles, animations, effets visuels.
 
 ---
@@ -337,13 +349,15 @@ Zennys de base, bonus de victoire, coût d'une relance, coûts d'amélioration d
 6. Contenu de la version boss d'un monstre (PV, plusieurs compétences, état enragé ?).
 7. Informations visibles sur chaque chasse proposée par la carte (ennemis, type de récompense ?).
 
+8. Les durées et pourcentages des compétences (bonus, ralentissement) progressent-ils avec le rang ★ ?
+
 ### Confort de jeu
-8. Bouton d'accélération ×2 des combats ?
-9. Sauvegarde en cours de run ?
+9. Bouton d'accélération ×2 des combats ?
+10. Sauvegarde en cours de run ?
 
 ### Contenu
-10. Effets des 36 objets (conçus par Théo).
-11. Unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon.
+11. Effets des 36 objets (conçus par Théo).
+12. Unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon.
 
 ---
 
@@ -352,3 +366,4 @@ Zennys de base, bonus de victoire, coût d'une relance, coûts d'amélioration d
 - **2026-11-20** : création du document. Décisions de l'étape 1 : structure de run, unités, rôles, statistiques, énergie, traits, combat, dégâts, objets, économie, ennemis, recrutement et récompenses.
 - **2026-11-20** : une défaite contre un boss compte parmi les 3 de la run ; effet de l'Extrait (+1 énergie/s) ; type de dégâts des compétences selon l'élément de l'unité ; vocabulaire matériau / objet.
 - **2026-11-20** : contenu du prototype validé ([prototype-content.md](prototype-content.md)) ; mécanique propre à chaque élément ; nouveaux effets de compétence (bouclier, soin, bonus, ralentissement).
+- **2026-11-20** : début de l'étape 5. Progression par rang ★ : PV et attaque brute ×1,8 à chaque rang, autres statistiques inchangées ; chaque compétence a une valeur de base par rang, les ratios restent identiques (section 3.4).

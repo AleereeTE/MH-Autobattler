@@ -10,6 +10,7 @@ export type {
   CombatEndReason,
   CombatEvent,
   DamageCause,
+  SkillEffectKind,
   StatusKind,
   TraitSummary,
   UnitSnapshot,
