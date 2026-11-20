@@ -1,0 +1,148 @@
+import type { Element, StatBonus, TraitId, UnitKind } from './definitions.ts';
+
+/**
+ * Traits et synergies du prototype (docs/prototype-content.md).
+ * ⚠️ Toutes les valeurs sont provisoires.
+ */
+
+export type TraitEffect =
+  /** Bonus de statistiques pour les unités du trait. */
+  | { readonly kind: 'statBonus'; readonly bonus: StatBonus }
+  /** Bonus multiplié par le nombre d'objets portés (Guilde). */
+  | { readonly kind: 'perObjectBonus'; readonly bonus: StatBonus }
+  /** Les coups des unités du trait brûlent la cible (Feu). */
+  | { readonly kind: 'burn'; readonly damagePerSecond: number; readonly duration: number }
+  /** Les coups des unités du trait ralentissent la cible (Glace). */
+  | { readonly kind: 'chill'; readonly attackSpeedPercent: number; readonly duration: number }
+  /** Un éclair frappe régulièrement un ennemi au hasard (Foudre). */
+  | { readonly kind: 'lightning'; readonly damage: number; readonly interval: number };
+
+export interface TraitTier {
+  /** Nombre d'unités différentes nécessaire. */
+  readonly count: number;
+  readonly effect: TraitEffect;
+  readonly description: string;
+}
+
+export interface TraitDefinition {
+  readonly id: TraitId;
+  readonly name: string;
+  readonly category: 'element' | 'secondary';
+  /** Trait réservé aux chasseurs ou aux monstres. */
+  readonly restrictedTo?: UnitKind;
+  /** Paliers, du plus petit au plus grand. */
+  readonly tiers: readonly TraitTier[];
+}
+
+/** Trait principal d'une unité : son élément, ou « Sans élément ». */
+export function elementTraitId(element: Element | null): TraitId {
+  return element ?? 'neutral';
+}
+
+export const TRAITS: readonly TraitDefinition[] = [
+  {
+    id: 'fire',
+    name: 'Feu',
+    category: 'element',
+    tiers: [
+      { count: 2, effect: { kind: 'burn', damagePerSecond: 20, duration: 3 }, description: 'Les coups des unités Feu brûlent : 20 dégâts/s pendant 3 s' },
+      { count: 3, effect: { kind: 'burn', damagePerSecond: 40, duration: 3 }, description: 'Les coups des unités Feu brûlent : 40 dégâts/s pendant 3 s' },
+    ],
+  },
+  {
+    id: 'thunder',
+    name: 'Foudre',
+    category: 'element',
+    tiers: [
+      { count: 2, effect: { kind: 'lightning', damage: 80, interval: 4 }, description: 'Toutes les 4 s, un éclair frappe un ennemi au hasard (80 dégâts)' },
+      { count: 3, effect: { kind: 'lightning', damage: 150, interval: 3 }, description: 'Toutes les 3 s, un éclair frappe un ennemi au hasard (150 dégâts)' },
+    ],
+  },
+  {
+    id: 'ice',
+    name: 'Glace',
+    category: 'element',
+    tiers: [
+      { count: 2, effect: { kind: 'chill', attackSpeedPercent: -0.2, duration: 2 }, description: 'Les coups des unités Glace ralentissent la cible de 20 % pendant 2 s' },
+      { count: 3, effect: { kind: 'chill', attackSpeedPercent: -0.35, duration: 2 }, description: 'Les coups des unités Glace ralentissent la cible de 35 % pendant 2 s' },
+    ],
+  },
+  {
+    id: 'neutral',
+    name: 'Sans élément',
+    category: 'element',
+    tiers: [
+      { count: 2, effect: { kind: 'statBonus', bonus: { attackPercent: 0.15 } }, description: '+15 % d’attaque brute' },
+      { count: 3, effect: { kind: 'statBonus', bonus: { attackPercent: 0.3 } }, description: '+30 % d’attaque brute' },
+    ],
+  },
+  {
+    id: 'guild',
+    name: 'Guilde',
+    category: 'secondary',
+    restrictedTo: 'hunter',
+    tiers: [
+      {
+        count: 2,
+        effect: { kind: 'perObjectBonus', bonus: { hpPercent: 0.06, attackPercent: 0.06, elementalPowerPercent: 0.06 } },
+        description: '+6 % PV, attaque brute et puissance élémentaire par objet porté',
+      },
+      {
+        count: 4,
+        effect: { kind: 'perObjectBonus', bonus: { hpPercent: 0.12, attackPercent: 0.12, elementalPowerPercent: 0.12 } },
+        description: '+12 % PV, attaque brute et puissance élémentaire par objet porté',
+      },
+    ],
+  },
+  {
+    id: 'berserker',
+    name: 'Berserker',
+    category: 'secondary',
+    tiers: [
+      {
+        count: 2,
+        effect: { kind: 'statBonus', bonus: { skillsCanCrit: true, critChance: 0.15, critMultiplier: 0.2 } },
+        description: 'Compétences critiques possibles, +15 % de critique, critiques ×1,7',
+      },
+      {
+        count: 3,
+        effect: { kind: 'statBonus', bonus: { skillsCanCrit: true, critChance: 0.3, critMultiplier: 0.4 } },
+        description: 'Compétences critiques possibles, +30 % de critique, critiques ×1,9',
+      },
+    ],
+  },
+  {
+    id: 'bastion',
+    name: 'Bastion',
+    category: 'secondary',
+    tiers: [
+      { count: 2, effect: { kind: 'statBonus', bonus: { damageReduction: 0.15 } }, description: '−15 % de dégâts subis' },
+      { count: 3, effect: { kind: 'statBonus', bonus: { damageReduction: 0.3 } }, description: '−30 % de dégâts subis' },
+    ],
+  },
+  {
+    id: 'catalyst',
+    name: 'Catalyseur',
+    category: 'secondary',
+    tiers: [
+      { count: 2, effect: { kind: 'statBonus', bonus: { elementalPower: 20 } }, description: '+20 puissance élémentaire' },
+      { count: 3, effect: { kind: 'statBonus', bonus: { elementalPower: 45 } }, description: '+45 puissance élémentaire' },
+    ],
+  },
+  {
+    id: 'flying-wyvern',
+    name: 'Wyverne volante',
+    category: 'secondary',
+    restrictedTo: 'monster',
+    tiers: [
+      { count: 2, effect: { kind: 'statBonus', bonus: { attackSpeedPercent: 0.15 } }, description: '+15 % de vitesse d’attaque' },
+      { count: 3, effect: { kind: 'statBonus', bonus: { attackSpeedPercent: 0.3 } }, description: '+30 % de vitesse d’attaque' },
+    ],
+  },
+];
+
+const TRAITS_BY_ID = new Map(TRAITS.map((trait) => [trait.id, trait]));
+
+export function findTrait(id: TraitId): TraitDefinition | undefined {
+  return TRAITS_BY_ID.get(id);
+}

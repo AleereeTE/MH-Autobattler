@@ -1,0 +1,74 @@
+import type { Hex } from '../../core/hex.ts';
+import { drawBoard, type BoardScene, type BoardTheme } from '../../render/board-canvas.ts';
+import { createLayout, hexAtPoint } from '../../render/hex-layout.ts';
+
+/** Le plateau affiché dans un canvas : dessine des scènes et signale les clics sur les cases. */
+export class BoardView {
+  readonly element: HTMLCanvasElement;
+  private readonly layout = createLayout(34);
+  private theme: BoardTheme | null = null;
+
+  constructor(onCellClick: (hex: Hex) => void) {
+    this.element = document.createElement('canvas');
+    this.element.className = 'board';
+    this.element.setAttribute('role', 'img');
+    this.element.setAttribute('aria-label', 'Plateau de combat : 7 colonnes, 4 rangées par camp');
+    this.element.style.aspectRatio = `${this.layout.width} / ${this.layout.height}`;
+
+    this.element.addEventListener('click', (event) => {
+      const rect = this.element.getBoundingClientRect();
+      const hex = hexAtPoint(this.layout, {
+        x: ((event.clientX - rect.left) * this.layout.width) / rect.width,
+        y: ((event.clientY - rect.top) * this.layout.height) / rect.height,
+      });
+      if (hex !== null) onCellClick(hex);
+    });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      this.theme = null;
+    });
+  }
+
+  render(scene: BoardScene): void {
+    const ratio = window.devicePixelRatio || 1;
+    const width = Math.round(this.layout.width * ratio);
+    const height = Math.round(this.layout.height * ratio);
+    if (this.element.width !== width || this.element.height !== height) {
+      this.element.width = width;
+      this.element.height = height;
+    }
+    const context = this.element.getContext('2d');
+    if (context === null) return;
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    this.theme ??= readTheme(this.element);
+    drawBoard(context, this.layout, this.theme, scene);
+  }
+}
+
+/** Les couleurs viennent des variables CSS, pour suivre le thème clair ou sombre. */
+function readTheme(element: Element): BoardTheme {
+  const style = getComputedStyle(element);
+  const color = (name: string): string => style.getPropertyValue(name).trim() || '#888';
+  return {
+    cellPlayer: color('--board-cell-player'),
+    cellEnemy: color('--board-cell-enemy'),
+    cellStroke: color('--board-stroke'),
+    highlight: color('--accent'),
+    player: color('--side-player'),
+    enemy: color('--side-enemy'),
+    unitText: '#ffffff',
+    hpBack: color('--board-hp-back'),
+    hp: color('--board-hp'),
+    shield: color('--board-shield'),
+    text: color('--fg'),
+    crit: color('--accent'),
+    heal: color('--board-hp'),
+    elements: {
+      fire: color('--element-fire'),
+      water: color('--element-water'),
+      thunder: color('--element-thunder'),
+      ice: color('--element-ice'),
+      dragon: color('--element-dragon'),
+      none: color('--element-none'),
+    },
+  };
+}

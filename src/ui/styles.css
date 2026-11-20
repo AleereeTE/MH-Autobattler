@@ -1,0 +1,422 @@
+:root {
+  --bg: #f4f1ea;
+  --panel: #ffffff;
+  --fg: #1f1d1a;
+  --muted: #6b665d;
+  --border: #dcd6ca;
+  --accent: #b5532b;
+  --accent-fg: #ffffff;
+  --danger: #a33a3a;
+
+  --side-player: #2f6f9f;
+  --side-enemy: #9a3b3b;
+  --board-cell-player: #e3ecf3;
+  --board-cell-enemy: #f3e5e1;
+  --board-stroke: #c9c1b2;
+  --board-hp: #3f9b5a;
+  --board-hp-back: #00000033;
+  --board-shield: #d9d9d9;
+
+  --element-fire: #e0662f;
+  --element-water: #2f8fd6;
+  --element-thunder: #e3b81c;
+  --element-ice: #5fc4dc;
+  --element-dragon: #7d4bb3;
+  --element-none: #8c8577;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171614;
+    --panel: #211f1c;
+    --fg: #ece8e0;
+    --muted: #a39d92;
+    --border: #3a3732;
+    --accent: #e0814f;
+    --accent-fg: #1a1410;
+    --danger: #e07070;
+
+    --side-player: #3d7fb0;
+    --side-enemy: #a84848;
+    --board-cell-player: #1f2a33;
+    --board-cell-enemy: #33221f;
+    --board-stroke: #45413a;
+    --board-hp: #57c178;
+    --board-hp-back: #ffffff26;
+    --board-shield: #f0f0f0;
+
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+main {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+}
+
+h3 {
+  margin: 12px 0 6px;
+  font-size: 0.95rem;
+}
+
+p {
+  margin: 6px 0;
+}
+
+.page-header {
+  margin-bottom: 16px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.85rem;
+}
+
+/* Mise en page : liste des unités | plateau | détails */
+.sandbox {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 560px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.palette-column,
+.details-column,
+.board-column {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  min-width: 0;
+}
+
+.palette-column > *,
+.details-column > *,
+.board-column > * {
+  min-width: 0;
+}
+
+@media (max-width: 1180px) {
+  .sandbox {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .palette-column {
+    grid-column: 1 / -1;
+  }
+  .palette {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .sandbox {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  min-width: 0;
+}
+
+/* Plateau */
+.board {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.toolbar,
+.controls,
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.mode {
+  font-weight: 700;
+}
+
+.status {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Contrôles */
+.button,
+select,
+input {
+  font: inherit;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--fg);
+}
+
+.button {
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: var(--accent);
+}
+
+.button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 600;
+}
+
+.button.small {
+  padding: 3px 8px;
+  font-size: 0.85rem;
+}
+
+.button.danger {
+  color: var(--danger);
+  margin-top: 10px;
+}
+
+select {
+  max-width: 100%;
+}
+
+.seed input {
+  width: 8ch;
+  margin-left: 4px;
+}
+
+/* Liste des unités */
+.palette-group h3 {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.palette {
+  display: grid;
+  gap: 6px;
+}
+
+.palette-item {
+  display: grid;
+  gap: 2px;
+  text-align: left;
+  font: inherit;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--element-none);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.palette-item span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.palette-item[aria-pressed='true'] {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.element-fire {
+  border-left-color: var(--element-fire);
+}
+.element-thunder {
+  border-left-color: var(--element-thunder);
+}
+.element-ice {
+  border-left-color: var(--element-ice);
+}
+.element-water {
+  border-left-color: var(--element-water);
+}
+.element-dragon {
+  border-left-color: var(--element-dragon);
+}
+
+/* Détails d'une unité */
+.unit-card h3 {
+  margin-top: 4px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 1px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.8rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 14px;
+  margin: 8px 0;
+  font-size: 0.9rem;
+}
+
+.stats dt {
+  color: var(--muted);
+}
+
+.stats dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.slots {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0;
+  display: grid;
+  gap: 6px;
+}
+
+.slot {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.equipment .row {
+  margin-top: 6px;
+}
+
+.equipment select {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.hint {
+  color: var(--accent);
+}
+
+.notice {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Synergies */
+.two-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.traits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.trait.inactive {
+  opacity: 0.6;
+}
+
+.trait.active strong {
+  color: var(--accent);
+}
+
+/* Résultats */
+.outcome,
+.batch {
+  font-weight: 600;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+th,
+td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  white-space: nowrap;
+}
+
+th[scope='row'],
+td:nth-child(2),
+thead th:first-child {
+  text-align: left;
+}
+
+tr.player th[scope='row'] {
+  color: var(--side-player);
+}
+
+tr.enemy th[scope='row'] {
+  color: var(--side-enemy);
+}
+
+details {
+  margin-top: 10px;
+}
+
+.log {
+  max-height: 360px;
+  overflow: auto;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  background: var(--bg);
+  padding: 10px;
+  border-radius: 6px;
+}

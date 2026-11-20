@@ -1,0 +1,131 @@
+import type { UnitDefinition } from '../definitions.ts';
+
+/**
+ * Chasseurs du prototype. Noms provisoires.
+ * ⚠️ Statistiques provisoires : plus faibles que celles des monstres, compensées par 3 emplacements d'objets.
+ */
+
+export const GARRICK: UnitDefinition = {
+  id: 'garrick',
+  name: 'Garrick',
+  kind: 'hunter',
+  weapon: 'Lance',
+  role: 'tank',
+  element: 'ice',
+  cost: 2,
+  traits: ['bastion'],
+  stats: { hp: 750, attack: 45, elementalPower: 30, critChance: 0.05, armor: 50, elementalResist: 40, attackSpeed: 0.65, range: 1, maxEnergy: 80, energyRegenBonus: 0 },
+  skill: {
+    id: 'garde',
+    name: 'Garde',
+    description: 'Bouclier de 200 + 20 % des PV max pendant 4 s.',
+    castTime: 0.25,
+    effects: [{ kind: 'shield', base: 200, ratios: [{ stat: 'hp', ratio: 0.2 }], duration: 4 }],
+  },
+};
+
+export const HELGA: UnitDefinition = {
+  id: 'helga',
+  name: 'Helga',
+  kind: 'hunter',
+  weapon: 'Marteau',
+  role: 'bruiser',
+  element: null,
+  cost: 1,
+  traits: ['guild'],
+  stats: { hp: 650, attack: 55, elementalPower: 0, critChance: 0.1, armor: 30, elementalResist: 25, attackSpeed: 0.7, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
+  skill: {
+    id: 'big-bang',
+    name: 'Big Bang',
+    description: '80 + 160 % de l’attaque brute en dégâts physiques sur sa cible.',
+    castTime: 0.5,
+    effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'physical', base: 80, ratios: [{ stat: 'attack', ratio: 1.6 }] }],
+  },
+};
+
+export const AKIRA: UnitDefinition = {
+  id: 'akira',
+  name: 'Akira',
+  kind: 'hunter',
+  weapon: 'Grande épée',
+  role: 'dps',
+  element: null,
+  cost: 3,
+  traits: ['guild', 'berserker'],
+  stats: { hp: 700, attack: 75, elementalPower: 0, critChance: 0.15, armor: 30, elementalResist: 25, attackSpeed: 0.55, range: 1, maxEnergy: 70, energyRegenBonus: 0 },
+  skill: {
+    id: 'coup-charge',
+    name: 'Coup chargé',
+    description: 'Charge pendant 1,5 s, puis inflige 150 + 300 % de l’attaque brute en dégâts physiques.',
+    castTime: 1.5,
+    effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'physical', base: 150, ratios: [{ stat: 'attack', ratio: 3 }] }],
+  },
+};
+
+export const LYSA: UnitDefinition = {
+  id: 'lysa',
+  name: 'Lysa',
+  kind: 'hunter',
+  weapon: 'Doubles lames',
+  role: 'dps',
+  element: 'thunder',
+  cost: 1,
+  traits: ['guild'],
+  stats: { hp: 550, attack: 45, elementalPower: 25, critChance: 0.15, armor: 20, elementalResist: 20, attackSpeed: 0.9, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
+  skill: {
+    id: 'mode-demon',
+    name: 'Mode démon',
+    description: '+60 % de vitesse d’attaque pendant 4 s.',
+    castTime: 0,
+    effects: [{ kind: 'buff', attackSpeedPercent: 0.6, duration: 4 }],
+  },
+};
+
+export const SYLVAIN: UnitDefinition = {
+  id: 'sylvain',
+  name: 'Sylvain',
+  kind: 'hunter',
+  weapon: 'Arc',
+  role: 'dps',
+  element: 'ice',
+  cost: 1,
+  traits: ['catalyst'],
+  stats: { hp: 500, attack: 48, elementalPower: 30, critChance: 0.15, armor: 15, elementalResist: 20, attackSpeed: 0.8, range: 4, maxEnergy: 60, energyRegenBonus: 0 },
+  skill: {
+    id: 'pluie-de-fleches',
+    name: 'Pluie de flèches',
+    description: '50 + 160 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
+    castTime: 0.5,
+    effects: [
+      {
+        kind: 'damage',
+        target: 'farthestEnemy',
+        damageType: 'elemental',
+        base: 50,
+        ratios: [{ stat: 'elementalPower', ratio: 1.6 }],
+        radius: 1,
+      },
+    ],
+  },
+};
+
+export const ODETTE: UnitDefinition = {
+  id: 'odette',
+  name: 'Odette',
+  kind: 'hunter',
+  weapon: 'Corne de chasse',
+  role: 'support',
+  element: 'fire',
+  cost: 2,
+  traits: ['guild'],
+  stats: { hp: 600, attack: 40, elementalPower: 35, critChance: 0.05, armor: 25, elementalResist: 30, attackSpeed: 0.7, range: 2, maxEnergy: 70, energyRegenBonus: 0 },
+  skill: {
+    id: 'melodie-de-soin',
+    name: 'Mélodie de soin',
+    description: 'Soigne de 80 + 200 % de la puissance élémentaire les alliés à 2 cases ou moins.',
+    castTime: 0.5,
+    effects: [{ kind: 'heal', base: 80, ratios: [{ stat: 'elementalPower', ratio: 2 }], radius: 2 }],
+  },
+};
+
+export const HUNTERS: readonly UnitDefinition[] = [GARRICK, HELGA, AKIRA, LYSA, SYLVAIN, ODETTE];
