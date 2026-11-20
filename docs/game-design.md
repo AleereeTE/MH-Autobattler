@@ -187,6 +187,10 @@ L'Extrait ajoute **+1 énergie par seconde** au gain passif de l'unité qui le p
   - **Dragon (Rage draconique)** : les unités Dragon infligent plus de dégâts quand leurs PV passent sous 50 %.
 - **Dragon ancien (Calamité)** : trait secondaire des Dragons anciens (monstres de coût 5), avec des paliers à 1, 2 et 3 unités. Les Dragons anciens commencent le combat avec une partie de leur énergie, donc lancent leur compétence plus tôt.
 - **Dragon noir (Terreur)** : trait secondaire des Dragons noirs (monstres de coût 6), avec des paliers à 1, 2 et 3 unités. Tant qu'un Dragon noir est en vie, tous les ennemis infligent moins de dégâts. Les Dragons noirs ne sont pas des Dragons anciens dans le jeu (ils n'ont pas le trait Dragon ancien).
+- **Traits de famille** (monstres uniquement, paliers à 2 et 3 unités) :
+  - **Léviathan (Glissade)** : les Léviathans esquivent une partie des attaques de base. Une attaque esquivée n'inflige ni dégâts ni effet d'élément ; les compétences ne s'esquivent jamais ;
+  - **Wyverne brute (Masse)** : les Wyvernes brutes gagnent des PV max ;
+  - **Wyverne à crocs** : prévue quand il y aura au moins 3 Wyvernes à crocs.
 - Les traits secondaires renforcent les unités du trait.
 - Paliers et valeurs du prototype : voir [prototype-content.md](prototype-content.md). Ils évolueront avec l'arrivée de nouvelles unités.
 
@@ -389,7 +393,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 
 ### Contenu
 10. Effets des 36 objets (conçus par Théo).
-11. Unités supplémentaires : armes de chasseur restantes (Épée et bouclier, Épée longue, Fusarbalètes), autres monstres et Dragons anciens.
+11. Unités supplémentaires : arme de chasseur restante (Fusarbalète léger), autres monstres (dont des Wyvernes à crocs) et Dragons anciens.
 
 ---
 
@@ -401,6 +405,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-20** : début de l'étape 5. Progression par rang ★ : PV et attaque brute ×1,8 à chaque rang, autres statistiques inchangées ; chaque compétence a une valeur de base par rang, les ratios restent identiques (section 3.4).
 - **2026-11-20** : rangs ★ — les durées et pourcentages des compétences ne changent pas avec le rang pour l'instant. Rangs implémentés dans le moteur et le bac à sable.
 - **2026-11-20** : première version du mode run — suite imposée de 30 chasses, escouades générées selon un budget, boss en escouade renforcée, récompenses 1 parmi 3 simplifiées ; fusion automatique comme TFT (plateau + réserve, objets regroupés, achat possible réserve pleine) ; valeurs de départ de l'économie (provisoires).
+- **2026-11-20** : 11 nouvelles unités (coûts 1 à 5, dont Kirin en Dragon ancien) ; traits de famille Léviathan (Glissade : esquive des attaques de base) et Wyverne brute (Masse : PV max) ; Wyverne à crocs reportée.
 - **2026-11-20** : Dragons noirs — coût 6 (fond prismatique) pour Fatalis, Alatreon et Dire Miralis ; boutique au niveau 9 seulement, 3 exemplaires chacun ; trait Dragon noir (Terreur) ; le boss de la chasse 30 peut être un Dragon noir ★1.
 - **2026-11-20** : unités de coût 4 et 5 — 8 unités (dont 3 Dragons anciens au coût 5), traits Eau (Source de vie), Dragon (Rage draconique) et Dragon ancien (Calamité), boutique à 5 coûts, monstres de coût 4 dans les escouades des stages 2 et 3, Dragon ancien ★2 en boss du stage 3.
 - **2026-11-20** : ciblage — une unité vise toujours l'ennemi le plus proche, réévalué en permanence (elle ne garde plus sa cible jusqu'au K.O.). Boutique — une unité obtenue au ★3 n'est plus proposée (boutique et récompenses).

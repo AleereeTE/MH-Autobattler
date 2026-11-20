@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { makeUnit, place } from '../../test-utils/factories.ts';
+import { basicAttack } from '../actions/basic-attack.ts';
 import { dealDamage } from '../actions/damage.ts';
 import { createCombatState } from '../setup.ts';
 import type { CombatState, CombatUnit } from '../state.ts';
@@ -143,5 +144,56 @@ describe('Dragon noir — Terreur', () => {
     dragon.alive = false;
     dragon.hp = 0;
     expect(dealDamage(state, unit(state, 'ennemi'), dragon, hit(100))).toBeCloseTo(100);
+  });
+});
+
+describe('Léviathan — Glissade', () => {
+  it('esquive environ 15 % des attaques de base, sans dégâts ni effet d’élément', () => {
+    const leviathan = (id: string) => makeUnit({ id, kind: 'monster', traits: ['leviathan'], stats: { hp: 1_000_000 } });
+    const state = createCombatState(
+      {
+        player: [place(leviathan('lev-1'), 3, 4), place(leviathan('lev-2'), 4, 4)],
+        enemy: [place(makeUnit({ id: 'feu', element: 'fire' }), 3, 3), place(makeUnit({ id: 'feu-2', element: 'fire' }), 6, 0)],
+      },
+      3,
+    );
+    const target = unit(state, 'lev-1');
+    expect(target.stats.dodgeChance).toBeCloseTo(0.15);
+    const attacker = unit(state, 'feu');
+    for (let i = 0; i < 2000; i++) basicAttack(state, attacker, target);
+
+    const dodges = state.events.filter((event) => event.type === 'dodge');
+    const hits = state.events.filter((event) => event.type === 'damage' && event.cause === 'attack');
+    expect(dodges.length / 2000).toBeGreaterThan(0.12);
+    expect(dodges.length / 2000).toBeLessThan(0.18);
+    expect(dodges.length + hits.length).toBe(2000);
+    expect(state.events.filter((event) => event.type === 'status' && event.status === 'burn').length).toBe(hits.length);
+  });
+
+  it('n’esquive jamais une compétence', () => {
+    const state = createCombatState(
+      {
+        player: [
+          place(makeUnit({ id: 'lev-1', kind: 'monster', traits: ['leviathan'] }), 3, 4),
+          place(makeUnit({ id: 'lev-2', kind: 'monster', traits: ['leviathan'] }), 4, 4),
+        ],
+        enemy: [target()],
+      },
+      1,
+    );
+    const skillHit = { amount: 50, type: 'physical' as const, isCrit: false, cause: 'skill' as const };
+    for (let i = 0; i < 50; i++) dealDamage(state, unit(state, 'cible'), unit(state, 'lev-1'), skillHit);
+    expect(state.events.some((event) => event.type === 'dodge')).toBe(false);
+  });
+});
+
+describe('Wyverne brute — Masse', () => {
+  it('donne +15 % de PV max avec 2 Wyvernes brutes, +30 % avec 3', () => {
+    const brute = (id: string) => makeUnit({ id, kind: 'monster', traits: ['brute-wyvern'], stats: { hp: 1000 } });
+    const hpWith = (count: number) => {
+      const player = Array.from({ length: count }, (_, i) => place(brute(`brute-${i}`), 2 + i, 7));
+      return unit(createCombatState({ player, enemy: [target()] }, 1), 'brute-0').stats.hp;
+    };
+    expect([1, 2, 3].map(hpWith)).toEqual([1000, 1150, 1300]);
   });
 });

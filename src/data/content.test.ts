@@ -10,11 +10,11 @@ import { UNITS } from './units/index.ts';
 
 /** Vérifie que le contenu du prototype respecte ce qui a été validé (docs/prototype-content.md). */
 describe('contenu du prototype', () => {
-  it('contient 8 chasseurs et 15 monstres, de coût 1 à 6', () => {
-    expect(UNITS.filter((u) => u.kind === 'hunter')).toHaveLength(8);
-    expect(UNITS.filter((u) => u.kind === 'monster')).toHaveLength(15);
+  it('contient 11 chasseurs et 23 monstres, de coût 1 à 6', () => {
+    expect(UNITS.filter((u) => u.kind === 'hunter')).toHaveLength(11);
+    expect(UNITS.filter((u) => u.kind === 'monster')).toHaveLength(23);
     const count = (cost: number) => UNITS.filter((u) => u.cost === cost).length;
-    expect([1, 2, 3, 4, 5, 6].map(count)).toEqual([5, 4, 3, 5, 3, 3]);
+    expect([1, 2, 3, 4, 5, 6].map(count)).toEqual([8, 7, 6, 6, 4, 3]);
   });
 
   it('réserve le coût 6 aux 3 Dragons noirs, qui ne sont pas Dragons anciens', () => {
@@ -26,9 +26,9 @@ describe('contenu du prototype', () => {
     }
   });
 
-  it('réserve le coût 5 aux 3 Dragons anciens, qui sont des monstres', () => {
+  it('réserve le coût 5 aux 4 Dragons anciens, qui sont des monstres', () => {
     const elders = UNITS.filter((u) => u.traits.includes('elder-dragon'));
-    expect(elders.map((u) => u.id).sort()).toEqual(['namielle', 'safi-jiiva', 'teostra']);
+    expect(elders.map((u) => u.id).sort()).toEqual(['kirin', 'namielle', 'safi-jiiva', 'teostra']);
     expect(UNITS.filter((u) => u.cost === 5)).toEqual(elders);
     for (const elder of elders) expect(elder).toMatchObject({ kind: 'monster', cost: 5 });
   });
@@ -49,13 +49,19 @@ describe('contenu du prototype', () => {
     expect(new Set(UNITS.map((u) => u.id)).size).toBe(UNITS.length);
   });
 
-  it('répartit les rôles : 5 tanks, 8 bruisers, 6 DPS, 4 supports', () => {
+  it('répartit les rôles : 7 tanks, 12 bruisers, 10 DPS, 5 supports', () => {
     const count = (role: string) => UNITS.filter((u) => u.role === role).length;
-    expect([count('tank'), count('bruiser'), count('dps'), count('support')]).toEqual([5, 8, 6, 4]);
+    expect([count('tank'), count('bruiser'), count('dps'), count('support')]).toEqual([7, 12, 10, 5]);
   });
 
-  it('a 5 unités Feu, 4 Foudre, Glace et Dragon, 3 Sans élément et Eau', () => {
-    const expected: Record<string, number> = { fire: 5, thunder: 4, ice: 4, neutral: 3, water: 3, dragon: 4 };
+  it('range les monstres dans leurs familles : 3 Léviathans et 3 Wyvernes brutes', () => {
+    const family = (id: string) => UNITS.filter((u) => u.traits.includes(id)).map((u) => u.id).sort();
+    expect(family('leviathan')).toEqual(['lagiacrus', 'mizutsune', 'royal-ludroth']);
+    expect(family('brute-wyvern')).toEqual(['anjanath', 'barroth', 'deviljho']);
+  });
+
+  it('a 5 unités Feu et Glace, 6 Foudre, Sans élément, Eau et Dragon', () => {
+    const expected: Record<string, number> = { fire: 5, thunder: 6, ice: 5, neutral: 6, water: 6, dragon: 6 };
     for (const [id, count] of Object.entries(expected)) {
       expect(UNITS.filter((u) => unitTraitIds(u)[0] === id), id).toHaveLength(count);
     }

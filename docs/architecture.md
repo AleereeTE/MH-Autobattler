@@ -159,6 +159,7 @@ Les statistiques de combat sont calculées au début du combat : statistiques de
 | `skillCast` | Début d'incantation d'une compétence | Animation de préparation |
 | `skillResolve` | La compétence prend effet | Effet visuel de la compétence |
 | `skillArea` | Zone touchée par un effet de compétence : centre (cible principale ou lanceur), rayon et type d'effet | Animation de la zone d'effet |
+| `dodge` | Une attaque de base est esquivée (Léviathan) | Texte « Esquive » |
 | `death` | Une unité est K.O. | Animation de K.O. |
 | `suddenDeath` | Début de la mort subite | Alerte visuelle |
 | `combatEnd` | Vainqueur et raison de la fin | Écran de résultat |

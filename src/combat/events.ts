@@ -73,6 +73,8 @@ export type CombatEvent =
       radius: number;
     }>
   | At<{ type: 'lightning'; sourceUid: number; targetUid: number }>
+  /** Une attaque de base est esquivée (Léviathan) : ni dégâts ni effet d'élément. */
+  | At<{ type: 'dodge'; sourceUid: number; targetUid: number }>
   | At<{ type: 'death'; uid: number }>
   | At<{ type: 'suddenDeath' }>
   | At<{ type: 'combatEnd'; winner: Winner; reason: CombatEndReason }>;

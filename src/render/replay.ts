@@ -32,7 +32,7 @@ export interface FrameUnit {
 export interface FloatingText {
   readonly uid: number;
   readonly text: string;
-  readonly kind: 'damage' | 'crit' | 'heal' | 'skill';
+  readonly kind: 'damage' | 'crit' | 'heal' | 'skill' | 'dodge';
   /** 0 = vient d'apparaître, 1 = va disparaître. */
   readonly age: number;
 }
@@ -172,6 +172,9 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
             if (event.status === 'chill') tracker.chilledUntil = Math.max(tracker.chilledUntil, until);
             if (event.status === 'haste') tracker.hastedUntil = until;
           }
+          break;
+        case 'dodge':
+          if (age < 1 && trackers.has(event.targetUid)) texts.push({ uid: event.targetUid, text: 'Esquive', kind: 'dodge', age });
           break;
         case 'skillCast':
           if (tracker !== undefined) {

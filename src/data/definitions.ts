@@ -72,6 +72,8 @@ export interface StatBonus {
   readonly lowHpDamageBonus?: number;
   /** Énergie au début du combat, en part de l'énergie maximale (Dragon ancien : 0,4 = 40 %). */
   readonly startingEnergyRatio?: number;
+  /** Chance d'esquiver une attaque de base (Léviathan : 0,15 = 15 %). */
+  readonly dodgeChance?: number;
 }
 
 /** Statistique sur laquelle un ratio de compétence peut s'appuyer ('hp' = PV max). */

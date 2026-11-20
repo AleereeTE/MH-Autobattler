@@ -21,4 +21,6 @@ export const BALANCE = {
   minAttackSpeedMultiplier: 0.25,
   /** ✅ Rage draconique : bonus de dégâts sous 50 % des PV. */
   rageHpThreshold: 0.5,
+  /** ⚠️ Chance d'esquive maximale, toutes sources confondues. */
+  maxDodgeChance: 0.75,
 } as const;

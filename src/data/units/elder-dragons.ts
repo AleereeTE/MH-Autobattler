@@ -69,4 +69,24 @@ export const SAFI_JIIVA: UnitDefinition = {
   },
 };
 
-export const ELDER_DRAGONS: readonly UnitDefinition[] = [TEOSTRA, NAMIELLE, SAFI_JIIVA];
+export const KIRIN: UnitDefinition = {
+  id: 'kirin',
+  name: 'Kirin',
+  kind: 'monster',
+  role: 'dps',
+  element: 'thunder',
+  cost: 5,
+  traits: ['elder-dragon'],
+  stats: { hp: 1000, attack: 60, elementalPower: 75, critChance: 0.1, armor: 30, elementalResist: 50, attackSpeed: 0.8, range: 3, maxEnergy: 90, energyRegenBonus: 0 },
+  skill: {
+    id: 'foudre-divine',
+    name: 'Foudre divine',
+    description: '200/300/450 + 280 % de la puissance élémentaire sur l’ennemi le plus faible et ses voisins.',
+    castTime: 0.5,
+    effects: [
+      { kind: 'damage', target: 'lowestHpEnemy', damageType: 'elemental', base: [200, 300, 450], ratios: [{ stat: 'elementalPower', ratio: 2.8 }], radius: 1 },
+    ],
+  },
+};
+
+export const ELDER_DRAGONS: readonly UnitDefinition[] = [TEOSTRA, NAMIELLE, SAFI_JIIVA, KIRIN];

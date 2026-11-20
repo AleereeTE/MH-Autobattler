@@ -171,4 +171,67 @@ export const ONDINE: UnitDefinition = {
   },
 };
 
-export const HUNTERS: readonly UnitDefinition[] = [GARRICK, HELGA, AKIRA, LYSA, SYLVAIN, ODETTE, BRANN, ONDINE];
+export const MIRA: UnitDefinition = {
+  id: 'mira',
+  name: 'Mira',
+  kind: 'hunter',
+  weapon: 'Épée et bouclier',
+  role: 'bruiser',
+  element: 'dragon',
+  cost: 1,
+  traits: ['guild', 'bastion'],
+  stats: { hp: 620, attack: 48, elementalPower: 25, critChance: 0.1, armor: 35, elementalResist: 25, attackSpeed: 0.8, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
+  skill: {
+    id: 'frappe-tournoyante',
+    name: 'Frappe tournoyante',
+    description: '50/75/115 + 150 % de la puissance élémentaire sur la cible et ses voisins.',
+    castTime: 0.25,
+    effects: [
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [50, 75, 115], ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 1 },
+    ],
+  },
+};
+
+export const KAEDE: UnitDefinition = {
+  id: 'kaede',
+  name: 'Kaede',
+  kind: 'hunter',
+  weapon: 'Épée longue',
+  role: 'dps',
+  element: 'water',
+  cost: 2,
+  traits: ['guild', 'berserker'],
+  stats: { hp: 580, attack: 58, elementalPower: 35, critChance: 0.15, armor: 20, elementalResist: 20, attackSpeed: 0.85, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
+  skill: {
+    id: 'coup-spirituel',
+    name: 'Coup spirituel',
+    description: '70/105/160 + 200 % de la puissance élémentaire sur la cible.',
+    castTime: 0.25,
+    effects: [
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [70, 105, 160], ratios: [{ stat: 'elementalPower', ratio: 2 }] },
+    ],
+  },
+};
+
+export const DORIAN: UnitDefinition = {
+  id: 'dorian',
+  name: 'Dorian',
+  kind: 'hunter',
+  weapon: 'Fusarbalète lourd',
+  role: 'dps',
+  element: 'dragon',
+  cost: 3,
+  traits: ['guild', 'catalyst'],
+  stats: { hp: 550, attack: 50, elementalPower: 45, critChance: 0.1, armor: 15, elementalResist: 20, attackSpeed: 0.6, range: 4, maxEnergy: 70, energyRegenBonus: 0 },
+  skill: {
+    id: 'tir-draconique',
+    name: 'Tir draconique',
+    description: 'Incantation de 1 s, puis 130/195/295 + 250 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
+    castTime: 1,
+    effects: [
+      { kind: 'damage', target: 'farthestEnemy', damageType: 'elemental', base: [130, 195, 295], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 1 },
+    ],
+  },
+};
+
+export const HUNTERS: readonly UnitDefinition[] = [GARRICK, HELGA, AKIRA, LYSA, SYLVAIN, ODETTE, BRANN, ONDINE, MIRA, KAEDE, DORIAN];

@@ -199,6 +199,26 @@ export const TRAITS: readonly TraitDefinition[] = [
     ],
   },
   {
+    id: 'leviathan',
+    name: 'Léviathan',
+    category: 'secondary',
+    restrictedTo: 'monster',
+    tiers: [
+      { count: 2, effect: { kind: 'statBonus', bonus: { dodgeChance: 0.15 } }, description: 'Glissade : les Léviathans esquivent 15 % des attaques de base' },
+      { count: 3, effect: { kind: 'statBonus', bonus: { dodgeChance: 0.3 } }, description: 'Glissade : les Léviathans esquivent 30 % des attaques de base' },
+    ],
+  },
+  {
+    id: 'brute-wyvern',
+    name: 'Wyverne brute',
+    category: 'secondary',
+    restrictedTo: 'monster',
+    tiers: [
+      { count: 2, effect: { kind: 'statBonus', bonus: { hpPercent: 0.15 } }, description: 'Masse : +15 % de PV max pour les Wyvernes brutes' },
+      { count: 3, effect: { kind: 'statBonus', bonus: { hpPercent: 0.3 } }, description: 'Masse : +30 % de PV max pour les Wyvernes brutes' },
+    ],
+  },
+  {
     id: 'black-dragon',
     name: 'Dragon noir',
     category: 'secondary',

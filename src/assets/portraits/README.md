@@ -27,6 +27,17 @@ Une image par unité, nommée d'après son identifiant (`id` de la fiche dans `s
 | Fatalis | `fatalis.png` |
 | Alatreon | `alatreon.png` |
 | Dire Miralis | `dire-miralis.png` (pas encore d'image : initiales en attendant) |
+| Royal Ludroth | `royal-ludroth.png` |
+| Kulu-Ya-Ku | `kulu-ya-ku.png` |
+| Mira (Épée et bouclier) | `mira.webp` |
+| Jyuratodus | `jyuratodus.png` |
+| Barioth | `barioth.png` |
+| Kaede (Épée longue) | `kaede.webp` |
+| Nargacuga | `nargacuga.png` |
+| Lagiacrus | `lagiacrus.png` |
+| Dorian (Fusarbalète lourd) | `dorian.webp` |
+| Tigrex | `tigrex.png` |
+| Kirin | `kirin.png` |
 
 Formats acceptés : png, webp, jpg, svg. Une image carrée d'environ 128 × 128 pixels suffit.
 Une unité sans image garde ses initiales. Détails : section 5 de `docs/architecture.md`.
@@ -36,7 +47,7 @@ Une unité sans image garde ses initiales. Détails : section 5 de `docs/archite
 Téléchargées le 2026-11-20 depuis le [Monster Hunter Wiki](https://monsterhunterwiki.org) :
 
 - **Monstres** : icônes de *Monster Hunter Stories 3* (`MHST3-<Monstre>_Icon.png`, 128 × 128), qui contient presque tous les monstres du prototype dans un même style.
-- **Teostra, Safi'jiiva, Fatalis et Alatreon** : absents de Stories 3, icônes de *Monster Hunter World: Iceborne* (`MHWI-<Monstre>_Icon.png`, 456 × 455), dans le même style de dessin.
+- **Teostra, Safi'jiiva, Fatalis, Alatreon, Jyuratodus et Kirin** : absents de Stories 3, icônes de *Monster Hunter World: Iceborne* (`MHWI-<Monstre>_Icon.png`, 456 × 455), dans le même style de dessin.
 - **Dire Miralis** : le wiki n'a pas d'icône (seulement un rendu en pied de MH3U) ; il garde ses initiales pour l'instant.
 - **Chasseurs** : icônes d'arme de *Monster Hunter Wilds* (`MHWA-<Arme>_Icon_Base.webp`, 100 × 100), puisque les chasseurs du prototype sont inventés.
 

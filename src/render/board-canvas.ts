@@ -273,7 +273,7 @@ function drawTexts(
     if (text.kind !== 'skill') stacked.set(text.uid, index + 1);
     ctx.globalAlpha = Math.max(0, 1 - text.age);
     ctx.fillStyle = text.kind === 'crit' ? theme.crit : text.kind === 'heal' ? theme.heal : theme.text;
-    const size = text.kind === 'skill' ? 0.36 : text.kind === 'crit' ? 0.5 : 0.4;
+    const size = text.kind === 'skill' || text.kind === 'dodge' ? 0.36 : text.kind === 'crit' ? 0.5 : 0.4;
     ctx.font = `700 ${Math.round(layout.size * size)}px system-ui, sans-serif`;
     ctx.textAlign = 'center';
     const offset = text.kind === 'skill' ? layout.size * 1.35 : layout.size * (0.2 + text.age * 0.8) + (index % 3) * 11;

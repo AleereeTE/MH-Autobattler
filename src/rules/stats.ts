@@ -12,6 +12,7 @@ export interface CombatStats extends Stats {
   readonly lifeSourceRatio: number;
   readonly lowHpDamageBonus: number;
   readonly startingEnergyRatio: number;
+  readonly dodgeChance: number;
 }
 
 type NumericKey = Exclude<keyof StatBonus, 'skillsCanCrit'>;
@@ -37,6 +38,7 @@ const NUMERIC_KEYS: readonly NumericKey[] = [
   'lifeSourceRatio',
   'lowHpDamageBonus',
   'startingEnergyRatio',
+  'dodgeChance',
 ];
 
 /** Additionne plusieurs bonus, champ par champ. */
@@ -84,5 +86,6 @@ export function computeCombatStats(base: Stats, bonuses: readonly StatBonus[]): 
     lifeSourceRatio: b.lifeSourceRatio,
     lowHpDamageBonus: b.lowHpDamageBonus,
     startingEnergyRatio: Math.min(1, Math.max(0, b.startingEnergyRatio)),
+    dodgeChance: Math.min(BALANCE.maxDodgeChance, Math.max(0, b.dodgeChance)),
   };
 }

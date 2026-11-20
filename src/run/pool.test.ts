@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../core/rng.ts';
-import { findUnit } from '../data/units/index.ts';
+import { UNITS, findUnit } from '../data/units/index.ts';
 import { createPool, drawUnitId, returnCopies, takeCopies } from './pool.ts';
 
 describe('stock commun', () => {
@@ -52,7 +52,7 @@ describe('stock commun', () => {
 
   it('ne propose jamais une unité épuisée, et prend un autre coût si besoin', () => {
     const pool = createPool();
-    for (const id of ['barroth', 'khezu', 'helga', 'lysa', 'sylvain']) takeCopies(pool, id, 18);
+    for (const unit of UNITS.filter((u) => u.cost === 1)) takeCopies(pool, unit.id, 18); // plus aucun coût 1
     const rng = createRng(5);
     const drawn = drawUnitId(pool, 2, rng);
     expect(drawn).not.toBeNull();

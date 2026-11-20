@@ -73,6 +73,9 @@ export function formatCombatLog(events: readonly CombatEvent[], untilTick = Infi
       case 'lightning':
         lines.push(`${time} Un éclair frappe ${name(event.targetUid)}`);
         break;
+      case 'dodge':
+        lines.push(`${time}    ${name(event.targetUid)} esquive l’attaque de ${name(event.sourceUid)}`);
+        break;
       case 'death':
         lines.push(`${time} ${name(event.uid)} est K.O.`);
         break;
