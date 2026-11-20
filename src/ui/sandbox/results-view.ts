@@ -1,6 +1,7 @@
 import { ticksToSeconds, type CombatResult } from '../../combat/index.ts';
 import { summarizeUnits, type UnitSummary } from '../../render/combat-summary.ts';
 import { formatCombatLog } from '../../render/text-log.ts';
+import { rankStars } from '../../rules/ranks.ts';
 import { el } from '../dom.ts';
 
 export interface BatchResult {
@@ -14,7 +15,7 @@ const round = (value: number): string => String(Math.round(value));
 function summaryRow(unit: UnitSummary): HTMLElement {
   const knockedOut = unit.knockedOutAt === null ? '—' : `${ticksToSeconds(unit.knockedOutAt).toFixed(1)} s`;
   return el('tr', { className: unit.side }, [
-    el('th', { text: unit.name, attrs: { scope: 'row' } }),
+    el('th', { text: unit.rank > 1 ? `${unit.name} ${rankStars(unit.rank)}` : unit.name, attrs: { scope: 'row' } }),
     el('td', { text: unit.side === 'player' ? 'Joueur' : 'Ennemi' }),
     el('td', { text: round(unit.damageDealt) }),
     el('td', { text: round(unit.damageTaken) }),

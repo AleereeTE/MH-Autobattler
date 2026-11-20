@@ -1,3 +1,4 @@
+import type { StarRank } from './definitions.ts';
 import type { Equipment } from './items.ts';
 
 /**
@@ -10,6 +11,8 @@ export interface SquadMember {
   readonly col: number;
   readonly row: number;
   readonly equipment?: Equipment;
+  /** Rang ★ (★1 si absent). */
+  readonly rank?: StarRank;
 }
 
 export interface SquadDefinition {

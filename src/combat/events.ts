@@ -1,5 +1,5 @@
 import type { Hex } from '../core/hex.ts';
-import type { DamageType, Element, Role, SkillEffect, TraitId, UnitCost, UnitKind } from '../data/definitions.ts';
+import type { DamageType, Element, Role, SkillEffect, StarRank, TraitId, UnitCost, UnitKind } from '../data/definitions.ts';
 import type { Side } from './state.ts';
 
 /**
@@ -16,6 +16,7 @@ export interface UnitSnapshot {
   readonly role: Role;
   readonly element: Element | null;
   readonly cost: UnitCost;
+  readonly rank: StarRank;
   readonly position: Hex;
   readonly maxHp: number;
   readonly maxEnergy: number;

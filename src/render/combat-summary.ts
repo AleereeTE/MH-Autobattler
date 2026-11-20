@@ -1,9 +1,11 @@
 import type { CombatEvent, Side } from '../combat/index.ts';
+import type { StarRank } from '../data/definitions.ts';
 
 /** Bilan d'une unité sur tout un combat, utile pour repérer les unités trop fortes ou trop faibles. */
 export interface UnitSummary {
   readonly uid: number;
   readonly name: string;
+  readonly rank: StarRank;
   readonly side: Side;
   damageDealt: number;
   damageTaken: number;
@@ -25,6 +27,7 @@ export function summarizeUnits(events: readonly CombatEvent[]): UnitSummary[] {
           summaries.set(unit.uid, {
             uid: unit.uid,
             name: unit.name,
+            rank: unit.rank,
             side: unit.side,
             damageDealt: 0,
             damageTaken: 0,

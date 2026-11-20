@@ -1,5 +1,6 @@
 import { BALANCE } from '../data/balance.ts';
-import type { Ratio, Stats } from '../data/definitions.ts';
+import type { RankValues, Ratio, StarRank, Stats } from '../data/definitions.ts';
+import { valueForRank } from './ranks.ts';
 
 /**
  * ✅ Réduction par ratio (game-design §6.2) : dégâts × 100 / (100 + défense).
@@ -15,10 +16,14 @@ export function applyCrit(amount: number, multiplier: number = BALANCE.critMulti
 }
 
 /**
- * ⚠️ Formule provisoire (question ouverte n°5) : base + Σ (ratio × statistique).
+ * ⚠️ Formule provisoire (question ouverte n°5) : base du rang + Σ (ratio × statistique).
  * Sert aux dégâts, aux boucliers et aux soins des compétences.
- * Exemple : base 50 et 150 % de l'attaque brute, avec 100 d'attaque → 50 + 1,5 × 100 = 200.
+ * Exemple : base 50 / 75 / 115 et 150 % de l'attaque brute, au ★2 avec 100 d'attaque → 75 + 1,5 × 100 = 225.
  */
-export function scaledAmount(effect: { base: number; ratios: readonly Ratio[] }, stats: Stats): number {
-  return effect.ratios.reduce((total, { stat, ratio }) => total + ratio * stats[stat], effect.base);
+export function scaledAmount(
+  effect: { readonly base: RankValues; readonly ratios: readonly Ratio[] },
+  stats: Stats,
+  rank: StarRank,
+): number {
+  return effect.ratios.reduce((total, { stat, ratio }) => total + ratio * stats[stat], valueForRank(effect.base, rank));
 }

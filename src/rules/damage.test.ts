@@ -27,18 +27,22 @@ describe('applyCrit', () => {
 });
 
 describe('scaledAmount', () => {
+  const effect = {
+    base: [50, 75, 115],
+    ratios: [
+      { stat: 'attack', ratio: 1.5 },
+      { stat: 'elementalPower', ratio: 0.5 },
+    ],
+  } as const;
+
   it('additionne la base et chaque ratio', () => {
     const { stats } = makeUnit({ stats: { attack: 100, elementalPower: 40 } });
-    const damage = scaledAmount(
-      {
-        base: 50,
-        ratios: [
-          { stat: 'attack', ratio: 1.5 },
-          { stat: 'elementalPower', ratio: 0.5 },
-        ],
-      },
-      stats,
-    );
-    expect(damage).toBe(50 + 150 + 20);
+    expect(scaledAmount(effect, stats, 1)).toBe(50 + 150 + 20);
+  });
+
+  it('prend la base du rang, sans changer les ratios', () => {
+    const { stats } = makeUnit({ stats: { attack: 100, elementalPower: 40 } });
+    expect(scaledAmount(effect, stats, 2)).toBe(75 + 150 + 20);
+    expect(scaledAmount(effect, stats, 3)).toBe(115 + 150 + 20);
   });
 });

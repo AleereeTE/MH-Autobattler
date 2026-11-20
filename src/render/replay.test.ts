@@ -42,6 +42,7 @@ describe('zones d’effet', () => {
     role: 'support',
     element: 'fire',
     cost: 2,
+    rank: 1,
     position: { col: 3, row: 6 },
     maxHp: 500,
     maxEnergy: 60,

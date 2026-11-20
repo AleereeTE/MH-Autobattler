@@ -1,9 +1,10 @@
 import { ROWS_PER_SIDE, hexKey, isOnBoard, type Hex } from '../core/hex.ts';
 import { createRng } from '../core/rng.ts';
-import type { TraitId, UnitDefinition } from '../data/definitions.ts';
+import type { StarRank, TraitId, UnitDefinition } from '../data/definitions.ts';
 import type { Equipment } from '../data/items.ts';
 import type { TraitTier } from '../data/traits.ts';
 import { SLOT_CAPACITY, equipmentBonuses } from '../rules/equipment.ts';
+import { isStarRank, rankedStats } from '../rules/ranks.ts';
 import { computeCombatStats } from '../rules/stats.ts';
 import { traitStatuses, type TraitStatus } from '../rules/traits.ts';
 import type { TraitSummary, UnitSnapshot } from './events.ts';
@@ -14,6 +15,8 @@ export interface Placement {
   readonly unit: UnitDefinition;
   readonly position: Hex;
   readonly equipment?: Equipment;
+  /** Rang ★ de l'unité (★1 par défaut). */
+  readonly rank?: StarRank;
 }
 
 /** Composition, placement et équipement des deux camps au début d'un combat. */
@@ -53,12 +56,15 @@ export function createCombatState(setup: CombatSetup, seed: number): CombatState
 function createUnit(uid: number, side: Side, placement: Placement, active: ReadonlyMap<TraitId, TraitTier>): CombatUnit {
   const { unit, position } = placement;
   const equipment = placement.equipment ?? [];
+  const rank = placement.rank ?? 1;
   const loadout = traitLoadout(unit, equipment, active);
-  const stats = computeCombatStats(unit.stats, [...equipmentBonuses(equipment), ...loadout.bonuses]);
+  // Le rang s'applique aux statistiques de la fiche, avant les bonus des objets et des traits.
+  const stats = computeCombatStats(rankedStats(unit.stats, rank), [...equipmentBonuses(equipment), ...loadout.bonuses]);
 
   return {
     uid,
     def: unit,
+    rank,
     side,
     equipment,
     stats,
@@ -91,6 +97,7 @@ function snapshot(unit: CombatUnit): UnitSnapshot {
     role: unit.def.role,
     element: unit.def.element,
     cost: unit.def.cost,
+    rank: unit.rank,
     position: { ...unit.position },
     maxHp: unit.stats.hp,
     maxEnergy: unit.stats.maxEnergy,
@@ -103,7 +110,7 @@ function validateSetup(setup: CombatSetup): void {
   }
 
   const occupied = new Set<string>();
-  const check = (side: Side, { unit, position, equipment = [] }: Placement): void => {
+  const check = (side: Side, { unit, position, equipment = [], rank = 1 }: Placement): void => {
     if (!isOnBoard(position) || !isInSideArea(side, position)) {
       throw new Error(`${unit.name} est placé hors de la zone de son camp (${hexKey(position)}).`);
     }
@@ -112,6 +119,9 @@ function validateSetup(setup: CombatSetup): void {
     }
     if (unit.stats.maxEnergy <= 0) {
       throw new Error(`${unit.name} doit avoir une énergie maximale supérieure à 0.`);
+    }
+    if (!isStarRank(rank)) {
+      throw new Error(`${unit.name} a un rang invalide (${String(rank)}) : il doit valoir 1, 2 ou 3.`);
     }
     if (equipment.length > SLOT_CAPACITY[unit.kind]) {
       throw new Error(`${unit.name} porte trop d'objets (${equipment.length} / ${SLOT_CAPACITY[unit.kind]}).`);

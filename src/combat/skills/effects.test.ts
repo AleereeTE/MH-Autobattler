@@ -26,7 +26,7 @@ describe('applySkillEffect — dégâts', () => {
       kind: 'damage',
       target: 'lowestHpEnemy',
       damageType: 'elemental',
-      base: 10,
+      base: [10, 10, 10],
       ratios: [{ stat: 'elementalPower', ratio: 1 }],
       radius: 1,
     };
@@ -55,7 +55,7 @@ describe('applySkillEffect — dégâts', () => {
       kind: 'damage',
       target: 'lowestHpEnemy',
       damageType: 'physical',
-      base: 10,
+      base: [10, 10, 10],
       ratios: [],
       radius: 1,
     });
@@ -71,9 +71,22 @@ describe('applySkillEffect — dégâts', () => {
     if (caster === undefined || enemy === undefined) throw new Error('unités manquantes');
     enemy.alive = false;
 
-    applySkillEffect(state, caster, { kind: 'damage', target: 'lowestHpEnemy', damageType: 'physical', base: 10, ratios: [] });
+    applySkillEffect(state, caster, { kind: 'damage', target: 'lowestHpEnemy', damageType: 'physical', base: [10, 10, 10], ratios: [] });
 
     expect(state.events.some((event) => event.type === 'skillArea')).toBe(false);
+  });
+
+  it('utilise la valeur de base du rang du lanceur', () => {
+    const state = createCombatState(
+      { player: [{ ...place(makeUnit(), 3, 4), rank: 3 }], enemy: [place(makeUnit(), 3, 3)] },
+      1,
+    );
+    const caster = state.units[0];
+    if (caster === undefined) throw new Error('lanceur manquant');
+
+    applySkillEffect(state, caster, { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [10, 20, 40], ratios: [] });
+
+    expect(state.events.find((event) => event.type === 'damage')).toMatchObject({ amount: 40 });
   });
 
   it('ne fait jamais de coup critique', () => {
@@ -88,7 +101,7 @@ describe('applySkillEffect — dégâts', () => {
       kind: 'damage',
       target: 'currentTarget',
       damageType: 'physical',
-      base: 100,
+      base: [100, 100, 100],
       ratios: [],
     });
 

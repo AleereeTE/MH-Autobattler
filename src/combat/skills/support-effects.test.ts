@@ -26,7 +26,7 @@ function setupWithAllies() {
 describe('effets de soutien', () => {
   it('bouclier : protège le lanceur pendant la durée prévue', () => {
     const { state, caster } = setupWithAllies();
-    applySkillEffect(state, caster, { kind: 'shield', base: 100, ratios: [{ stat: 'hp', ratio: 0.1 }], duration: 2 });
+    applySkillEffect(state, caster, { kind: 'shield', base: [100, 100, 100], ratios: [{ stat: 'hp', ratio: 0.1 }], duration: 2 });
     expect(caster.shields).toEqual([{ amount: 150, remainingTicks: 2 * TICKS_PER_SECOND }]);
     expect(state.events.at(-1)).toMatchObject({ type: 'shield', uid: caster.uid, amount: 150 });
   });
@@ -35,15 +35,15 @@ describe('effets de soutien', () => {
     const { state, caster, near, far } = setupWithAllies();
     near.hp = 400;
     far.hp = 400;
-    applySkillEffect(state, caster, { kind: 'heal', base: 300, ratios: [], radius: 2 });
+    applySkillEffect(state, caster, { kind: 'heal', base: [300, 300, 300], ratios: [], radius: 2 });
     expect(near.hp).toBe(500);
     expect(far.hp).toBe(400);
   });
 
   it('soin, bouclier et bonus signalent leur zone, centrée sur le lanceur', () => {
     const { state, caster } = setupWithAllies();
-    applySkillEffect(state, caster, { kind: 'heal', base: 10, ratios: [], radius: 2 });
-    applySkillEffect(state, caster, { kind: 'shield', base: 10, ratios: [], duration: 1 });
+    applySkillEffect(state, caster, { kind: 'heal', base: [10, 10, 10], ratios: [], radius: 2 });
+    applySkillEffect(state, caster, { kind: 'shield', base: [10, 10, 10], ratios: [], duration: 1 });
     applySkillEffect(state, caster, { kind: 'buff', attackSpeedPercent: 0.1, duration: 1 });
     const areas = state.events.filter((event) => event.type === 'skillArea');
     expect(areas).toMatchObject([
@@ -76,7 +76,7 @@ describe('effets de dégâts particuliers', () => {
       kind: 'damage',
       target: 'self',
       damageType: 'elemental',
-      base: 50,
+      base: [50, 50, 50],
       ratios: [{ stat: 'elementalPower', ratio: 1 }],
       radius: 1,
     });
@@ -91,7 +91,7 @@ describe('effets de dégâts particuliers', () => {
       1,
     );
     const [caster, target] = state.units as [CombatUnit, CombatUnit];
-    applySkillEffect(state, caster, { kind: 'damage', target: 'lowestHpEnemy', damageType: 'elemental', base: 10, ratios: [], leap: true });
+    applySkillEffect(state, caster, { kind: 'damage', target: 'lowestHpEnemy', damageType: 'elemental', base: [10, 10, 10], ratios: [], leap: true });
     expect(state.events.some((event) => event.type === 'leap')).toBe(true);
     expect(Math.abs(caster.position.row - target.position.row)).toBeLessThanOrEqual(1);
   });
@@ -106,7 +106,7 @@ describe('effets de dégâts particuliers', () => {
       kind: 'damage',
       target: 'currentTarget',
       damageType: 'elemental',
-      base: 10,
+      base: [10, 10, 10],
       ratios: [],
       slow: { attackSpeedPercent: -0.3, duration: 3 },
     });

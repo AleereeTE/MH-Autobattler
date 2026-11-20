@@ -78,6 +78,12 @@ function readTheme(element: Element): BoardTheme {
       4: color('--cost-4'),
       5: color('--cost-5'),
     },
+    ranks: {
+      1: color('--rank-1'),
+      2: color('--rank-2'),
+      3: color('--rank-3'),
+    },
+    rankBadge: color('--rank-badge'),
     areas: {
       heal: color('--area-heal'),
       shield: color('--area-shield'),

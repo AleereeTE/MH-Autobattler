@@ -1,4 +1,5 @@
 import { ticksToSeconds, type CombatEvent, type UnitSnapshot, type Winner } from '../combat/index.ts';
+import { rankStars } from '../rules/ranks.ts';
 
 /**
  * Rendu texte d'un combat : transforme les événements en lignes lisibles.
@@ -9,7 +10,8 @@ const DAMAGE_LABELS = { physical: 'physiques', elemental: 'élémentaires' } as 
 const CAUSE_LABELS = { attack: '', skill: '', burn: ' (brûlure)', lightning: ' (éclair)' } as const;
 
 function unitLabel(unit: UnitSnapshot): string {
-  return `${unit.name} [${unit.side === 'player' ? 'J' : 'E'}${unit.uid}]`;
+  const stars = unit.rank > 1 ? ` ${rankStars(unit.rank)}` : '';
+  return `${unit.name}${stars} [${unit.side === 'player' ? 'J' : 'E'}${unit.uid}]`;
 }
 
 function winnerLabel(winner: Winner): string {

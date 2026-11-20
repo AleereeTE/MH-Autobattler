@@ -16,6 +16,18 @@ describe('contenu du prototype', () => {
     for (const unit of UNITS) expect([1, 2, 3]).toContain(unit.cost);
   });
 
+  it('donne à chaque compétence une valeur de base croissante pour ★1, ★2 et ★3', () => {
+    for (const unit of UNITS) {
+      for (const effect of unit.skill.effects) {
+        if (!('base' in effect)) continue;
+        const [one, two, three] = effect.base;
+        expect(one, unit.name).toBeGreaterThan(0);
+        expect(two, unit.name).toBeGreaterThan(one);
+        expect(three, unit.name).toBeGreaterThan(two);
+      }
+    }
+  });
+
   it('a des identifiants uniques', () => {
     expect(new Set(UNITS.map((u) => u.id)).size).toBe(UNITS.length);
   });

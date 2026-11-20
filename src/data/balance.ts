@@ -7,6 +7,8 @@ export const BALANCE = {
   combatDuration: 60,
   /** ✅ Multiplicateur des coups critiques. */
   critMultiplier: 1.5,
+  /** ✅ PV et attaque brute multipliés à chaque rang ★ (×1,8 au ★2, ×3,24 au ★3). */
+  rankStatMultiplier: 1.8,
   /** ⚠️ Mort subite : dégâts +20 % par seconde écoulée après la durée normale. */
   suddenDeathDamageRampPerSecond: 0.2,
   /** ⚠️ Mort subite : soins −5 % par seconde écoulée après la durée normale (minimum 0). */

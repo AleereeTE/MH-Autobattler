@@ -17,22 +17,28 @@ Plus tard : unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon, 
 
 ## Unités
 
-Les noms des chasseurs sont provisoires.
+Les noms des chasseurs sont provisoires. Les valeurs « a/b/c » des compétences sont celles des rangs ★1/★2/★3.
 
 | Unité | Type | Rôle | Élément | Traits secondaires | Coût | Portée | Compétence |
 |---|---|---|---|---|---|---|---|
-| Barroth | Monstre | Tank | — | Bastion | 1 | 1 | **Carapace de boue** : bouclier de 150 + 15 % des PV max pendant 4 s |
-| Khezu | Monstre | Tank | Foudre | Wyverne volante, Bastion | 1 | 1 | **Décharge** : 60 + 150 % puiss. élém. aux ennemis adjacents |
-| Garrick (Lance) | Chasseur | Tank | Glace | Bastion | 2 | 1 | **Garde** : bouclier de 200 + 20 % des PV max pendant 4 s |
-| Helga (Marteau) | Chasseur | Bruiser | — | Guilde | 1 | 1 | **Big Bang** : 80 + 160 % attaque brute (physique) |
-| Anjanath | Monstre | Bruiser | Feu | Berserker | 2 | 1 | **Souffle ardent** : 70 + 180 % puiss. élém. sur la cible et ses voisins |
-| Tobi-Kadachi | Monstre | Bruiser | Foudre | Berserker | 2 | 1 | **Charge électrique** : bondit sur l'ennemi le plus faible, 60 + 180 % puiss. élém. |
-| Akira (Grande épée) | Chasseur | DPS | — | Guilde, Berserker | 3 | 1 | **Coup chargé** : incantation de 1,5 s, puis 150 + 300 % attaque brute |
+| Barroth | Monstre | Tank | — | Bastion | 1 | 1 | **Carapace de boue** : bouclier de 150/225/340 + 15 % des PV max pendant 4 s |
+| Khezu | Monstre | Tank | Foudre | Wyverne volante, Bastion | 1 | 1 | **Décharge** : 60/90/135 + 150 % puiss. élém. aux ennemis adjacents |
+| Garrick (Lance) | Chasseur | Tank | Glace | Bastion | 2 | 1 | **Garde** : bouclier de 200/300/450 + 20 % des PV max pendant 4 s |
+| Helga (Marteau) | Chasseur | Bruiser | — | Guilde | 1 | 1 | **Big Bang** : 80/120/180 + 160 % attaque brute (physique) |
+| Anjanath | Monstre | Bruiser | Feu | Berserker | 2 | 1 | **Souffle ardent** : 70/105/160 + 180 % puiss. élém. sur la cible et ses voisins |
+| Tobi-Kadachi | Monstre | Bruiser | Foudre | Berserker | 2 | 1 | **Charge électrique** : bondit sur l'ennemi le plus faible, 60/90/135 + 180 % puiss. élém. |
+| Akira (Grande épée) | Chasseur | DPS | — | Guilde, Berserker | 3 | 1 | **Coup chargé** : incantation de 1,5 s, puis 150/225/340 + 300 % attaque brute |
 | Lysa (Doubles lames) | Chasseur | DPS | Foudre | Guilde | 1 | 1 | **Mode démon** : +60 % de vitesse d'attaque pendant 4 s |
-| Sylvain (Arc) | Chasseur | DPS | Glace | Catalyseur | 1 | 4 | **Pluie de flèches** : 50 + 160 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
-| Rathalos | Monstre | DPS | Feu | Wyverne volante, Catalyseur | 3 | 3 | **Boule de feu** : 120 + 250 % puiss. élém. sur la cible et ses voisins |
-| Odette (Corne de chasse) | Chasseur | Support | Feu | Guilde | 2 | 2 | **Mélodie de soin** : soigne de 80 + 200 % puiss. élém. les alliés à 2 cases ou moins |
-| Legiana | Monstre | Support | Glace | Wyverne volante, Catalyseur | 3 | 3 | **Vent glacial** : 70 + 160 % puiss. élém. sur la cible et ses voisins, −30 % de vitesse d'attaque pendant 3 s |
+| Sylvain (Arc) | Chasseur | DPS | Glace | Catalyseur | 1 | 4 | **Pluie de flèches** : 50/75/115 + 160 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
+| Rathalos | Monstre | DPS | Feu | Wyverne volante, Catalyseur | 3 | 3 | **Boule de feu** : 120/180/270 + 250 % puiss. élém. sur la cible et ses voisins |
+| Odette (Corne de chasse) | Chasseur | Support | Feu | Guilde | 2 | 2 | **Mélodie de soin** : soigne de 80/120/180 + 200 % puiss. élém. les alliés à 2 cases ou moins |
+| Legiana | Monstre | Support | Glace | Wyverne volante, Catalyseur | 3 | 3 | **Vent glacial** : 70/105/160 + 160 % puiss. élém. sur la cible et ses voisins, −30 % de vitesse d'attaque pendant 3 s |
+
+### Rangs ★
+
+Règle validée (voir [game-design.md](game-design.md), section 3.4) : PV et attaque brute ×1,8 à chaque rang, une valeur de base de compétence par rang, durées et pourcentages inchangés.
+
+⚠️ Les valeurs de base ★2 et ★3 du tableau sont **provisoires**. Elles suivent une règle simple, à remplacer unité par unité pendant l'équilibrage : ★2 ≈ ★1 × 1,5 et ★3 ≈ ★1 × 2,25, arrondis à 5.
 
 ---
 

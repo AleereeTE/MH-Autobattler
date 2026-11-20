@@ -1,10 +1,11 @@
 import { isInSideArea, type CombatSetup, type Side } from '../../combat/index.ts';
 import { hexKey, type Hex } from '../../core/hex.ts';
-import type { UnitDefinition } from '../../data/definitions.ts';
+import type { StarRank, UnitDefinition } from '../../data/definitions.ts';
 import type { Equipment, MaterialId } from '../../data/items.ts';
 import type { SquadDefinition } from '../../data/squads.ts';
 import { findUnit } from '../../data/units/index.ts';
 import { SLOT_CAPACITY, addMaterial, addObject, removeSlot } from '../../rules/equipment.ts';
+import { isStarRank } from '../../rules/ranks.ts';
 
 /**
  * État du bac à sable : quelles unités sont posées où, avec quel équipement, et ce qui est sélectionné.
@@ -15,6 +16,7 @@ export interface PlacedUnit {
   readonly unit: UnitDefinition;
   readonly position: Hex;
   readonly equipment: Equipment;
+  readonly rank: StarRank;
 }
 
 export type Selection =
@@ -27,6 +29,8 @@ export interface SavedPlacement {
   readonly col: number;
   readonly row: number;
   readonly equipment: Equipment;
+  /** Absent dans les compositions enregistrées avant l'arrivée des rangs : ★1. */
+  readonly rank?: StarRank;
 }
 
 export function sideOf(hex: Hex): Side {
@@ -92,7 +96,7 @@ export class SandboxModel {
       this.currentSelection = same ? null : { kind: 'board', key };
     } else if (selection?.kind === 'palette') {
       const unit = findUnit(selection.unitId);
-      if (unit !== undefined) this.cells.set(key, { unit, position: hex, equipment: [] });
+      if (unit !== undefined) this.cells.set(key, { unit, position: hex, equipment: [], rank: 1 });
     } else if (selection?.kind === 'board') {
       const moving = this.cells.get(selection.key);
       if (moving !== undefined) {
@@ -123,6 +127,13 @@ export class SandboxModel {
     this.changed();
   }
 
+  setSelectedRank(rank: StarRank): void {
+    const placed = this.selectedPlaced();
+    if (placed === null || this.currentSelection?.kind !== 'board') return;
+    this.cells.set(this.currentSelection.key, { ...placed, rank });
+    this.changed();
+  }
+
   addMaterial(material: MaterialId): void {
     this.updateSelectedEquipment((equipment, capacity) => addMaterial(equipment, material, capacity));
   }
@@ -147,7 +158,7 @@ export class SandboxModel {
       const unit = findUnit(member.unitId);
       const position = { col: member.col, row: member.row };
       if (unit !== undefined && sideOf(position) === side) {
-        this.cells.set(hexKey(position), { unit, position, equipment: member.equipment ?? [] });
+        this.cells.set(hexKey(position), { unit, position, equipment: member.equipment ?? [], rank: member.rank ?? 1 });
       }
     }
     this.currentSelection = null;
@@ -156,16 +167,17 @@ export class SandboxModel {
 
   toSetup(): CombatSetup {
     const toPlacements = (side: Side) =>
-      this.unitsOf(side).map(({ unit, position, equipment }) => ({ unit, position, equipment }));
+      this.unitsOf(side).map(({ unit, position, equipment, rank }) => ({ unit, position, equipment, rank }));
     return { player: toPlacements('player'), enemy: toPlacements('enemy') };
   }
 
   save(): SavedPlacement[] {
-    return this.placedUnits().map(({ unit, position, equipment }) => ({
+    return this.placedUnits().map(({ unit, position, equipment, rank }) => ({
       unitId: unit.id,
       col: position.col,
       row: position.row,
       equipment,
+      rank,
     }));
   }
 
@@ -174,7 +186,8 @@ export class SandboxModel {
     for (const entry of saved) {
       const unit = findUnit(entry.unitId);
       const position = { col: entry.col, row: entry.row };
-      if (unit !== undefined) this.cells.set(hexKey(position), { unit, position, equipment: entry.equipment });
+      const rank = isStarRank(entry.rank) ? entry.rank : 1;
+      if (unit !== undefined) this.cells.set(hexKey(position), { unit, position, equipment: entry.equipment, rank });
     }
     this.currentSelection = null;
     this.changed();

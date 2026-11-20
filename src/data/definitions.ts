@@ -8,6 +8,10 @@ export type Role = 'tank' | 'bruiser' | 'dps' | 'support';
 export type UnitKind = 'hunter' | 'monster';
 /** Coût en zennys, de 1 à 5. */
 export type UnitCost = 1 | 2 | 3 | 4 | 5;
+/** Rang ★ : 1 = Rang Bas, 2 = Rang Haut, 3 = Rang Maître. */
+export type StarRank = 1 | 2 | 3;
+/** Une valeur par rang : [★1, ★2, ★3]. */
+export type RankValues = readonly [number, number, number];
 export type DamageType = 'physical' | 'elemental';
 export type TraitId = string;
 
@@ -85,7 +89,8 @@ export interface DamageEffect {
   readonly kind: 'damage';
   readonly target: TargetRule;
   readonly damageType: DamageType;
-  readonly base: number;
+  /** Valeur de base selon le rang ★ ; les ratios, eux, ne changent pas. */
+  readonly base: RankValues;
   readonly ratios: readonly Ratio[];
   /** Touche aussi les ennemis à cette distance du centre (cible principale, ou lanceur pour 'self'). */
   readonly radius?: number;
@@ -98,7 +103,7 @@ export interface DamageEffect {
 /** Bouclier sur le lanceur. */
 export interface ShieldEffect {
   readonly kind: 'shield';
-  readonly base: number;
+  readonly base: RankValues;
   readonly ratios: readonly Ratio[];
   readonly duration: number;
 }
@@ -106,7 +111,7 @@ export interface ShieldEffect {
 /** Soin des alliés autour du lanceur (lui compris). */
 export interface HealEffect {
   readonly kind: 'heal';
-  readonly base: number;
+  readonly base: RankValues;
   readonly ratios: readonly Ratio[];
   readonly radius: number;
 }

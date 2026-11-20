@@ -3,6 +3,7 @@ import type { UnitDefinition } from '../definitions.ts';
 /**
  * Monstres du prototype. Les éléments sont ceux de la série.
  * ⚠️ Statistiques provisoires : plus élevées que celles des chasseurs, mais 1 seul emplacement d'objet.
+ * ⚠️ Valeurs de base des compétences par rang [★1, ★2, ★3] provisoires : ★2 ≈ ★1 × 1,5 et ★3 ≈ ★1 × 2,25.
  */
 
 export const BARROTH: UnitDefinition = {
@@ -17,9 +18,9 @@ export const BARROTH: UnitDefinition = {
   skill: {
     id: 'carapace-de-boue',
     name: 'Carapace de boue',
-    description: 'Bouclier de 150 + 15 % des PV max pendant 4 s.',
+    description: 'Bouclier de 150/225/340 + 15 % des PV max pendant 4 s.',
     castTime: 0.25,
-    effects: [{ kind: 'shield', base: 150, ratios: [{ stat: 'hp', ratio: 0.15 }], duration: 4 }],
+    effects: [{ kind: 'shield', base: [150, 225, 340], ratios: [{ stat: 'hp', ratio: 0.15 }], duration: 4 }],
   },
 };
 
@@ -35,10 +36,10 @@ export const KHEZU: UnitDefinition = {
   skill: {
     id: 'decharge',
     name: 'Décharge',
-    description: '60 + 150 % de la puissance élémentaire aux ennemis adjacents.',
+    description: '60/90/135 + 150 % de la puissance élémentaire aux ennemis adjacents.',
     castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'self', damageType: 'elemental', base: 60, ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 1 },
+      { kind: 'damage', target: 'self', damageType: 'elemental', base: [60, 90, 135], ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 1 },
     ],
   },
 };
@@ -55,10 +56,10 @@ export const ANJANATH: UnitDefinition = {
   skill: {
     id: 'souffle-ardent',
     name: 'Souffle ardent',
-    description: '70 + 180 % de la puissance élémentaire sur la cible et ses voisins.',
+    description: '70/105/160 + 180 % de la puissance élémentaire sur la cible et ses voisins.',
     castTime: 0.75,
     effects: [
-      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: 70, ratios: [{ stat: 'elementalPower', ratio: 1.8 }], radius: 1 },
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [70, 105, 160], ratios: [{ stat: 'elementalPower', ratio: 1.8 }], radius: 1 },
     ],
   },
 };
@@ -75,10 +76,10 @@ export const TOBI_KADACHI: UnitDefinition = {
   skill: {
     id: 'charge-electrique',
     name: 'Charge électrique',
-    description: 'Bondit sur l’ennemi le plus faible et inflige 60 + 180 % de la puissance élémentaire.',
+    description: 'Bondit sur l’ennemi le plus faible et inflige 60/90/135 + 180 % de la puissance élémentaire.',
     castTime: 0.25,
     effects: [
-      { kind: 'damage', target: 'lowestHpEnemy', damageType: 'elemental', base: 60, ratios: [{ stat: 'elementalPower', ratio: 1.8 }], leap: true },
+      { kind: 'damage', target: 'lowestHpEnemy', damageType: 'elemental', base: [60, 90, 135], ratios: [{ stat: 'elementalPower', ratio: 1.8 }], leap: true },
     ],
   },
 };
@@ -95,10 +96,10 @@ export const RATHALOS: UnitDefinition = {
   skill: {
     id: 'boule-de-feu',
     name: 'Boule de feu',
-    description: '120 + 250 % de la puissance élémentaire sur la cible et ses voisins.',
+    description: '120/180/270 + 250 % de la puissance élémentaire sur la cible et ses voisins.',
     castTime: 0.75,
     effects: [
-      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: 120, ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 1 },
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [120, 180, 270], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 1 },
     ],
   },
 };
@@ -115,14 +116,14 @@ export const LEGIANA: UnitDefinition = {
   skill: {
     id: 'vent-glacial',
     name: 'Vent glacial',
-    description: '70 + 160 % de la puissance élémentaire sur la cible et ses voisins, et −30 % de vitesse d’attaque pendant 3 s.',
+    description: '70/105/160 + 160 % de la puissance élémentaire sur la cible et ses voisins, et −30 % de vitesse d’attaque pendant 3 s.',
     castTime: 0.5,
     effects: [
       {
         kind: 'damage',
         target: 'currentTarget',
         damageType: 'elemental',
-        base: 70,
+        base: [70, 105, 160],
         ratios: [{ stat: 'elementalPower', ratio: 1.6 }],
         radius: 1,
         slow: { attackSpeedPercent: -0.3, duration: 3 },

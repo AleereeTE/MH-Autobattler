@@ -8,7 +8,7 @@ export function squadPlacements(squad: SquadDefinition): Placement[] {
     const unit = findUnit(member.unitId);
     if (unit === undefined) throw new Error(`Unité inconnue dans « ${squad.name} » : ${member.unitId}`);
     const position = { col: member.col, row: member.row };
-    return member.equipment === undefined ? { unit, position } : { unit, position, equipment: member.equipment };
+    return { unit, position, equipment: member.equipment ?? [], rank: member.rank ?? 1 };
   });
 }
 

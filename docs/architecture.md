@@ -41,6 +41,7 @@ src/
   rules/                Calculs purs (entrée → sortie, sans état)
     damage.ts           Réduction par la défense, critique, montants des compétences
     stats.ts            Statistiques de combat = fiche + bonus
+    ranks.ts            Rangs ★ : multiplicateur des PV et de l'attaque, valeur de base par rang
     equipment.ts        Emplacements, fusion des matériaux, objets
     traits.ts           Comptage des traits et paliers actifs
     sudden-death.ts     Multiplicateurs de la mort subite
@@ -120,7 +121,7 @@ Pourquoi résoudre les K.O. en fin de tick ? Deux unités qui se frappent au mê
 - Une **fiche** (`UnitDefinition`, dans `data/`) décrit une unité : nom, rôle, élément, statistiques de base, compétence. Elle ne change jamais.
 - Un **état de combat** (`CombatUnit`, dans `combat/`) décrit une unité pendant un combat : position, PV restants, énergie, cible, action en cours.
 
-Les statistiques de combat sont copiées depuis la fiche au début du combat. Plus tard, c'est à cet endroit qu'on ajoutera les bonus des matériaux, des objets, des traits et du rang ★.
+Les statistiques de combat sont calculées au début du combat : statistiques de la fiche ajustées au rang ★ (PV et attaque brute ×1,8 par rang), puis bonus des matériaux, des objets et des traits. Le rang (`rank` du placement, ★1 par défaut) choisit aussi la valeur de base de la compétence.
 
 ---
 
@@ -154,6 +155,8 @@ Les statistiques de combat sont copiées depuis la fiche au début du combat. Pl
 | Image | Portrait de l'unité, ou ses initiales s'il n'y en a pas |
 | Anneau | Élément (gris = sans élément) |
 | Barre de vie | Camp : bleue pour le joueur, rouge pour l'ennemi |
+| Pastille du bas | Rang : ★ bronze, ★★ argent, ★★★ or |
+| Points sur le côté gauche | États : brûlure, ralentissement, accélération |
 
 Les couleurs sont des variables CSS (`--cost-1` à `--cost-5`, `--side-player`, `--side-enemy`…) dans `src/ui/styles.css`, avec une variante pour le thème sombre.
 
@@ -207,7 +210,6 @@ Ces choix ont été nécessaires pour faire tourner le moteur. Ils sont isolés 
 
 ## 8. Prochaines étapes techniques
 
-- **Rangs ★** : progression des statistiques entre Rang Bas, Rang Haut et Rang Maître.
 - **Événements d'énergie** : pour afficher les barres d'énergie dans le rendu.
 - **Les 36 objets définitifs**, une fois conçus.
-- **Couche `run/`** : boutique, économie, réserve, carte, récompenses, capture.
+- **Couche `run/`** : boutique, économie, réserve, carte, récompenses, capture (dont la fusion de 3 exemplaires en rang supérieur).

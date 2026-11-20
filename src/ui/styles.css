@@ -24,6 +24,12 @@
   --cost-4: #8e4cc2;
   --cost-5: #d0a32a;
 
+  /* Étoiles de rang sur les jetons : bronze, argent, or. */
+  --rank-1: #c98a4b;
+  --rank-2: #d9dee6;
+  --rank-3: #ffcc33;
+  --rank-badge: #1d1b18e6;
+
   /* Zones d'effet des compétences (les dégâts prennent la couleur de l'élément). */
   --area-heal: #3f9b5a;
   --area-shield: #6f8aa6;
@@ -275,6 +281,25 @@ select {
 .palette-item span {
   font-size: 0.8rem;
   color: var(--muted);
+}
+
+/* Choix du rang ★ de l'unité sélectionnée */
+.rank-picker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 8px;
+}
+
+.button.rank {
+  min-width: 3.2em;
+  letter-spacing: 1px;
+}
+
+.button.rank[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
 }
 
 .palette-item[aria-pressed='true'] {

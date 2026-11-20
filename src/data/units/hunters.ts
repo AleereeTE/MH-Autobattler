@@ -3,6 +3,7 @@ import type { UnitDefinition } from '../definitions.ts';
 /**
  * Chasseurs du prototype. Noms provisoires.
  * ⚠️ Statistiques provisoires : plus faibles que celles des monstres, compensées par 3 emplacements d'objets.
+ * ⚠️ Valeurs de base des compétences par rang [★1, ★2, ★3] provisoires : ★2 ≈ ★1 × 1,5 et ★3 ≈ ★1 × 2,25.
  */
 
 export const GARRICK: UnitDefinition = {
@@ -18,9 +19,9 @@ export const GARRICK: UnitDefinition = {
   skill: {
     id: 'garde',
     name: 'Garde',
-    description: 'Bouclier de 200 + 20 % des PV max pendant 4 s.',
+    description: 'Bouclier de 200/300/450 + 20 % des PV max pendant 4 s.',
     castTime: 0.25,
-    effects: [{ kind: 'shield', base: 200, ratios: [{ stat: 'hp', ratio: 0.2 }], duration: 4 }],
+    effects: [{ kind: 'shield', base: [200, 300, 450], ratios: [{ stat: 'hp', ratio: 0.2 }], duration: 4 }],
   },
 };
 
@@ -37,9 +38,9 @@ export const HELGA: UnitDefinition = {
   skill: {
     id: 'big-bang',
     name: 'Big Bang',
-    description: '80 + 160 % de l’attaque brute en dégâts physiques sur sa cible.',
+    description: '80/120/180 + 160 % de l’attaque brute en dégâts physiques sur sa cible.',
     castTime: 0.5,
-    effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'physical', base: 80, ratios: [{ stat: 'attack', ratio: 1.6 }] }],
+    effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'physical', base: [80, 120, 180], ratios: [{ stat: 'attack', ratio: 1.6 }] }],
   },
 };
 
@@ -56,9 +57,9 @@ export const AKIRA: UnitDefinition = {
   skill: {
     id: 'coup-charge',
     name: 'Coup chargé',
-    description: 'Charge pendant 1,5 s, puis inflige 150 + 300 % de l’attaque brute en dégâts physiques.',
+    description: 'Charge pendant 1,5 s, puis inflige 150/225/340 + 300 % de l’attaque brute en dégâts physiques.',
     castTime: 1.5,
-    effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'physical', base: 150, ratios: [{ stat: 'attack', ratio: 3 }] }],
+    effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'physical', base: [150, 225, 340], ratios: [{ stat: 'attack', ratio: 3 }] }],
   },
 };
 
@@ -94,14 +95,14 @@ export const SYLVAIN: UnitDefinition = {
   skill: {
     id: 'pluie-de-fleches',
     name: 'Pluie de flèches',
-    description: '50 + 160 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
+    description: '50/75/115 + 160 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
     castTime: 0.5,
     effects: [
       {
         kind: 'damage',
         target: 'farthestEnemy',
         damageType: 'elemental',
-        base: 50,
+        base: [50, 75, 115],
         ratios: [{ stat: 'elementalPower', ratio: 1.6 }],
         radius: 1,
       },
@@ -122,9 +123,9 @@ export const ODETTE: UnitDefinition = {
   skill: {
     id: 'melodie-de-soin',
     name: 'Mélodie de soin',
-    description: 'Soigne de 80 + 200 % de la puissance élémentaire les alliés à 2 cases ou moins.',
+    description: 'Soigne de 80/120/180 + 200 % de la puissance élémentaire les alliés à 2 cases ou moins.',
     castTime: 0.5,
-    effects: [{ kind: 'heal', base: 80, ratios: [{ stat: 'elementalPower', ratio: 2 }], radius: 2 }],
+    effects: [{ kind: 'heal', base: [80, 120, 180], ratios: [{ stat: 'elementalPower', ratio: 2 }], radius: 2 }],
   },
 };
 

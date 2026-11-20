@@ -28,7 +28,7 @@ export function applyDamageEffect(state: CombatState, caster: CombatUnit, effect
   if (center === null) return;
   const radius = effect.radius ?? 0;
   pushSkillArea(state, caster, 'damage', center, radius);
-  const amount = scaledAmount(effect, caster.stats);
+  const amount = scaledAmount(effect, caster.stats, caster.rank);
 
   for (const victim of findVictims(state, caster, center, radius)) {
     // ✅ Par défaut une compétence ne peut pas être critique ; certains traits (Berserker) le permettent.

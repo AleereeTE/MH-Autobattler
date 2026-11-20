@@ -124,8 +124,9 @@ La vitesse de déplacement est identique pour toutes les unités.
 | Compétence | Valeur de base ★1 | Valeur de base ★2 | Valeur de base ★3 |
 
 - **Statistiques** : seuls les PV et l'attaque brute augmentent. La puissance élémentaire, l'armure, la résistance, la vitesse d'attaque, la portée et l'énergie ne changent pas.
-- **Compétences** : chaque fiche définit **une valeur de base par rang** (exemple : 60 / 90 / 140). Les ratios (pourcentage d'attaque brute ou de puissance élémentaire) restent identiques. Ce choix permet de régler chaque unité finement ; c'est aussi par ce biais que les unités élémentaires progressent, puisque leur puissance élémentaire ne monte pas.
-- **[à définir]** : les durées et pourcentages des compétences (bonus, ralentissement) progressent-ils aussi avec le rang ?
+- **Compétences** : chaque fiche définit **une valeur de base par rang** (exemple : 60 / 90 / 135). Les ratios (pourcentage d'attaque brute ou de puissance élémentaire) restent identiques. Ce choix permet de régler chaque unité finement ; c'est aussi par ce biais que les unités élémentaires progressent, puisque leur puissance élémentaire ne monte pas.
+- **Durées et pourcentages** des compétences (durée d'un bouclier, bonus de vitesse d'attaque, ralentissement…) : **identiques à tous les rangs** pour l'instant.
+- Valeurs de base du prototype : voir [prototype-content.md](prototype-content.md).
 
 ### 3.5 Énergie et compétences
 
@@ -349,15 +350,14 @@ Zennys de base, bonus de victoire, coût d'une relance, coûts d'amélioration d
 6. Contenu de la version boss d'un monstre (PV, plusieurs compétences, état enragé ?).
 7. Informations visibles sur chaque chasse proposée par la carte (ennemis, type de récompense ?).
 
-8. Les durées et pourcentages des compétences (bonus, ralentissement) progressent-ils avec le rang ★ ?
 
 ### Confort de jeu
-9. Bouton d'accélération ×2 des combats ?
-10. Sauvegarde en cours de run ?
+8. Bouton d'accélération ×2 des combats ?
+9. Sauvegarde en cours de run ?
 
 ### Contenu
-11. Effets des 36 objets (conçus par Théo).
-12. Unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon.
+10. Effets des 36 objets (conçus par Théo).
+11. Unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon.
 
 ---
 
@@ -367,3 +367,4 @@ Zennys de base, bonus de victoire, coût d'une relance, coûts d'amélioration d
 - **2026-11-20** : une défaite contre un boss compte parmi les 3 de la run ; effet de l'Extrait (+1 énergie/s) ; type de dégâts des compétences selon l'élément de l'unité ; vocabulaire matériau / objet.
 - **2026-11-20** : contenu du prototype validé ([prototype-content.md](prototype-content.md)) ; mécanique propre à chaque élément ; nouveaux effets de compétence (bouclier, soin, bonus, ralentissement).
 - **2026-11-20** : début de l'étape 5. Progression par rang ★ : PV et attaque brute ×1,8 à chaque rang, autres statistiques inchangées ; chaque compétence a une valeur de base par rang, les ratios restent identiques (section 3.4).
+- **2026-11-20** : rangs ★ — les durées et pourcentages des compétences ne changent pas avec le rang pour l'instant. Rangs implémentés dans le moteur et le bac à sable.

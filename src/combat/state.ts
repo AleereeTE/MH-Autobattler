@@ -1,6 +1,6 @@
 import type { Hex } from '../core/hex.ts';
 import type { Rng } from '../core/rng.ts';
-import type { UnitDefinition } from '../data/definitions.ts';
+import type { StarRank, UnitDefinition } from '../data/definitions.ts';
 import type { Equipment } from '../data/items.ts';
 import type { CombatStats } from '../rules/stats.ts';
 import { ticksToSeconds } from './constants.ts';
@@ -47,6 +47,8 @@ export interface CombatUnit {
   /** Identifiant unique dans ce combat ; fixe aussi l'ordre d'action dans un tick. */
   readonly uid: number;
   readonly def: UnitDefinition;
+  /** Rang ★ : il augmente PV et attaque brute, et choisit la valeur de base de la compétence. */
+  readonly rank: StarRank;
   readonly side: Side;
   readonly equipment: Equipment;
   /** Statistiques de combat : fiche + matériaux, objets et traits. `stats.hp` = PV max. */

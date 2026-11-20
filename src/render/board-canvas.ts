@@ -1,5 +1,5 @@
 import { BOARD_COLS, BOARD_ROWS, ROWS_PER_SIDE, type Hex } from '../core/hex.ts';
-import type { Element, UnitCost } from '../data/definitions.ts';
+import type { Element, StarRank, UnitCost } from '../data/definitions.ts';
 import { hexCenter, hexCorners, lerpHex, type BoardLayout, type Point } from './hex-layout.ts';
 import type { FloatingText } from './replay.ts';
 import { areaCells } from './skill-area.ts';
@@ -25,6 +25,9 @@ export interface BoardTheme {
   readonly elements: Readonly<Record<Element | 'none', string>>;
   /** Fond des jetons selon le coût : gris, vert, bleu, violet, doré. */
   readonly costs: Readonly<Record<UnitCost, string>>;
+  /** Couleur des étoiles selon le rang (bronze, argent, or) et fond de leur pastille. */
+  readonly ranks: Readonly<Record<StarRank, string>>;
+  readonly rankBadge: string;
   /** Couleurs des zones d'effet qui ne dépendent pas de l'élément du lanceur. */
   readonly areas: Readonly<Record<Exclude<AreaTone, 'damage'>, string>>;
 }
@@ -56,6 +59,7 @@ export interface SceneUnit {
   readonly side: 'player' | 'enemy';
   readonly element: Element | null;
   readonly cost: UnitCost;
+  readonly rank: StarRank;
   readonly position: Hex;
   readonly moving?: { readonly to: Hex; readonly progress: number } | null;
   readonly hpRatio: number;
@@ -138,6 +142,7 @@ function drawUnit(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   }
 
   if (unit.alive) drawBars(ctx, layout, theme, unit, center);
+  drawRank(ctx, layout, theme, unit, center, radius);
   drawStatusDots(ctx, theme, unit, center, radius);
   ctx.globalAlpha = 1;
 }
@@ -210,6 +215,24 @@ function drawBars(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   }
 }
 
+/** Étoiles du rang dans une pastille, au bas du jeton. */
+function drawRank(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: BoardTheme, unit: SceneUnit, center: Point, radius: number): void {
+  const stars = '★'.repeat(unit.rank);
+  const size = Math.round(layout.size * 0.3);
+  ctx.font = `700 ${size}px system-ui, sans-serif`;
+  const width = ctx.measureText(stars).width + 6;
+  const height = size + 3;
+  ctx.beginPath();
+  ctx.roundRect(center.x - width / 2, center.y + radius - height / 2 + 1, width, height, height / 2);
+  ctx.fillStyle = theme.rankBadge;
+  ctx.fill();
+  ctx.fillStyle = theme.ranks[unit.rank];
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(stars, center.x, center.y + radius + 1.5);
+}
+
+/** Pastilles d'état (brûlure, ralentissement, accélération), en colonne sur le côté gauche du jeton. */
 function drawStatusDots(ctx: CanvasRenderingContext2D, theme: BoardTheme, unit: SceneUnit, center: Point, radius: number): void {
   const dots: string[] = [];
   if (unit.burning === true) dots.push(theme.elements.fire);
@@ -217,7 +240,7 @@ function drawStatusDots(ctx: CanvasRenderingContext2D, theme: BoardTheme, unit: 
   if (unit.hasted === true) dots.push(theme.elements.thunder);
   dots.forEach((color, i) => {
     ctx.beginPath();
-    ctx.arc(center.x - radius + 4 + i * 9, center.y + radius + 2, 3.5, 0, Math.PI * 2);
+    ctx.arc(center.x - radius - 1, center.y - 8 + i * 8, 3.5, 0, Math.PI * 2);
     ctx.fillStyle = color;
     ctx.fill();
   });

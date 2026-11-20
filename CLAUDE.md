@@ -19,7 +19,7 @@ Projet personnel, jamais publié : les noms et monstres officiels de la série s
 2. **Architecture** : faite ([docs/architecture.md](docs/architecture.md)).
 3. **Moteur de combat** : en place, avec tests automatisés.
 4. **Prototype jouable** : bac à sable fait ([docs/prototype-content.md](docs/prototype-content.md)).
-5. **Extension du gameplay** : à venir. Rangs ★, boutique et run, unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon, et les 36 objets définitifs (l'utilisateur les conçoit lui-même).
+5. **Extension du gameplay** : en cours. Fait : rangs ★ (moteur et bac à sable), zones d'effet animées, jetons illustrés. À venir : boutique et run, unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon, et les 36 objets définitifs (l'utilisateur les conçoit lui-même).
 6. **Intégration graphique** : plus tard.
 
 Les questions de game design encore ouvertes sont dans la section 14 de `docs/game-design.md`. Les choix techniques provisoires sont dans la section 7 de `docs/architecture.md`.

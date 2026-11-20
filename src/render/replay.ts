@@ -1,6 +1,6 @@
 import type { CombatEvent, Side, SkillEffectKind, UnitSnapshot, Winner } from '../combat/index.ts';
 import type { Hex } from '../core/hex.ts';
-import type { Element, UnitCost } from '../data/definitions.ts';
+import type { Element, StarRank, UnitCost } from '../data/definitions.ts';
 
 /**
  * Reconstitue l'état visible du combat à n'importe quel instant, à partir des seuls événements.
@@ -15,6 +15,7 @@ export interface FrameUnit {
   readonly side: Side;
   readonly element: Element | null;
   readonly cost: UnitCost;
+  readonly rank: StarRank;
   readonly maxHp: number;
   position: Hex;
   /** Déplacement en cours : case d'arrivée et avancement (0 → 1). */
@@ -86,6 +87,7 @@ function createTracker(snapshot: UnitSnapshot): Tracker {
       side: snapshot.side,
       element: snapshot.element,
       cost: snapshot.cost,
+      rank: snapshot.rank,
       maxHp: snapshot.maxHp,
       position: snapshot.position,
       moving: null,

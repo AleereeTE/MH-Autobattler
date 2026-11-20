@@ -60,7 +60,7 @@ describe('simulateCombat', () => {
         id: 'eclair',
         name: 'Éclair',
         castTime: 0,
-        effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: 100, ratios: [] }],
+        effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [100, 100, 100], ratios: [] }],
       },
     });
     const dummy = makeUnit({ stats: { hp: 10_000, attack: 0, range: 10 } });
