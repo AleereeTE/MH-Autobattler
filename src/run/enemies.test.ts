@@ -1,0 +1,55 @@
+import { describe, expect, it } from 'vitest';
+import { hexKey } from '../core/hex.ts';
+import { createRng } from '../core/rng.ts';
+import { copiesForRank } from './economy.ts';
+import { generateSquad, huntBudget, maxEnemyUnits } from './enemies.ts';
+
+const squadValue = (hunt: number, seed: number): number =>
+  generateSquad(hunt, createRng(seed)).reduce((sum, placement) => sum + placement.unit.cost * copiesForRank(placement.rank ?? 1), 0);
+
+describe('escouades ennemies', () => {
+  it('suit le budget et le nombre de monstres prévus', () => {
+    expect([1, 9, 30].map(huntBudget)).toEqual([2, 12, 38]);
+    expect([1, 5, 9, 30].map(maxEnemyUnits)).toEqual([2, 3, 4, 8]);
+  });
+
+  it('ne dépasse jamais le budget ni le nombre de monstres (chasses classiques)', () => {
+    for (const hunt of [1, 4, 9, 15, 25, 29]) {
+      for (const seed of [1, 2, 3]) {
+        expect(squadValue(hunt, seed), `chasse ${hunt}`).toBeLessThanOrEqual(huntBudget(hunt));
+        expect(generateSquad(hunt, createRng(seed)).length).toBeLessThanOrEqual(maxEnemyUnits(hunt));
+      }
+    }
+  });
+
+  it('ne met que des monstres, de coût 2 et de rang ★2 au plus pendant le stage 1', () => {
+    for (let hunt = 1; hunt <= 9; hunt++) {
+      for (const placement of generateSquad(hunt, createRng(hunt))) {
+        expect(placement.unit.kind).toBe('monster');
+        expect(placement.unit.cost).toBeLessThanOrEqual(2);
+        expect(placement.rank ?? 1).toBeLessThanOrEqual(2);
+      }
+    }
+  });
+
+  it('place chaque monstre sur une case différente du camp ennemi', () => {
+    const squad = generateSquad(29, createRng(4));
+    const cells = new Set(squad.map((placement) => hexKey(placement.position)));
+    expect(cells.size).toBe(squad.length);
+    for (const placement of squad) expect(placement.position.row).toBeLessThanOrEqual(3);
+  });
+
+  it('donne au boss un monstre de coût 3 au ★3, avec une escorte', () => {
+    for (const hunt of [10, 20, 30]) {
+      const squad = generateSquad(hunt, createRng(hunt));
+      expect(squad[0]).toMatchObject({ rank: 3 });
+      expect(squad[0]?.unit.cost).toBe(3);
+      expect(squad.length).toBeGreaterThan(1);
+    }
+  });
+
+  it('donne la même escouade avec la même graine', () => {
+    const names = (seed: number) => generateSquad(12, createRng(seed)).map((p) => `${p.unit.id}${p.rank}@${hexKey(p.position)}`);
+    expect(names(8)).toEqual(names(8));
+  });
+});

@@ -28,6 +28,20 @@ export class ReplayPlayer {
     return this.tick;
   }
 
+  /** Le replay chargé est arrivé à la fin du combat. */
+  get isFinished(): boolean {
+    return this.replay !== null && this.tick >= this.replay.durationTicks;
+  }
+
+  /** Saute directement à la fin du combat. */
+  skipToEnd(): void {
+    if (this.replay === null) return;
+    this.tick = this.replay.durationTicks;
+    this.playing = false;
+    this.onFrame(this.replay.frameAt(this.tick));
+    this.onStateChange();
+  }
+
   load(replay: Replay): void {
     this.replay = replay;
     this.tick = 0;

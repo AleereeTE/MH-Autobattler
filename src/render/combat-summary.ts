@@ -16,11 +16,16 @@ export interface UnitSummary {
   knockedOutAt: number | null;
 }
 
-export function summarizeUnits(events: readonly CombatEvent[]): UnitSummary[] {
+/**
+ * Bilan de chaque unité, en ne comptant que les événements survenus jusqu'à `untilTick`
+ * (tout le combat par défaut). Permet d'afficher le bilan en direct pendant le replay.
+ */
+export function summarizeUnits(events: readonly CombatEvent[], untilTick = Infinity): UnitSummary[] {
   const summaries = new Map<number, UnitSummary>();
   const get = (uid: number): UnitSummary | undefined => summaries.get(uid);
 
   for (const event of events) {
+    if (event.tick > untilTick) break;
     switch (event.type) {
       case 'combatStart':
         for (const unit of event.units) {

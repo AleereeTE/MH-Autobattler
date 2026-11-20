@@ -1,7 +1,7 @@
 import { UNITS } from '../../data/units/index.ts';
 import { el } from '../dom.ts';
 import type { SandboxModel } from './model.ts';
-import { unitSubtitle } from './unit-label.ts';
+import { unitSubtitle } from '../shared/unit-label.ts';
 
 /** Liste des unités disponibles, regroupées par coût. Cliquer sur une unité la sélectionne pour la poser. */
 export function renderPalette(model: SandboxModel): HTMLElement {

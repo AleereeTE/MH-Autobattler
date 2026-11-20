@@ -454,6 +454,11 @@ tr.enemy th[scope='row'] {
   color: var(--side-enemy);
 }
 
+/* Unités K.O. : grisées dans le bilan. */
+tr.ko {
+  opacity: 0.5;
+}
+
 details {
   margin-top: 10px;
 }
@@ -466,4 +471,381 @@ details {
   background: var(--bg);
   padding: 10px;
   border-radius: 6px;
+}
+
+/* ------------------------------------------------------------------
+   Coquille de l'application : titre et onglets des modes
+   ------------------------------------------------------------------ */
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin-bottom: 12px;
+}
+
+.app-nav {
+  display: flex;
+  gap: 6px;
+}
+
+.app-tab {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--fg);
+  text-decoration: none;
+  background: var(--panel);
+}
+
+.app-tab:hover {
+  border-color: var(--accent);
+}
+
+.app-tab[aria-current='page'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------
+   Mode run
+   ------------------------------------------------------------------ */
+.run {
+  display: grid;
+  grid-template-columns: minmax(0, 620px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  margin-top: 12px;
+}
+
+@media (max-width: 900px) {
+  .run {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.panel-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin-bottom: 10px;
+}
+
+.panel-title h2 {
+  margin: 0;
+}
+
+.panel-title .row {
+  margin-left: auto;
+}
+
+/* Bandeau de la run */
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 20px;
+}
+
+.hud-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 22px;
+}
+
+.hud-hunt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.05rem;
+}
+
+.hud-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-actions .button.danger {
+  margin-top: 0;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.badge {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge.boss {
+  background: var(--danger);
+  color: #fff;
+}
+
+.defeats {
+  color: var(--danger);
+  letter-spacing: 2px;
+}
+
+/* Petits jetons HTML : fond selon le coût, anneau selon l'élément */
+.token {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--ring, var(--element-none));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.token img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.token-stars {
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--rank-badge);
+  font-size: 0.6rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.token-stars.rank-1 {
+  color: var(--rank-1);
+}
+.token-stars.rank-2 {
+  color: var(--rank-2);
+}
+.token-stars.rank-3 {
+  color: var(--rank-3);
+}
+
+.cost-1 {
+  background-color: var(--cost-1);
+}
+.cost-2 {
+  background-color: var(--cost-2);
+}
+.cost-3 {
+  background-color: var(--cost-3);
+}
+.cost-4 {
+  background-color: var(--cost-4);
+}
+.cost-5 {
+  background-color: var(--cost-5);
+}
+
+/* Réserve */
+.bench-slots {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 6px;
+}
+
+@media (max-width: 640px) {
+  .bench-slots {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.bench-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-height: 84px;
+  padding: 8px 2px 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.bench-slot.empty {
+  border-style: dashed;
+}
+
+.bench-slot:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.bench-slot[aria-pressed='true'] {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.bench-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.7rem;
+}
+
+/* Boutique */
+.shop-cards {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .shop-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.shop-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px 8px;
+  border: 1px solid var(--border);
+  border-top-width: 4px;
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.shop-card:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.shop-card.empty {
+  justify-content: center;
+  color: var(--muted);
+  border-style: dashed;
+  min-height: 120px;
+  cursor: default;
+}
+
+.shop-card.too-expensive {
+  opacity: 0.55;
+}
+
+.shop-card-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.shop-card-text .small {
+  font-size: 0.7rem;
+}
+
+.shop-price {
+  font-weight: 700;
+}
+
+.cost-border-1 {
+  border-top-color: var(--cost-1);
+}
+.cost-border-2 {
+  border-top-color: var(--cost-2);
+}
+.cost-border-3 {
+  border-top-color: var(--cost-3);
+}
+.cost-border-4 {
+  border-top-color: var(--cost-4);
+}
+.cost-border-5 {
+  border-top-color: var(--cost-5);
+}
+
+/* Inventaire */
+.inventory {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 6px;
+}
+
+.inventory-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.inventory-item:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+/* Fin de combat : récompense, défaite, fin de run */
+.outcome-panel.won {
+  border-color: var(--board-hp);
+}
+
+.outcome-panel.lost {
+  border-color: var(--danger);
+}
+
+.reward-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.reward-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.reward-card:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.reward-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

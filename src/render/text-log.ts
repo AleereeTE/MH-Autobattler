@@ -20,12 +20,14 @@ function winnerLabel(winner: Winner): string {
   return 'interrompu par la limite de sécurité (bug probable)';
 }
 
-export function formatCombatLog(events: readonly CombatEvent[]): string[] {
+/** Lignes du journal, jusqu'à `untilTick` (tout le combat par défaut). */
+export function formatCombatLog(events: readonly CombatEvent[], untilTick = Infinity): string[] {
   const labels = new Map<number, string>();
   const name = (uid: number): string => labels.get(uid) ?? `#${uid}`;
   const lines: string[] = [];
 
   for (const event of events) {
+    if (event.tick > untilTick) break;
     const time = `[${ticksToSeconds(event.tick).toFixed(2).padStart(6)} s]`;
     switch (event.type) {
       case 'combatStart': {

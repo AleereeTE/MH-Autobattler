@@ -46,6 +46,16 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 
 Les zennys de base et les intérêts sont gagnés à chaque tour, **même en cas de défaite**.
 
+### Première version du mode run (étape 5)
+
+| Élément | Décision |
+|---|---|
+| Enchaînement | **Suite imposée** : les 30 chasses s'enchaînent sans choix. La carte (2 ou 3 chasses au choix) viendra plus tard |
+| Ennemis | Escouades générées selon un budget (section 9) |
+| Boss (chasses 10, 20, 30) | **Escouade renforcée** en attendant la « version boss » (section 9) |
+| Récompenses | **1 parmi 3 simplifié** (section 11) |
+| Fin de la run | Victoire contre le boss de la chasse 30, ou 3 défaites |
+
 ---
 
 ## 3. Unités
@@ -106,7 +116,7 @@ La vitesse de déplacement est identique pour toutes les unités.
 ### 3.4 Coût, exemplaires et rangs
 
 - Chaque unité coûte de **1 à 5 zennys**.
-- Le nombre d'exemplaires de chaque unité est **limité selon son coût** **[valeurs à définir]**.
+- Le nombre d'exemplaires de chaque unité est **limité selon son coût** (valeurs de départ dans [prototype-content.md](prototype-content.md), section « Mode run »).
 - 3 exemplaires identiques du même rang donnent un exemplaire du rang supérieur :
 
 | Rang | Obtention |
@@ -114,6 +124,14 @@ La vitesse de déplacement est identique pour toutes les unités.
 | ★1 Rang Bas | Achat en boutique, capture |
 | ★2 Rang Haut | 3 exemplaires ★1 |
 | ★3 Rang Maître | 3 exemplaires ★2 |
+
+#### Fusion automatique
+
+- Dès que le joueur possède **3 exemplaires identiques du même rang**, ils fusionnent aussitôt en un exemplaire du rang supérieur ; une fusion ★2 peut en entraîner une ★3.
+- Les exemplaires **sur le plateau et en réserve** comptent.
+- L'unité fusionnée prend la case d'un exemplaire posé sur le plateau, sinon une place de la réserve.
+- Acheter un exemplaire qui déclenche une fusion reste possible **même réserve pleine**.
+- Objets et matériaux : voir section 7.2.
 
 #### Progression par rang
 
@@ -246,6 +264,8 @@ Le prototype contient 8 objets avec un effet propre ; les autres combinaisons do
   - un matériau : gratuit, à tout moment entre les combats ;
   - un objet : nécessite un **retire-objet**.
 - **Vendre une unité** rend tous ses matériaux et objets.
+- **Fusion de 3 exemplaires** : l'unité fusionnée récupère les objets et matériaux des 3 exemplaires, dans la limite de ses emplacements (les matériaux seuls fusionnent entre eux selon la règle habituelle). Le surplus revient dans l'inventaire du joueur.
+- **Inventaire** : les matériaux et objets qui ne sont pas posés sur une unité y attendent, entre les combats.
 - **Obtenir des retire-objets** : 1 garanti après chaque boss, et possibilité d'en obtenir dans les récompenses.
 
 ---
@@ -269,9 +289,12 @@ Le prototype contient 8 objets avec un effet propre ; les autres combinaisons do
 | Apparition des unités chères | Par probabilités selon le niveau (comme TFT) |
 | Réserve | 10 places pour les unités achetées mais non placées |
 
-### 8.3 Valeurs à définir pendant l'équilibrage
+### 8.3 Valeurs de départ
 
-Zennys de base, bonus de victoire, coût d'une relance, coûts d'amélioration de la boutique, prix de revente, table de probabilités par niveau, nombre d'exemplaires par coût.
+Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, exemplaires) sont dans [prototype-content.md](prototype-content.md), section « Mode run ». Elles sont provisoires ⚠️ et seront ajustées pendant l'équilibrage.
+
+- La boutique est **relancée gratuitement au début de chaque tour**. Les unités proposées mais non achetées retournent dans le stock commun.
+- **Revente** : une unité rapporte son coût multiplié par le nombre d'exemplaires qu'elle représente (1, 3 ou 9), et ces exemplaires retournent dans le stock.
 
 ---
 
@@ -279,6 +302,8 @@ Zennys de base, bonus de victoire, coût d'une relance, coûts d'amélioration d
 
 - **Chasses classiques** : escouades de monstres **générées selon un budget**, qui augmente au fil de la run.
 - **Chasses de boss** : la **version boss** d'un grand monstre, plus puissante que sa version unité **[contenu exact à définir]**.
+- **Première version** : uniquement des monstres. Le budget sert à recruter des monstres (selon leur coût) puis à monter leur rang. Les boss sont une **escouade renforcée** : un grand monstre ★3 entouré d'une escorte. Les règles de calcul sont dans [prototype-content.md](prototype-content.md) ⚠️.
+- L'escouade de la prochaine chasse est visible sur le plateau pendant la préparation.
 - Boss sur plusieurs hexagones et parties cassables : reportés à plus tard.
 
 ---
@@ -297,6 +322,7 @@ Zennys de base, bonus de victoire, coût d'une relance, coûts d'amélioration d
 - **Après une victoire** : choix d'une récompense parmi 3 : unité, objet (déjà fusionné), matériaux, zennys, retire-objet ou capture.
 - **Après un boss** : récompenses de meilleure qualité que celles des chasses classiques, plus 1 retire-objet garanti.
 - **Après une défaite** : aucune récompense (les zennys de base et les intérêts restent gagnés).
+- **Première version (1 parmi 3 simplifié)** : un matériau au hasard, des zennys, ou une unité ★1 tirée comme en boutique ; pas encore d'objet fusionné, de retire-objet ni de capture parmi les choix. Après un boss, les quantités sont doublées, en plus du retire-objet garanti. Une unité ne peut être choisie que s'il y a de la place en réserve (ou si elle déclenche une fusion).
 
 ---
 
@@ -368,3 +394,4 @@ Zennys de base, bonus de victoire, coût d'une relance, coûts d'amélioration d
 - **2026-11-20** : contenu du prototype validé ([prototype-content.md](prototype-content.md)) ; mécanique propre à chaque élément ; nouveaux effets de compétence (bouclier, soin, bonus, ralentissement).
 - **2026-11-20** : début de l'étape 5. Progression par rang ★ : PV et attaque brute ×1,8 à chaque rang, autres statistiques inchangées ; chaque compétence a une valeur de base par rang, les ratios restent identiques (section 3.4).
 - **2026-11-20** : rangs ★ — les durées et pourcentages des compétences ne changent pas avec le rang pour l'instant. Rangs implémentés dans le moteur et le bac à sable.
+- **2026-11-20** : première version du mode run — suite imposée de 30 chasses, escouades générées selon un budget, boss en escouade renforcée, récompenses 1 parmi 3 simplifiées ; fusion automatique comme TFT (plateau + réserve, objets regroupés, achat possible réserve pleine) ; valeurs de départ de l'économie (provisoires).

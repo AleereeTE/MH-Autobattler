@@ -28,8 +28,10 @@ export function portraitUrls(files: Readonly<Record<string, string>>): Map<strin
 /** Charge les portraits en arrière-plan ; `onLoad` est appelé à chaque image prête, pour redessiner. */
 export class PortraitStore {
   private readonly loaded = new Map<string, Portrait>();
+  private readonly urls: ReadonlyMap<string, string>;
 
   constructor(onLoad: () => void, urls: ReadonlyMap<string, string> = portraitUrls(FILES)) {
+    this.urls = urls;
     for (const [id, url] of urls) {
       const image = new Image();
       image.addEventListener('load', () => {
@@ -42,5 +44,10 @@ export class PortraitStore {
 
   get(unitId: string): Portrait | null {
     return this.loaded.get(unitId) ?? null;
+  }
+
+  /** Adresse de l'image, pour l'afficher dans une page HTML (réserve, boutique). */
+  url(unitId: string): string | null {
+    return this.urls.get(unitId) ?? null;
   }
 }

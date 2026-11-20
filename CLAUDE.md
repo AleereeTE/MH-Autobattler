@@ -19,10 +19,10 @@ Projet personnel, jamais publié : les noms et monstres officiels de la série s
 2. **Architecture** : faite ([docs/architecture.md](docs/architecture.md)).
 3. **Moteur de combat** : en place, avec tests automatisés.
 4. **Prototype jouable** : bac à sable fait ([docs/prototype-content.md](docs/prototype-content.md)).
-5. **Extension du gameplay** : en cours. Fait : rangs ★ (moteur et bac à sable), zones d'effet animées, jetons illustrés. À venir : boutique et run, unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon, et les 36 objets définitifs (l'utilisateur les conçoit lui-même).
+5. **Extension du gameplay** : en cours. Fait : rangs ★, zones d'effet animées, jetons illustrés, bilan en direct, première version du mode run (30 chasses, boutique, réserve, fusion automatique, économie, récompenses simplifiées). À venir : carte, récompenses complètes et capture, vraie version boss, unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon, et les 36 objets définitifs (l'utilisateur les conçoit lui-même).
 6. **Intégration graphique** : plus tard.
 
-Les questions de game design encore ouvertes sont dans la section 14 de `docs/game-design.md`. Les choix techniques provisoires sont dans la section 7 de `docs/architecture.md`.
+Les questions de game design encore ouvertes sont dans la section 14 de `docs/game-design.md`. Les choix techniques provisoires sont dans la section 8 de `docs/architecture.md`.
 
 ## Documentation
 
@@ -37,7 +37,7 @@ Les questions de game design encore ouvertes sont dans la section 14 de `docs/ga
 | Commande | Effet |
 |---|---|
 | `npm install` | Installe les dépendances |
-| `npm run dev` | Lance le bac à sable dans le navigateur |
+| `npm run dev` | Lance le jeu dans le navigateur (onglets « Mode run » et « Bac à sable ») |
 | `npm test` | Lance les tests (Vitest) |
 | `npm run typecheck` | Vérifie les types |
 | `npm run build` | Vérifie les types et construit l'application |
@@ -48,7 +48,7 @@ Avant de considérer un travail terminé : `npm run typecheck` et `npm test` doi
 ## Principes d'architecture
 
 - **Technologies** : TypeScript, Vite, HTML/CSS et Canvas 2D. Pas de React, de framework ni de backend tant qu'ils n'apportent pas d'avantage concret.
-- **Dépendances à sens unique** : `core → data → rules → combat → render → ui`. Un module n'importe jamais un module situé à sa droite. L'extérieur n'utilise le moteur qu'à travers `src/combat/index.ts`.
+- **Dépendances à sens unique** : `core → data → rules → combat → render → ui`, avec `run` entre `combat` et `ui`. Un module n'importe jamais un module situé à sa droite. L'extérieur n'utilise le moteur qu'à travers `src/combat/index.ts`, et le mode run qu'à travers `src/run/index.ts`.
 - **Le moteur ne touche jamais au DOM.** Il fonctionne sans affichage et produit des événements que le rendu rejoue. La logique de combat et les animations ne se mélangent pas.
 - **Déterminisme** : le moteur n'utilise jamais `Math.random()`. Tout le hasard passe par le générateur à graine (`src/core/rng.ts`).
 - **Les données de gameplay** (`src/data/`) sont séparées de la logique.

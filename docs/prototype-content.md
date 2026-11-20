@@ -9,7 +9,7 @@
 - **4 traits d'élément** : Feu, Foudre, Glace, Sans élément (3 unités chacun).
 - **5 traits secondaires** : Guilde, Berserker, Bastion, Catalyseur, Wyverne volante.
 - **8 matériaux**, **8 objets avec effet propre**, et une fusion générique pour les 28 autres combinaisons.
-- **Mode bac à sable** : composition libre des deux camps, escouades ennemies prédéfinies, replay du combat et statistiques par unité.
+- **Mode bac à sable** : composition libre des deux camps, escouades ennemies prédéfinies, replay du combat et statistiques par unité mises à jour en direct pendant le replay (le résultat n'est annoncé qu'à la fin).
 
 Plus tard : unités de coût 4 et 5, Dragons anciens, éléments Eau et Dragon, nouveaux traits. Les traits de certaines unités pourront changer.
 
@@ -106,6 +106,55 @@ Chaque objet donne les statistiques de ses deux matériaux **plus** son propre e
 | Facile | Barroth, Khezu, Anjanath |
 | Moyenne | Barroth, Khezu, Anjanath, Tobi-Kadachi |
 | Difficile | Barroth, Khezu, Anjanath, Tobi-Kadachi, Rathalos, Legiana, avec quelques objets |
+
+---
+
+## Mode run
+
+Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. ⚠️ Toutes les valeurs ci-dessous sont des valeurs de départ, à ajuster en jouant. Elles se trouvent dans `src/data/run-balance.ts`.
+
+### Économie
+
+| Élément | Valeur |
+|---|---|
+| Départ | Boutique niveau 2, 5 zennys (+ le revenu du 1er tour, soit 10 zennys pour la première boutique) |
+| Revenu de base | 5 zennys par tour, même en cas de défaite |
+| Bonus de victoire | +1 zenny au tour suivant |
+| Intérêts | +1 par tranche de 10 zennys épargnés, 5 au maximum (validé) |
+| Relance | 2 zennys (gratuite au début de chaque tour) |
+| Amélioration de la boutique | 2→3 : 4 · 3→4 : 8 · 4→5 : 12 · 5→6 : 20 · 6→7 : 28 · 7→8 : 36 · 8→9 : 48 |
+| Revente | Coût × exemplaires : ★1 = coût, ★2 = 3 × coût, ★3 = 9 × coût |
+| Exemplaires par unité | Coût 1 : 18 · coût 2 : 15 · coût 3 : 12 |
+| Réserve | 10 places (validé) |
+
+### Probabilités de la boutique (coût 1 / 2 / 3)
+
+| Niveau | 1-2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|---|---|---|---|---|---|---|---|
+| % | 100 / 0 / 0 | 75 / 25 / 0 | 55 / 35 / 10 | 45 / 40 / 15 | 35 / 40 / 25 | 25 / 40 / 35 | 20 / 35 / 45 | 15 / 35 / 50 |
+
+Les unités de coût 4 et 5 n'existent pas encore : la table sera complétée avec elles.
+
+### Ennemis
+
+| Élément | Valeur |
+|---|---|
+| Budget de la chasse n | 2 + 1,25 × (n − 1), arrondi à l'inférieur (2 à la chasse 1, 12 à la chasse 9, 38 à la chasse 30) |
+| Valeur d'un monstre | Coût × exemplaires : ★1 = coût, ★2 = 3 × coût, ★3 = 9 × coût |
+| Nombre de monstres | 2 + 1 toutes les 4 chasses, 8 au maximum |
+| Monstres possibles | Stage 1 : coût 1 et 2, rang ★2 au maximum · stages 2 et 3 : coût 1 à 3, rang ★3 au maximum |
+| Utilisation du budget | D'abord recruter des monstres au hasard jusqu'au nombre maximum, puis monter leur rang avec ce qui reste |
+| Placement | Tanks et bruisers devant (rangées 3 puis 2), DPS et supports derrière (rangées 0 puis 1) |
+| Boss (chasses 10, 20, 30) | Un monstre de coût 3 au ★3, plus une escorte générée avec le budget de la chasse (une place de moins) |
+
+### Récompenses (1 parmi 3)
+
+| Choix | Chasse classique | Boss |
+|---|---|---|
+| Matériau au hasard | 1 | 2 |
+| Zennys | 4 | 8 |
+| Unité ★1 tirée comme en boutique | 1 exemplaire | 2 exemplaires de la même unité |
+| Retire-objet | — | +1 garanti, en plus du choix |
 
 ---
 

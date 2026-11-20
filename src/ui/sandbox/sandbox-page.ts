@@ -2,18 +2,18 @@ import { simulateCombat, ticksToSeconds, type CombatResult } from '../../combat/
 import { hexKey } from '../../core/hex.ts';
 import { DEMO_PLAYER_TEAM, ENEMY_SQUADS } from '../../data/squads.ts';
 import type { BoardScene } from '../../render/board-canvas.ts';
-import { createReplay, type Frame } from '../../render/replay.ts';
+import { createReplay } from '../../render/replay.ts';
 import { button, el, select } from '../dom.ts';
-import { BoardView } from './board-view.ts';
+import { BoardView } from '../shared/board-view.ts';
 import { SandboxModel, sideOf } from './model.ts';
 import { renderPalette } from './palette-view.ts';
-import { PortraitStore } from './portraits.ts';
-import { ReplayPlayer } from './replay-player.ts';
-import { renderResults, type BatchResult } from './results-view.ts';
+import { PortraitStore } from '../shared/portraits.ts';
+import { ReplayPlayer } from '../shared/replay-player.ts';
+import { ResultsView, type BatchResult } from '../shared/results-view.ts';
 import { loadComposition, saveComposition } from './storage.ts';
-import { renderTraits } from './traits-view.ts';
+import { renderTraits } from '../shared/traits-view.ts';
 import { renderUnitPanel } from './unit-panel.ts';
-import { shortLabel } from './unit-label.ts';
+import { frameScene, staticUnitScene } from '../shared/scenes.ts';
 
 const BATCH_SIZE = 100;
 const SPEEDS = [0.5, 1, 2, 4];
@@ -22,7 +22,7 @@ const SPEEDS = [0.5, 1, 2, 4];
  * Page « bac à sable » : composer les deux camps, lancer un combat, le regarder,
  * et lancer des séries de combats pour repérer les unités trop fortes.
  */
-export function mountSandbox(root: HTMLElement): void {
+export function mountSandbox(root: HTMLElement): () => void {
   const model = new SandboxModel();
   let mode: 'edit' | 'replay' = 'edit';
   let result: CombatResult | null = null;
@@ -34,7 +34,8 @@ export function mountSandbox(root: HTMLElement): void {
   });
   const player = new ReplayPlayer(
     (frame) => {
-      board.render(frameScene(frame));
+      board.render(frameScene(frame, portraits));
+      results.showUntil(frame.tick);
       status.textContent = `${ticksToSeconds(frame.tick).toFixed(1)} s${frame.suddenDeath ? ' · mort subite' : ''}`;
     },
     () => renderToolbar(),
@@ -49,7 +50,7 @@ export function mountSandbox(root: HTMLElement): void {
   const status = el('span', { className: 'status' });
   const paletteColumn = el('aside', { className: 'palette-column' });
   const detailsColumn = el('aside', { className: 'details-column' });
-  const resultsSlot = el('div');
+  const results = new ResultsView();
   const seedInput = el('input', { attrs: { type: 'number', step: '1', value: '1', 'aria-label': 'Graine du combat' } });
   const squadSelect = select(
     ENEMY_SQUADS.map((squad) => ({ value: squad.id, label: `Escouade ${squad.name}` })),
@@ -59,54 +60,20 @@ export function mountSandbox(root: HTMLElement): void {
   function editScene(): BoardScene {
     const selected = model.selectedPlaced();
     return {
-      units: model.placedUnits().map((placed) => ({
-        key: hexKey(placed.position),
-        label: shortLabel(placed.unit.name),
-        portrait: portraits.get(placed.unit.id),
-        side: sideOf(placed.position),
-        element: placed.unit.element,
-        cost: placed.unit.cost,
-        rank: placed.rank,
-        position: placed.position,
-        hpRatio: 1,
-        alive: true,
-        selected: placed === selected,
-      })),
+      units: model.placedUnits().map((placed) =>
+        staticUnitScene(
+          {
+            key: hexKey(placed.position),
+            unit: placed.unit,
+            rank: placed.rank,
+            side: sideOf(placed.position),
+            position: placed.position,
+            selected: placed === selected,
+          },
+          portraits,
+        ),
+      ),
       highlight: selected?.position ?? null,
-    };
-  }
-
-  function frameScene(frame: Frame): BoardScene {
-    const banner =
-      frame.winner === undefined ? null : frame.winner === 'player' ? 'Victoire !' : frame.winner === 'enemy' ? 'Défaite' : 'Interrompu';
-    return {
-      units: frame.units.map((unit) => ({
-        key: unit.uid,
-        label: shortLabel(unit.name),
-        portrait: portraits.get(unit.defId),
-        side: unit.side,
-        element: unit.element,
-        cost: unit.cost,
-        rank: unit.rank,
-        position: unit.position,
-        moving: unit.moving,
-        hpRatio: unit.hp / unit.maxHp,
-        shieldRatio: unit.shield / unit.maxHp,
-        alive: unit.alive,
-        casting: unit.casting,
-        burning: unit.burning,
-        chilled: unit.chilled,
-        hasted: unit.hasted,
-      })),
-      texts: frame.texts,
-      areas: frame.areas.map((area) => ({
-        center: area.center,
-        radius: area.radius,
-        tone: area.effect,
-        element: area.element,
-        age: area.age,
-      })),
-      banner,
     };
   }
 
@@ -115,6 +82,7 @@ export function mountSandbox(root: HTMLElement): void {
     mode = 'edit';
     board.render(editScene());
     renderToolbar();
+    renderResultsSlot();
   }
 
   function renderToolbar(): void {
@@ -139,11 +107,15 @@ export function mountSandbox(root: HTMLElement): void {
 
   function renderSidebars(): void {
     paletteColumn.replaceChildren(renderPalette(model));
-    detailsColumn.replaceChildren(renderUnitPanel(model), renderTraits(model));
+    detailsColumn.replaceChildren(renderUnitPanel(model), renderTraits(
+        model.unitsOf('player').map((placed) => placed.unit),
+        model.unitsOf('enemy').map((placed) => placed.unit),
+      ));
   }
 
+  /** Pendant le replay, le bilan suit l'instant affiché ; sinon il montre tout le combat. */
   function renderResultsSlot(): void {
-    resultsSlot.replaceChildren(renderResults(result, batch, error));
+    results.show(result, batch, error, mode === 'replay' && player.isLoaded ? player.currentTick : Infinity);
   }
 
   function seed(): number {
@@ -194,7 +166,6 @@ export function mountSandbox(root: HTMLElement): void {
 
   root.replaceChildren(
     el('header', { className: 'page-header' }, [
-      el('h1', { text: 'MH Autobattler — bac à sable' }),
       el('p', {
         className: 'muted',
         text: 'Compose les deux camps, lance un combat et regarde-le. Même graine = même combat. Les valeurs sont provisoires.',
@@ -220,7 +191,7 @@ export function mountSandbox(root: HTMLElement): void {
           button('Vider le joueur', () => model.clearSide('player')),
           button('Vider l’ennemi', () => model.clearSide('enemy')),
         ]),
-        resultsSlot,
+        results.element,
       ]),
       detailsColumn,
     ]),
@@ -234,4 +205,6 @@ export function mountSandbox(root: HTMLElement): void {
     const medium = ENEMY_SQUADS.find((squad) => squad.id === 'medium');
     if (medium !== undefined) model.loadSquad('enemy', medium);
   }
+  // En quittant la page : arrêter le replay en cours.
+  return () => player.stop();
 }

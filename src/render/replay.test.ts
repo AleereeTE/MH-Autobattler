@@ -77,4 +77,19 @@ describe('summarizeUnits', () => {
     expect(dealt).toBeGreaterThan(0);
     expect(dealt).toBeCloseTo(taken);
   });
+
+  it('ne compte que les événements survenus jusqu’à l’instant demandé', () => {
+    const result = simulateCombat(createDemoSetup(), 1);
+    const middle = Math.floor(result.durationTicks / 2);
+    const total = (untilTick?: number) =>
+      summarizeUnits(result.events, untilTick).reduce((sum, unit) => sum + unit.damageDealt, 0);
+    const expectedAtMiddle = result.events
+      .filter((event) => event.type === 'damage' && event.tick <= middle)
+      .reduce((sum, event) => sum + (event.type === 'damage' ? event.amount : 0), 0);
+
+    expect(total(0)).toBe(0);
+    expect(total(middle)).toBeCloseTo(expectedAtMiddle);
+    expect(total(middle)).toBeLessThan(total());
+    expect(summarizeUnits(result.events, middle).some((unit) => unit.knockedOutAt !== null && unit.knockedOutAt > middle)).toBe(false);
+  });
 });
