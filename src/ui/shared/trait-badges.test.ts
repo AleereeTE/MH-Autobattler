@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TRAITS } from '../../data/traits.ts';
-import { TRAIT_BADGES } from './trait-badges.ts';
+import { TRAIT_BADGES } from './trait-styles.ts';
 
 describe('insignes des traits', () => {
   it('donne un insigne à chaque trait du jeu', () => {

@@ -183,7 +183,8 @@ Les couleurs sont des variables CSS (`--cost-1` à `--cost-5`, `--side-player`, 
 
 ### Insignes et aperçus
 
-- **Insignes des traits** (`ui/shared/trait-badges.ts`) : un symbole et une couleur par trait, affichés sur les cartes (liste du bac à sable, boutique) et dans les fiches. Un test vérifie que chaque trait a le sien.
+- **Insignes des traits** (`ui/shared/trait-badges.ts`, symboles et couleurs dans `trait-styles.ts`) : un symbole et une couleur par trait, affichés sur les cartes (liste du bac à sable, boutique) et dans les fiches. Un test vérifie que chaque trait a le sien.
+- **Aperçu d'un trait** (`ui/shared/trait-preview.ts`) : clic droit sur une synergie ou sur un insigne (cartes, fiches, unité sélectionnée). Il montre tous les paliers avec leur couleur (bronze, argent, or) et leur effet, et la liste des unités qui portent le trait. Depuis une synergie, il met en avant le palier actif de l'équipe et coche ses unités. Sur un insigne placé dans une carte, c'est l'aperçu du trait qui s'ouvre, pas la fiche de l'unité.
 - **Clic droit** (`ui/shared/popover.ts`, `previews.ts`) : fiche d'une unité (liste, boutique, réserve, plateau), état d'une unité en plein combat (PV, bouclier, états, statistiques de début de combat), recettes d'un matériau (les 8 objets possibles et leurs statistiques, en signalant ceux qu'on peut faire avec l'inventaire) ou statistiques d'un objet.
 - Pour l'aperçu en combat, l'événement `combatStart` contient l'équipement et les statistiques de combat de chaque unité (rang, objets et traits compris).
 

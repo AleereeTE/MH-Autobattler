@@ -1,7 +1,9 @@
 import type { UnitDefinition } from '../../data/definitions.ts';
 import { traitStatuses, type TraitStatus } from '../../rules/traits.ts';
 import { el } from '../dom.ts';
-import { traitBadgeStyle } from './trait-badges.ts';
+import { onRightClick } from './popover.ts';
+import { traitPreview } from './trait-preview.ts';
+import { traitBadgeStyle } from './trait-styles.ts';
 import { MEDAL_NAMES, traitMedal } from './trait-medals.ts';
 
 /** Paliers d'un trait (« 2 / 4 / 6 ») : ceux atteints ressortent, le palier actif est sur fond de sa couleur. */
@@ -22,14 +24,15 @@ function tierSteps({ trait, count, tier }: TraitStatus, medalClass: string): HTM
 /**
  * Une synergie : insigne du trait (fond bronze, argent ou or selon le palier atteint, gris sinon),
  * nom, nombre d'unités, paliers, puis l'effet actif ou le prochain palier à atteindre.
+ * Clic droit : aperçu de tous les paliers, avec les unités du trait (celles de l'équipe cochées).
  */
-function traitItem(status: TraitStatus): HTMLElement {
+function traitItem(status: TraitStatus, team: readonly UnitDefinition[]): HTMLElement {
   const { trait, count, tier } = status;
   const medal = traitMedal(trait, tier);
   const medalClass = medal === null ? 'medal-none' : `medal-${medal}`;
   const next = trait.tiers.find((candidate) => candidate.count > count);
   const style = traitBadgeStyle(trait.id);
-  return el('li', { className: tier === null ? 'trait inactive' : 'trait active' }, [
+  const item = el('li', { className: tier === null ? 'trait inactive' : 'trait active', attrs: { title: 'Clic droit : tous les paliers' } }, [
     el('span', {
       className: `trait-medal ${medalClass}`,
       text: style.symbol,
@@ -51,12 +54,15 @@ function traitItem(status: TraitStatus): HTMLElement {
       }),
     ]),
   ]);
+  return onRightClick(item, () => traitPreview(trait.id, team));
 }
 
 /** Liste des synergies d'une équipe, actives en premier (aussi utilisée par le planificateur). */
 export function traitList(units: readonly UnitDefinition[], empty = 'Aucune unité.'): HTMLElement {
   const statuses = traitStatuses(units);
-  return statuses.length > 0 ? el('ul', { className: 'traits' }, statuses.map(traitItem)) : el('p', { className: 'muted', text: empty });
+  return statuses.length > 0
+    ? el('ul', { className: 'traits' }, statuses.map((status) => traitItem(status, units)))
+    : el('p', { className: 'muted', text: empty });
 }
 
 /** Traits de chaque camp, actifs en premier, avec le prochain palier à atteindre. */

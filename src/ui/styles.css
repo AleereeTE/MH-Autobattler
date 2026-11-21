@@ -1275,3 +1275,99 @@ details {
   font-size: 0.68rem;
   font-weight: 700;
 }
+
+/* ------------------------------------------------------------------
+   Aperçu d'un trait (clic droit sur une synergie ou un insigne)
+   ------------------------------------------------------------------ */
+.trait,
+.trait-badge {
+  cursor: context-menu;
+}
+
+.trait-preview-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.trait-preview-head h3,
+.trait-preview-head p {
+  margin: 0;
+}
+
+/* Insigne d'un trait vu hors de toute équipe : teinté de la couleur du trait. */
+.trait-medal.medal-trait {
+  background: color-mix(in srgb, var(--badge) 40%, var(--panel));
+}
+
+.tier-rows {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.tier-row {
+  display: grid;
+  grid-template-columns: 2.2em 1fr;
+  gap: 8px;
+  align-items: baseline;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+
+.tier-row .trait-step {
+  text-align: center;
+}
+
+/* Palier qui s'applique à l'équipe : encadré. Paliers dépassés : un peu estompés. Pas encore atteints : estompés. */
+.tier-row.active {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  outline: 1px solid var(--accent);
+  font-weight: 600;
+}
+
+.tier-row.reached {
+  opacity: 0.75;
+}
+
+.tier-row.locked {
+  opacity: 0.5;
+}
+
+.trait-preview h4 {
+  margin: 10px 0 6px;
+  font-size: 0.85rem;
+}
+
+.trait-units {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 0.8rem;
+}
+
+.trait-unit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+}
+
+.trait-unit.in-team {
+  color: var(--fg);
+  font-weight: 700;
+}
+
+/* Petite pastille de la couleur du coût. */
+.cost-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
