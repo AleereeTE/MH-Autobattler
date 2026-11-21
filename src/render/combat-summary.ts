@@ -76,3 +76,10 @@ export function summarizeUnits(events: readonly CombatEvent[], untilTick = Infin
   }
   return [...summaries.values()];
 }
+
+/** Bilans répartis par camp, chaque camp trié du plus de dégâts infligés au moins. */
+export function summariesBySide(summaries: readonly UnitSummary[]): Record<Side, UnitSummary[]> {
+  const bySide = (side: Side): UnitSummary[] =>
+    summaries.filter((unit) => unit.side === side).sort((a, b) => b.damageDealt - a.damageDealt);
+  return { player: bySide('player'), enemy: bySide('enemy') };
+}

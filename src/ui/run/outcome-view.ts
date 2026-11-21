@@ -8,7 +8,7 @@ import type { RunController } from './controller.ts';
 import { onRightClick } from '../shared/popover.ts';
 import { materialPreview } from '../shared/previews.ts';
 import { unitCard } from '../shared/unit-card.ts';
-import { unitToken } from './token.ts';
+import { unitToken } from '../shared/token.ts';
 
 function rewardCard(controller: RunController, option: RewardOption, index: number, portraits: PortraitStore): HTMLElement {
   const available = canTakeReward(controller.state, option);

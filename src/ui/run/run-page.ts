@@ -14,6 +14,9 @@ import { combatUnitPreview } from '../shared/previews.ts';
 import { frameScene, frameUnitAt, staticUnitScene } from '../shared/scenes.ts';
 import { unitCard } from '../shared/unit-card.ts';
 import { renderTraits } from '../shared/traits-view.ts';
+import { openPlanner } from '../planner/planner-dialog.ts';
+import { renderPlanPanel } from '../planner/plan-panel.ts';
+import { teamPlan } from '../planner/team-plan.ts';
 import { renderBench } from './bench-view.ts';
 import { RunController } from './controller.ts';
 import { renderHud } from './hud-view.ts';
@@ -37,6 +40,7 @@ let controller: RunController | null = null;
  */
 export function mountRun(root: HTMLElement): () => void {
   const run = (controller ??= new RunController(newSeed()));
+  const plan = teamPlan();
   let shownFight: CombatResult | null = null;
   let lastFight: CombatResult | null = null;
   let confirmRestart = false;
@@ -79,6 +83,7 @@ export function mountRun(root: HTMLElement): () => void {
   const selectionSlot = el('div');
   const inventorySlot = el('div');
   const traitsSlot = el('div');
+  const planSlot = el('div');
 
   /** Plateau pendant la préparation : tes unités posées et l'escouade de la chasse. */
   function prepScene(): BoardScene {
@@ -153,11 +158,13 @@ export function mountRun(root: HTMLElement): () => void {
     hudSlot.replaceChildren(renderHud(run, replayControls(), restartButton(), run.watching === null || player.isFinished));
     noticeSlot.replaceChildren(...(run.notice === null ? [] : [el('p', { className: 'notice', text: run.notice })]));
     benchSlot.replaceChildren(renderBench(run, portraits));
-    shopSlot.replaceChildren(renderShop(run, portraits));
+    shopSlot.replaceChildren(renderShop(run, portraits, plan));
     const outcome = renderOutcome(run, run.watching === null || player.isFinished, portraits, startNewRun);
     outcomeSlot.replaceChildren(...(outcome === null ? [] : [outcome]));
     selectionSlot.replaceChildren(renderSelection(run));
     inventorySlot.replaceChildren(renderInventory(run));
+    const ownedIds = new Set(run.state.units.map((unit) => unit.unitId));
+    planSlot.replaceChildren(renderPlanPanel(plan, ownedIds, portraits, () => openPlanner(plan, portraits)));
     const playerUnits = boardUnits(run.state).flatMap((unit) => findUnit(unit.unitId) ?? []);
     traitsSlot.replaceChildren(renderTraits(playerUnits, run.state.enemy.map((placement) => placement.unit)));
   }
@@ -182,6 +189,8 @@ export function mountRun(root: HTMLElement): () => void {
   }
 
   const unsubscribe = run.subscribe(render);
+  // Le plan change depuis le planificateur : boutique et encadré « Plan » suivent.
+  const unsubscribePlan = plan.subscribe(renderPanels);
   root.replaceChildren(
     el('header', { className: 'page-header' }, [
       el('p', {
@@ -193,7 +202,7 @@ export function mountRun(root: HTMLElement): () => void {
     noticeSlot,
     el('div', { className: 'run' }, [
       el('section', { className: 'board-column' }, [board.element, benchSlot, shopSlot, results.element]),
-      el('aside', { className: 'details-column' }, [outcomeSlot, selectionSlot, inventorySlot, traitsSlot]),
+      el('aside', { className: 'details-column' }, [outcomeSlot, selectionSlot, inventorySlot, planSlot, traitsSlot]),
     ]),
   );
   results.show(lastFight, null, null);
@@ -201,6 +210,7 @@ export function mountRun(root: HTMLElement): () => void {
 
   return () => {
     unsubscribe();
+    unsubscribePlan();
     player.stop();
   };
 }

@@ -31,6 +31,10 @@
   --rank-1: #c98a4b;
   --rank-2: #d9dee6;
   --rank-3: #ffcc33;
+  /* Paliers des synergies : bronze (1er), argent (2e), or (dernier). */
+  --medal-bronze: #c98a4b;
+  --medal-silver: #b9c3cd;
+  --medal-gold: #e6b422;
   --rank-badge: #1d1b18e6;
 
   /* Zones d'effet des compétences (les dégâts prennent la couleur de l'élément). */
@@ -261,6 +265,45 @@ select {
 }
 
 /* Liste des unités */
+.cost-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+/* Boutons de filtre par coût, aux couleurs des jetons ; le bouton actif est plein, les autres estompés. */
+.cost-chip {
+  min-width: 2.2em;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
+  cursor: pointer;
+  opacity: 0.45;
+}
+
+.cost-chip.cost-all {
+  background: var(--panel);
+  color: var(--fg);
+  text-shadow: none;
+}
+
+.cost-chip:hover,
+.cost-chip:focus-visible {
+  opacity: 0.8;
+}
+
+.cost-chip[aria-pressed='true'] {
+  opacity: 1;
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
 .palette-group h3 {
   color: var(--muted);
   font-weight: 600;
@@ -414,12 +457,75 @@ select {
   gap: 6px;
 }
 
+/* Une synergie : insigne hexagonal à gauche, texte à droite. */
+.trait {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
 .trait.inactive {
   opacity: 0.6;
 }
 
-.trait.active strong {
-  color: var(--accent);
+/* Insigne du trait : son symbole dans un hexagone, sur fond bronze, argent ou or selon le palier atteint. */
+.trait-medal {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 34px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.trait-medal.medal-none {
+  background: var(--border);
+}
+
+.medal-bronze {
+  background: linear-gradient(160deg, #e3a86d, var(--medal-bronze) 55%, #8a5a2b);
+}
+
+.medal-silver {
+  background: linear-gradient(160deg, #f4f7fa, var(--medal-silver) 55%, #8d98a4);
+}
+
+.medal-gold {
+  background: linear-gradient(160deg, #fff0a8, var(--medal-gold) 55%, #b8860b);
+}
+
+.trait-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.trait-count {
+  font-weight: 700;
+}
+
+.trait-steps {
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.trait-step {
+  color: var(--muted);
+}
+
+.trait-step.reached {
+  color: var(--fg);
+}
+
+/* Palier actif : chiffre sur fond de sa couleur (bronze, argent ou or). */
+.trait-step.current {
+  padding: 0 5px;
+  border-radius: 4px;
+  color: #1a1410;
+  font-weight: 700;
 }
 
 /* Résultats */
@@ -448,9 +554,30 @@ td {
 }
 
 th[scope='row'],
-td:nth-child(2),
 thead th:first-child {
   text-align: left;
+}
+
+/* Bilan : une section par camp, chacune ouverte par une ligne de titre à la couleur du camp. */
+tr.side-header th {
+  padding-top: 10px;
+  text-align: left;
+  font-weight: 700;
+  border-bottom: 2px solid currentColor;
+}
+
+tr.side-header.player th {
+  color: var(--side-player);
+}
+
+tr.side-header.enemy th {
+  color: var(--side-enemy);
+}
+
+.side-header-count {
+  margin-left: 6px;
+  font-weight: 400;
+  color: var(--muted);
 }
 
 tr.player th[scope='row'] {
@@ -979,4 +1106,172 @@ details {
   color: var(--board-hp);
   font-weight: 700;
   font-size: 0.8rem;
+}
+
+/* ------------------------------------------------------------------
+   Planificateur d'équipe
+   ------------------------------------------------------------------ */
+.planner {
+  width: min(1040px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--fg);
+  overflow: hidden;
+}
+
+.planner[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.planner::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+
+.planner-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.planner-header h2,
+.planner-header p {
+  margin: 0;
+}
+
+.planner-header p {
+  margin-top: 4px;
+}
+
+/* Deux colonnes qui défilent chacune de leur côté : liste des unités | plan et synergies. */
+.planner-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  min-height: 0;
+  flex: 1;
+}
+
+.planner-units,
+.planner-plan {
+  min-height: 0;
+  max-height: calc(100vh - 140px);
+  overflow: auto;
+  padding: 12px 16px 16px;
+}
+
+.planner-plan {
+  border-left: 1px solid var(--border);
+}
+
+.planner-units .palette {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+}
+
+@media (max-width: 720px) {
+  .planner-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .planner-units,
+  .planner-plan {
+    max-height: none;
+  }
+
+  .planner-plan {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .planner {
+    overflow: auto;
+  }
+}
+
+/* Les 9 places du plan. */
+.plan-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.plan-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-height: 84px;
+  padding: 8px 2px 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.plan-slot.empty {
+  border-style: dashed;
+  cursor: default;
+}
+
+.plan-slot:hover:not(.empty) {
+  border-color: var(--danger);
+}
+
+.plan-slot-name,
+.plan-unit-name {
+  font-size: 0.75rem;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Encadré « Plan » du mode run. */
+.plan-units {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 8px;
+}
+
+.plan-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 4px;
+  opacity: 0.55;
+}
+
+.plan-unit.owned {
+  opacity: 1;
+}
+
+.plan-unit .token,
+.plan-slot .token {
+  width: 36px;
+  height: 36px;
+}
+
+/* Boutique : unité du plan. */
+.shop-card.planned {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.plan-flag {
+  padding: 0 6px;
+  white-space: nowrap;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 0.68rem;
+  font-weight: 700;
 }

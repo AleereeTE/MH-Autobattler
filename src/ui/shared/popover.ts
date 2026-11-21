@@ -33,7 +33,8 @@ export function showPopover(content: HTMLElement, x: number, y: number): void {
   listenOnce();
   hidePopover();
   const box = el('div', { className: 'popover', attrs: { role: 'dialog' } }, [content]);
-  document.body.append(box);
+  // Une fenêtre modale ouverte (planificateur) passe au-dessus de toute la page : l'aperçu doit être dedans pour rester visible.
+  (document.querySelector('dialog[open]') ?? document.body).append(box);
   const { width, height } = box.getBoundingClientRect();
   box.style.left = `${Math.max(8, Math.min(x + 12, window.innerWidth - width - 8))}px`;
   box.style.top = `${Math.max(8, Math.min(y + 12, window.innerHeight - height - 8))}px`;

@@ -2,7 +2,9 @@ import type { Element, StatBonus, TraitId, UnitKind } from './definitions.ts';
 
 /**
  * Traits et synergies du prototype (docs/prototype-content.md).
- * ⚠️ Toutes les valeurs sont provisoires.
+ * ✅ Paliers 2 / 4 / 6 pour les traits d'au moins 6 unités, 2 / 4 pour Feu et Glace (5 unités, en attendant une 6e),
+ * 2 / 3 pour les petites familles (Léviathan, Wyverne brute).
+ * ⚠️ Toutes les valeurs sont provisoires (palier du haut ≈ ×1,6 celui du milieu).
  */
 
 export type TraitEffect =
@@ -48,7 +50,7 @@ export const TRAITS: readonly TraitDefinition[] = [
     category: 'element',
     tiers: [
       { count: 2, effect: { kind: 'burn', damagePerSecond: 20, duration: 3 }, description: 'Les coups des unités Feu brûlent : 20 dégâts/s pendant 3 s' },
-      { count: 3, effect: { kind: 'burn', damagePerSecond: 40, duration: 3 }, description: 'Les coups des unités Feu brûlent : 40 dégâts/s pendant 3 s' },
+      { count: 4, effect: { kind: 'burn', damagePerSecond: 40, duration: 3 }, description: 'Les coups des unités Feu brûlent : 40 dégâts/s pendant 3 s' },
     ],
   },
   {
@@ -57,7 +59,8 @@ export const TRAITS: readonly TraitDefinition[] = [
     category: 'element',
     tiers: [
       { count: 2, effect: { kind: 'lightning', damage: 80, interval: 4 }, description: 'Toutes les 4 s, un éclair frappe un ennemi au hasard (80 dégâts)' },
-      { count: 3, effect: { kind: 'lightning', damage: 150, interval: 3 }, description: 'Toutes les 3 s, un éclair frappe un ennemi au hasard (150 dégâts)' },
+      { count: 4, effect: { kind: 'lightning', damage: 150, interval: 3 }, description: 'Toutes les 3 s, un éclair frappe un ennemi au hasard (150 dégâts)' },
+      { count: 6, effect: { kind: 'lightning', damage: 240, interval: 2.5 }, description: 'Toutes les 2,5 s, un éclair frappe un ennemi au hasard (240 dégâts)' },
     ],
   },
   {
@@ -66,7 +69,7 @@ export const TRAITS: readonly TraitDefinition[] = [
     category: 'element',
     tiers: [
       { count: 2, effect: { kind: 'chill', attackSpeedPercent: -0.2, duration: 2 }, description: 'Les coups des unités Glace ralentissent la cible de 20 % pendant 2 s' },
-      { count: 3, effect: { kind: 'chill', attackSpeedPercent: -0.35, duration: 2 }, description: 'Les coups des unités Glace ralentissent la cible de 35 % pendant 2 s' },
+      { count: 4, effect: { kind: 'chill', attackSpeedPercent: -0.35, duration: 2 }, description: 'Les coups des unités Glace ralentissent la cible de 35 % pendant 2 s' },
     ],
   },
   {
@@ -75,7 +78,8 @@ export const TRAITS: readonly TraitDefinition[] = [
     category: 'element',
     tiers: [
       { count: 2, effect: { kind: 'statBonus', bonus: { attackPercent: 0.15 } }, description: '+15 % d’attaque brute' },
-      { count: 3, effect: { kind: 'statBonus', bonus: { attackPercent: 0.3 } }, description: '+30 % d’attaque brute' },
+      { count: 4, effect: { kind: 'statBonus', bonus: { attackPercent: 0.3 } }, description: '+30 % d’attaque brute' },
+      { count: 6, effect: { kind: 'statBonus', bonus: { attackPercent: 0.5 } }, description: '+50 % d’attaque brute' },
     ],
   },
   {
@@ -89,9 +93,14 @@ export const TRAITS: readonly TraitDefinition[] = [
         description: 'Source de vie : les unités Eau soignent l’allié le plus blessé de 15 % des dégâts qu’elles infligent',
       },
       {
-        count: 3,
+        count: 4,
         effect: { kind: 'statBonus', bonus: { lifeSourceRatio: 0.3 } },
         description: 'Source de vie : les unités Eau soignent l’allié le plus blessé de 30 % des dégâts qu’elles infligent',
+      },
+      {
+        count: 6,
+        effect: { kind: 'statBonus', bonus: { lifeSourceRatio: 0.5 } },
+        description: 'Source de vie : les unités Eau soignent l’allié le plus blessé de 50 % des dégâts qu’elles infligent',
       },
     ],
   },
@@ -106,9 +115,14 @@ export const TRAITS: readonly TraitDefinition[] = [
         description: 'Rage draconique : +20 % de dégâts pour les unités Dragon sous 50 % de leurs PV',
       },
       {
-        count: 3,
+        count: 4,
         effect: { kind: 'statBonus', bonus: { lowHpDamageBonus: 0.4 } },
         description: 'Rage draconique : +40 % de dégâts pour les unités Dragon sous 50 % de leurs PV',
+      },
+      {
+        count: 6,
+        effect: { kind: 'statBonus', bonus: { lowHpDamageBonus: 0.65 } },
+        description: 'Rage draconique : +65 % de dégâts pour les unités Dragon sous 50 % de leurs PV',
       },
     ],
   },
@@ -128,6 +142,11 @@ export const TRAITS: readonly TraitDefinition[] = [
         effect: { kind: 'perObjectBonus', bonus: { hpPercent: 0.12, attackPercent: 0.12, elementalPowerPercent: 0.12 } },
         description: '+12 % PV, attaque brute et puissance élémentaire par objet porté',
       },
+      {
+        count: 6,
+        effect: { kind: 'perObjectBonus', bonus: { hpPercent: 0.2, attackPercent: 0.2, elementalPowerPercent: 0.2 } },
+        description: '+20 % PV, attaque brute et puissance élémentaire par objet porté',
+      },
     ],
   },
   {
@@ -141,9 +160,14 @@ export const TRAITS: readonly TraitDefinition[] = [
         description: 'Compétences critiques possibles, +15 % de critique, critiques ×1,7',
       },
       {
-        count: 3,
+        count: 4,
         effect: { kind: 'statBonus', bonus: { skillsCanCrit: true, critChance: 0.3, critMultiplier: 0.4 } },
         description: 'Compétences critiques possibles, +30 % de critique, critiques ×1,9',
+      },
+      {
+        count: 6,
+        effect: { kind: 'statBonus', bonus: { skillsCanCrit: true, critChance: 0.5, critMultiplier: 0.6 } },
+        description: 'Compétences critiques possibles, +50 % de critique, critiques ×2,1',
       },
     ],
   },
@@ -153,7 +177,8 @@ export const TRAITS: readonly TraitDefinition[] = [
     category: 'secondary',
     tiers: [
       { count: 2, effect: { kind: 'statBonus', bonus: { damageReduction: 0.15 } }, description: '−15 % de dégâts subis' },
-      { count: 3, effect: { kind: 'statBonus', bonus: { damageReduction: 0.3 } }, description: '−30 % de dégâts subis' },
+      { count: 4, effect: { kind: 'statBonus', bonus: { damageReduction: 0.3 } }, description: '−30 % de dégâts subis' },
+      { count: 6, effect: { kind: 'statBonus', bonus: { damageReduction: 0.45 } }, description: '−45 % de dégâts subis' },
     ],
   },
   {
@@ -162,7 +187,8 @@ export const TRAITS: readonly TraitDefinition[] = [
     category: 'secondary',
     tiers: [
       { count: 2, effect: { kind: 'statBonus', bonus: { elementalPower: 20 } }, description: '+20 puissance élémentaire' },
-      { count: 3, effect: { kind: 'statBonus', bonus: { elementalPower: 45 } }, description: '+45 puissance élémentaire' },
+      { count: 4, effect: { kind: 'statBonus', bonus: { elementalPower: 45 } }, description: '+45 puissance élémentaire' },
+      { count: 6, effect: { kind: 'statBonus', bonus: { elementalPower: 70 } }, description: '+70 puissance élémentaire' },
     ],
   },
   {
@@ -172,7 +198,8 @@ export const TRAITS: readonly TraitDefinition[] = [
     restrictedTo: 'monster',
     tiers: [
       { count: 2, effect: { kind: 'statBonus', bonus: { attackSpeedPercent: 0.15 } }, description: '+15 % de vitesse d’attaque' },
-      { count: 3, effect: { kind: 'statBonus', bonus: { attackSpeedPercent: 0.3 } }, description: '+30 % de vitesse d’attaque' },
+      { count: 4, effect: { kind: 'statBonus', bonus: { attackSpeedPercent: 0.3 } }, description: '+30 % de vitesse d’attaque' },
+      { count: 6, effect: { kind: 'statBonus', bonus: { attackSpeedPercent: 0.5 } }, description: '+50 % de vitesse d’attaque' },
     ],
   },
   {

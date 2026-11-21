@@ -38,21 +38,38 @@ describe('Eau — Source de vie', () => {
     expect(state.events.at(-1)).toMatchObject({ type: 'heal', targetUid: wounded.uid });
   });
 
-  it('passe à 30 % avec 3 unités Eau, et ne soigne personne si tout le monde est en pleine santé', () => {
-    const state = createCombatState(
+  /** Équipe de `count` unités Eau différentes, face à une cible. */
+  const waterTeam = (count: number) =>
+    createCombatState(
       {
-        player: ['a', 'b', 'c'].map((id, index) => place(makeUnit({ id: `eau-${id}`, element: 'water' }), 2 + index, 7)),
+        player: Array.from({ length: count }, (_, index) => place(makeUnit({ id: `eau-${index}`, element: 'water' }), 1 + index, 7)),
         enemy: [target()],
       },
       1,
     );
-    const source = unit(state, 'eau-a');
+
+  it('passe à 30 % avec 4 unités Eau, et ne soigne personne si tout le monde est en pleine santé', () => {
+    const state = waterTeam(4);
+    const source = unit(state, 'eau-0');
     dealDamage(state, source, unit(state, 'cible'), hit(100));
     expect(state.events.some((event) => event.type === 'heal')).toBe(false);
 
     source.hp = 100;
     dealDamage(state, source, unit(state, 'cible'), hit(100));
     expect(source.hp).toBeCloseTo(100 + 100 * 0.3);
+  });
+
+  it('reste à 15 % avec 3 unités Eau, et passe à 50 % avec 6', () => {
+    for (const [count, ratio] of [
+      [3, 0.15],
+      [6, 0.5],
+    ] as const) {
+      const state = waterTeam(count);
+      const source = unit(state, 'eau-0');
+      source.hp = 100;
+      dealDamage(state, source, unit(state, 'cible'), hit(100));
+      expect(source.hp, `${count} unités Eau`).toBeCloseTo(100 + 100 * ratio);
+    }
   });
 
   it('n’agit pas pour une unité qui n’est pas du trait', () => {

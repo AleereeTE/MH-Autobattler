@@ -68,28 +68,37 @@ Règle validée (voir [game-design.md](game-design.md), section 3.4) : PV et att
 
 ## Traits
 
-Paliers : 2 et 3 unités, sauf la Guilde (2 et 4), Dragon ancien (1, 2 et 3) et Dragon noir (1 seul palier : 1 Dragon noir maximum par plateau). ⚠️ Comme dans TFT, deux exemplaires de la même unité ne comptent qu'une fois.
+Paliers (✅) : **2 / 4 / 6** pour les traits d'au moins 6 unités, **2 / 4** pour Feu et Glace (5 unités, en attendant une 6e), **2 / 3** pour Léviathan et Wyverne brute, 1 / 2 / 3 pour Dragon ancien et 1 seul palier pour Dragon noir (1 Dragon noir maximum par plateau). ⚠️ Comme dans TFT, deux exemplaires de la même unité ne comptent qu'une fois.
+
+⚠️ Valeurs : le premier palier est inchangé, celui du milieu reprend l'ancien palier 3, et le nouveau palier du haut vaut environ ×1,6 celui du milieu. Exceptions arrondies vers le bas : Bastion 6 à −45 % (au lieu de −48 %) et Berserker 6 à ×2,1 (multiplicateur +0,6 au lieu de +0,64).
+
+Dans les panneaux de synergies, un palier atteint est en **bronze** (premier), **argent** (deuxième) ou **or** (dernier, toujours or).
 
 ### Éléments (mécanique propre à chaque élément)
 
-| Trait | Palier 2 | Palier 3 |
-|---|---|---|
-| Feu | Les coups des unités Feu brûlent : 20 dégâts élémentaires/s pendant 3 s | 40 dégâts/s |
-| Foudre | Toutes les 4 s, un éclair frappe un ennemi au hasard (80 dégâts élémentaires) | Toutes les 3 s, 150 dégâts |
-| Glace | Les coups des unités Glace réduisent la vitesse d'attaque de la cible de 20 % pendant 2 s | −35 % |
-| Sans élément | +15 % d'attaque brute pour les unités sans élément | +30 % |
-| Eau (Source de vie) | Les unités Eau soignent l'allié le plus blessé de 15 % des dégâts qu'elles infligent | 30 % |
-| Dragon (Rage draconique) | Les unités Dragon infligent +20 % de dégâts quand leurs PV sont sous 50 % | +40 % |
+| Trait | Palier 2 | Palier 4 | Palier 6 |
+|---|---|---|---|
+| Feu | Les coups des unités Feu brûlent : 20 dégâts élémentaires/s pendant 3 s | 40 dégâts/s | — |
+| Foudre | Toutes les 4 s, un éclair frappe un ennemi au hasard (80 dégâts élémentaires) | Toutes les 3 s, 150 dégâts | Toutes les 2,5 s, 240 dégâts |
+| Glace | Les coups des unités Glace réduisent la vitesse d'attaque de la cible de 20 % pendant 2 s | −35 % | — |
+| Sans élément | +15 % d'attaque brute pour les unités sans élément | +30 % | +50 % |
+| Eau (Source de vie) | Les unités Eau soignent l'allié le plus blessé de 15 % des dégâts qu'elles infligent | 30 % | 50 % |
+| Dragon (Rage draconique) | Les unités Dragon infligent +20 % de dégâts quand leurs PV sont sous 50 % | +40 % | +65 % |
 
 ### Traits secondaires
 
+| Trait | Réservé à | Palier 2 | Palier 4 | Palier 6 |
+|---|---|---|---|---|
+| Guilde | Chasseurs | +6 % PV, attaque brute et puiss. élém. par objet porté | +12 % par objet | +20 % par objet |
+| Berserker | — | Compétences critiques possibles, +15 % de chance de critique, multiplicateur +0,2 (×1,7) | +30 %, multiplicateur +0,4 (×1,9) | +50 %, multiplicateur +0,6 (×2,1) |
+| Bastion | — | −15 % de dégâts subis | −30 % | −45 % |
+| Catalyseur | — | +20 puissance élémentaire | +45 | +70 |
+| Wyverne volante | Monstres | +15 % de vitesse d'attaque | +30 % | +50 % |
+
+Autres traits secondaires (paliers propres) :
+
 | Trait | Réservé à | Palier 1 | Palier 2 |
 |---|---|---|---|
-| Guilde | Chasseurs | (2) +6 % PV, attaque brute et puiss. élém. par objet porté | (4) +12 % par objet |
-| Berserker | — | (2) Compétences critiques possibles, +15 % de chance de critique, multiplicateur +0,2 | (3) +30 %, multiplicateur +0,4 |
-| Bastion | — | (2) −15 % de dégâts subis | (3) −30 % |
-| Catalyseur | — | (2) +20 puissance élémentaire | (3) +45 |
-| Wyverne volante | Monstres | (2) +15 % de vitesse d'attaque | (3) +30 % |
 | Dragon ancien (Calamité) | Monstres | (1) Les Dragons anciens commencent le combat avec 40 % de leur énergie | (2) 70 % · (3) 100 % |
 | Dragon noir (Terreur) | Monstres | (1) Tant qu'un Dragon noir est en vie, tous les ennemis infligent −15 % de dégâts | — (1 seul Dragon noir par plateau) |
 | Léviathan (Glissade) | Monstres | (2) Les Léviathans esquivent 15 % des attaques de base | (3) 30 % |

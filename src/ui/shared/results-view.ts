@@ -1,5 +1,6 @@
 import { ticksToSeconds, type CombatResult } from '../../combat/index.ts';
-import { summarizeUnits, type UnitSummary } from '../../render/combat-summary.ts';
+import type { Side } from '../../combat/index.ts';
+import { summariesBySide, summarizeUnits, type UnitSummary } from '../../render/combat-summary.ts';
 import { formatCombatLog } from '../../render/text-log.ts';
 import { rankStars } from '../../rules/ranks.ts';
 import { el } from '../dom.ts';
@@ -15,7 +16,9 @@ const round = (value: number): string => String(Math.round(value));
 /** Nombre de ticks entre deux mises à jour du bilan pendant le replay (2 ticks = 0,1 s de combat). */
 const REFRESH_TICKS = 2;
 
-const HEADERS = ['Unité', 'Camp', 'Dégâts infligés', 'Dégâts subis', 'Soins', 'Boucliers', 'Compétences', 'K.O.'];
+const HEADERS = ['Unité', 'Dégâts infligés', 'Dégâts subis', 'Soins', 'Boucliers', 'Compétences', 'K.O.'];
+
+const SIDE_TITLES: Record<Side, string> = { player: 'Alliés', enemy: 'Ennemis' };
 
 /** Ligne d'état : « Combat en cours · 12,3 s » pendant le replay, le résultat une fois la fin atteinte. */
 export function outcomeLine(result: CombatResult, tick: number): string {
@@ -28,7 +31,6 @@ function summaryRow(unit: UnitSummary): HTMLElement {
   const knockedOut = unit.knockedOutAt === null ? '—' : `${ticksToSeconds(unit.knockedOutAt).toFixed(1)} s`;
   return el('tr', { className: unit.knockedOutAt === null ? unit.side : `${unit.side} ko` }, [
     el('th', { text: unit.rank > 1 ? `${unit.name} ${rankStars(unit.rank)}` : unit.name, attrs: { scope: 'row' } }),
-    el('td', { text: unit.side === 'player' ? 'Joueur' : 'Ennemi' }),
     el('td', { text: round(unit.damageDealt) }),
     el('td', { text: round(unit.damageTaken) }),
     el('td', { text: round(unit.healingDone) }),
@@ -38,15 +40,31 @@ function summaryRow(unit: UnitSummary): HTMLElement {
   ]);
 }
 
+/** Texte du compteur d'un camp : combien de ses unités sont encore debout. */
+export function standingCount(units: readonly UnitSummary[]): string {
+  const standing = units.filter((unit) => unit.knockedOutAt === null).length;
+  return `${standing} / ${units.length} debout`;
+}
+
+/** Ligne de titre d'un camp dans le bilan : « Alliés · 3 / 5 debout ». */
+function sideHeader(side: Side, units: readonly UnitSummary[]): HTMLElement {
+  return el('tr', { className: `side-header ${side}` }, [
+    el('th', { attrs: { colspan: String(HEADERS.length), scope: 'rowgroup' } }, [
+      SIDE_TITLES[side],
+      el('span', { className: 'side-header-count', text: standingCount(units) }),
+    ]),
+  ]);
+}
+
 /**
- * Panneau « Résultats » : bilan par unité, journal du combat et simulations en série.
+ * Panneau « Résultats » : bilan par unité (alliés puis ennemis), journal du combat et simulations en série.
  * Pendant le replay, le bilan et le journal suivent l'instant affiché sur le plateau ;
  * ils sont mis à jour sur place, pour que le journal garde son ouverture et son défilement.
  */
 export class ResultsView {
   readonly element = el('section', { className: 'panel results' });
   private readonly outcome = el('p', { className: 'outcome' });
-  private readonly rows = el('tbody');
+  private readonly sideRows: Record<Side, HTMLTableSectionElement> = { player: el('tbody'), enemy: el('tbody') };
   private readonly log = el('pre', { className: 'log' });
   private readonly logDetails = el('details', {}, [el('summary', { text: 'Journal du combat' }), this.log]);
   private result: CombatResult | null = null;
@@ -76,7 +94,8 @@ export class ResultsView {
         el('div', { className: 'table-wrap' }, [
           el('table', {}, [
             el('thead', {}, [el('tr', {}, HEADERS.map((header) => el('th', { text: header, attrs: { scope: 'col' } })))]),
-            this.rows,
+            this.sideRows.player,
+            this.sideRows.enemy,
           ]),
         ]),
         this.logDetails,
@@ -97,8 +116,10 @@ export class ResultsView {
     this.lastStep = step;
 
     this.outcome.textContent = outcomeLine(result, tick);
-    const units = summarizeUnits(result.events, tick).sort((a, b) => b.damageDealt - a.damageDealt);
-    this.rows.replaceChildren(...units.map(summaryRow));
+    const bySide = summariesBySide(summarizeUnits(result.events, tick));
+    for (const side of ['player', 'enemy'] as const) {
+      this.sideRows[side].replaceChildren(sideHeader(side, bySide[side]), ...bySide[side].map(summaryRow));
+    }
 
     // Le journal défile tout seul s'il était déjà en bas (on suit le combat), sinon il reste où il est.
     const followsEnd = this.log.scrollTop + this.log.clientHeight >= this.log.scrollHeight - 8;

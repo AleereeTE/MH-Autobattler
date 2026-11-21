@@ -1,32 +1,71 @@
 import type { UnitDefinition } from '../../data/definitions.ts';
-import { traitStatuses } from '../../rules/traits.ts';
+import { traitStatuses, type TraitStatus } from '../../rules/traits.ts';
 import { el } from '../dom.ts';
+import { traitBadgeStyle } from './trait-badges.ts';
+import { MEDAL_NAMES, traitMedal } from './trait-medals.ts';
 
-function sideTraits(units: readonly UnitDefinition[], title: string): HTMLElement {
-  const statuses = traitStatuses(units);
-  const items = statuses.map(({ trait, count, tier }) => {
-    const next = trait.tiers.find((candidate) => candidate.count > count);
-    const progress = trait.tiers.map((candidate) => candidate.count).join(' / ');
-    return el('li', { className: tier === null ? 'trait inactive' : 'trait active' }, [
-      el('strong', { text: `${trait.name} ${count}` }),
-      el('span', { className: 'muted', text: ` (${progress})` }),
+/** Paliers d'un trait (« 2 / 4 / 6 ») : ceux atteints ressortent, le palier actif est sur fond de sa couleur. */
+function tierSteps({ trait, count, tier }: TraitStatus, medalClass: string): HTMLElement {
+  return el(
+    'span',
+    { className: 'trait-steps' },
+    trait.tiers.flatMap((candidate, index) => [
+      index > 0 ? el('span', { className: 'muted', text: ' / ' }) : null,
+      el('span', {
+        className: candidate === tier ? `trait-step current ${medalClass}` : count >= candidate.count ? 'trait-step reached' : 'trait-step',
+        text: String(candidate.count),
+      }),
+    ]),
+  );
+}
+
+/**
+ * Une synergie : insigne du trait (fond bronze, argent ou or selon le palier atteint, gris sinon),
+ * nom, nombre d'unités, paliers, puis l'effet actif ou le prochain palier à atteindre.
+ */
+function traitItem(status: TraitStatus): HTMLElement {
+  const { trait, count, tier } = status;
+  const medal = traitMedal(trait, tier);
+  const medalClass = medal === null ? 'medal-none' : `medal-${medal}`;
+  const next = trait.tiers.find((candidate) => candidate.count > count);
+  const style = traitBadgeStyle(trait.id);
+  return el('li', { className: tier === null ? 'trait inactive' : 'trait active' }, [
+    el('span', {
+      className: `trait-medal ${medalClass}`,
+      text: style.symbol,
+      attrs: {
+        style: `--badge: ${style.color}`,
+        title: medal === null ? 'Aucun palier atteint' : `Palier ${MEDAL_NAMES[medal]}`,
+        'aria-hidden': 'true',
+      },
+    }),
+    el('div', { className: 'trait-text' }, [
+      el('div', { className: 'trait-line' }, [
+        el('strong', { text: trait.name }),
+        el('span', { className: 'trait-count', text: String(count) }),
+        tierSteps(status, medalClass),
+      ]),
       el('div', {
         className: 'small',
         text: tier?.description ?? (next === undefined ? '' : `À ${next.count} : ${next.description}`),
       }),
-    ]);
-  });
-
-  return el('div', {}, [
-    el('h3', { text: title }),
-    items.length > 0 ? el('ul', { className: 'traits' }, items) : el('p', { className: 'muted', text: 'Aucune unité.' }),
+    ]),
   ]);
+}
+
+/** Liste des synergies d'une équipe, actives en premier (aussi utilisée par le planificateur). */
+export function traitList(units: readonly UnitDefinition[], empty = 'Aucune unité.'): HTMLElement {
+  const statuses = traitStatuses(units);
+  return statuses.length > 0 ? el('ul', { className: 'traits' }, statuses.map(traitItem)) : el('p', { className: 'muted', text: empty });
 }
 
 /** Traits de chaque camp, actifs en premier, avec le prochain palier à atteindre. */
 export function renderTraits(player: readonly UnitDefinition[], enemy: readonly UnitDefinition[]): HTMLElement {
   return el('section', { className: 'panel' }, [
     el('h2', { text: 'Synergies' }),
-    el('div', { className: 'two-columns' }, [sideTraits(player, 'Joueur'), sideTraits(enemy, 'Ennemi')]),
+    el('div', { className: 'two-columns' }, [
+      el('div', {}, [el('h3', { text: 'Joueur' }), traitList(player)]),
+      el('div', {}, [el('h3', { text: 'Ennemi' }), traitList(enemy)]),
+    ]),
   ]);
 }

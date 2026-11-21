@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { TICKS_PER_SECOND } from '../../combat/index.ts';
 import { simulateCombat } from '../../combat/simulate.ts';
 import { createDemoSetup } from '../../sandbox/presets.ts';
-import { outcomeLine } from './results-view.ts';
+import { summarizeUnits } from '../../render/combat-summary.ts';
+import { outcomeLine, standingCount } from './results-view.ts';
 
 describe('outcomeLine', () => {
   const result = simulateCombat(createDemoSetup(), 1);
@@ -16,5 +17,23 @@ describe('outcomeLine', () => {
     const seconds = (result.durationTicks / TICKS_PER_SECOND).toFixed(1);
     expect(outcomeLine(result, result.durationTicks)).toBe(`${outcome} en ${seconds} s`);
     expect(outcomeLine(result, Infinity)).toBe(outcomeLine(result, result.durationTicks));
+  });
+});
+
+describe('standingCount', () => {
+  it('compte les unités encore debout d’un camp', () => {
+    const result = simulateCombat(createDemoSetup(), 1);
+    const start = summarizeUnits(result.events, 0);
+    const players = start.filter((unit) => unit.side === 'player');
+    expect(standingCount(players)).toBe(`${players.length} / ${players.length} debout`);
+
+    const end = summarizeUnits(result.events);
+    const loserSide = result.winner === 'player' ? 'enemy' : 'player';
+    const losers = end.filter((unit) => unit.side === loserSide);
+    expect(standingCount(losers)).toBe(`0 / ${losers.length} debout`);
+  });
+
+  it('affiche 0 / 0 pour un camp vide', () => {
+    expect(standingCount([])).toBe('0 / 0 debout');
   });
 });

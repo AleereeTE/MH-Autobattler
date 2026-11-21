@@ -2,11 +2,11 @@ import type { StarRank } from '../../data/definitions.ts';
 import { findUnit } from '../../data/units/index.ts';
 import { rankStars } from '../../rules/ranks.ts';
 import { el } from '../dom.ts';
-import type { PortraitStore } from '../shared/portraits.ts';
-import { shortLabel } from '../shared/unit-label.ts';
+import type { PortraitStore } from './portraits.ts';
+import { shortLabel } from './unit-label.ts';
 
 /**
- * Petit jeton HTML (réserve, boutique, récompenses) : mêmes codes que sur le plateau —
+ * Petit jeton HTML (réserve, boutique, récompenses, planificateur) : mêmes codes que sur le plateau —
  * fond selon le coût, anneau selon l'élément, étoiles selon le rang.
  */
 export function unitToken(unitId: string, rank: StarRank | null, portraits: PortraitStore): HTMLElement {

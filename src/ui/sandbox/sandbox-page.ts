@@ -6,6 +6,7 @@ import { createReplay } from '../../render/replay.ts';
 import { button, el, select } from '../dom.ts';
 import { BoardView } from '../shared/board-view.ts';
 import { SandboxModel, sideOf } from './model.ts';
+import type { CostFilter } from '../shared/palette-groups.ts';
 import { renderPalette } from './palette-view.ts';
 import { PortraitStore } from '../shared/portraits.ts';
 import { ReplayPlayer } from '../shared/replay-player.ts';
@@ -31,6 +32,8 @@ export function mountSandbox(root: HTMLElement): () => void {
   let result: CombatResult | null = null;
   let batch: BatchResult | null = null;
   let error: string | null = null;
+  /** Filtre de la liste des unités : il ne change que l'affichage de la liste (le combat en cours continue). */
+  let costFilter: CostFilter = null;
 
   const board = new BoardView(
     (hex) => {
@@ -121,8 +124,17 @@ export function mountSandbox(root: HTMLElement): () => void {
     );
   }
 
+  function renderPaletteColumn(): void {
+    paletteColumn.replaceChildren(
+      renderPalette(model, costFilter, (filter) => {
+        costFilter = filter;
+        renderPaletteColumn();
+      }),
+    );
+  }
+
   function renderSidebars(): void {
-    paletteColumn.replaceChildren(renderPalette(model));
+    renderPaletteColumn();
     detailsColumn.replaceChildren(renderUnitPanel(model), renderTraits(
         model.unitsOf('player').map((placed) => placed.unit),
         model.unitsOf('enemy').map((placed) => placed.unit),

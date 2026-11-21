@@ -87,8 +87,9 @@ src/
     app.ts              Coquille : titre et onglets (« Mode run », « Bac à sable »), choisis par l'adresse (#run, #sandbox)
     run/                Page « Mode run » (bandeau, boutique, réserve, inventaire, fin de combat)
     sandbox/            Page « bac à sable » (composition, équipement)
-    shared/             Éléments communs : plateau, lecteur de replay, bilan, portraits, fiche d'unité, synergies,
-                        insignes des traits, aperçus au clic droit
+    planner/            Planificateur d'équipe : plan (modèle et stockage), fenêtre du planificateur, encadré du mode run
+    shared/             Éléments communs : plateau, lecteur de replay, bilan, portraits, jetons, fiche d'unité, synergies
+                        (couleurs des paliers), insignes des traits, filtre par coût, aperçus au clic droit
     dom.ts              Petit utilitaire de création d'éléments
     styles.css          Styles (thème clair et sombre)
   assets/portraits/     Images des jetons, une par unité (voir la section 5)
@@ -185,6 +186,23 @@ Les couleurs sont des variables CSS (`--cost-1` à `--cost-5`, `--side-player`, 
 - **Insignes des traits** (`ui/shared/trait-badges.ts`) : un symbole et une couleur par trait, affichés sur les cartes (liste du bac à sable, boutique) et dans les fiches. Un test vérifie que chaque trait a le sien.
 - **Clic droit** (`ui/shared/popover.ts`, `previews.ts`) : fiche d'une unité (liste, boutique, réserve, plateau), état d'une unité en plein combat (PV, bouclier, états, statistiques de début de combat), recettes d'un matériau (les 8 objets possibles et leurs statistiques, en signalant ceux qu'on peut faire avec l'inventaire) ou statistiques d'un objet.
 - Pour l'aperçu en combat, l'événement `combatStart` contient l'équipement et les statistiques de combat de chaque unité (rang, objets et traits compris).
+
+### Liste du bac à sable et bilan des combats
+
+- **Filtre par coût** (`ui/shared/palette-groups.ts`, `cost-filter.ts`, partagés avec le planificateur) : la liste des unités reste groupée par coût croissant ; des boutons « Tous », 1 à 6 (aux couleurs des jetons) n'affichent qu'un coût. Recliquer sur le coût actif réaffiche tout. Le filtre ne touche que l'affichage : il ne relance pas la composition et n'arrête pas un replay.
+- **Bilan par camp** (`render/combat-summary.ts` → `summariesBySide`, `ui/shared/results-view.ts`) : le tableau a une section « Alliés » puis une section « Ennemis », chacune ouverte par une ligne de titre à la couleur du camp avec le nombre d'unités encore debout, et triée par dégâts infligés. Commun au bac à sable et au mode run, il suit le replay en direct.
+
+### Synergies
+
+- `ui/shared/traits-view.ts` : chaque synergie porte l'insigne hexagonal de son trait (symbole de `trait-badges.ts`), sur fond **bronze, argent ou or** selon le palier atteint (`trait-medals.ts` : le dernier palier est toujours or), gris s'il n'est pas atteint. Les paliers (« 2 / 4 / 6 ») suivent, le palier actif sur fond de sa couleur.
+- `traitList(units)` affiche les synergies d'une seule équipe : il sert aussi au planificateur.
+
+### Planificateur d'équipe
+
+- `ui/planner/plan-model.ts` : le plan (9 unités au plus, 1 Dragon noir au plus, trié par coût puis par nom), avec un message quand un ajout est refusé. `sanitizePlan` nettoie un plan relu du stockage (unités inconnues, doublons, excédent).
+- `ui/planner/team-plan.ts` : le plan unique du joueur, gardé dans le navigateur (`localStorage`, clé `mh-autobattler:plan`) d'une run à l'autre.
+- `ui/planner/planner-dialog.ts` : fenêtre modale (`<dialog>`) : liste des unités filtrable par coût à gauche, les 9 places du plan et ses synergies à droite. Les deux colonnes défilent chacune de leur côté et gardent leur position quand le plan change. Les aperçus au clic droit s'ouvrent dans la fenêtre (une fenêtre modale passe au-dessus de toute la page).
+- `ui/planner/plan-panel.ts` : encadré « Plan » du mode run (unités possédées cochées) ; la boutique signale les unités du plan (« 📌 Plan »).
 
 ### Portraits
 

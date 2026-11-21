@@ -6,7 +6,7 @@ import type { PortraitStore } from '../shared/portraits.ts';
 import type { RunController } from './controller.ts';
 import { onRightClick } from '../shared/popover.ts';
 import { unitCard } from '../shared/unit-card.ts';
-import { unitToken } from './token.ts';
+import { unitToken } from '../shared/token.ts';
 
 /** Réserve : 10 places. Cliquer sélectionne une unité, ou y range l'unité sélectionnée. */
 export function renderBench(controller: RunController, portraits: PortraitStore): HTMLElement {

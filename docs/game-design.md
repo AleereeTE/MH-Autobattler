@@ -192,7 +192,9 @@ L'Extrait ajoute **+1 énergie par seconde** au gain passif de l'unité qui le p
   - **Wyverne brute (Masse)** : les Wyvernes brutes gagnent des PV max ;
   - **Wyverne à crocs** : prévue quand il y aura au moins 3 Wyvernes à crocs.
 - Les traits secondaires renforcent les unités du trait.
-- Paliers et valeurs du prototype : voir [prototype-content.md](prototype-content.md). Ils évolueront avec l'arrivée de nouvelles unités.
+- **Paliers** : **2 / 4 / 6** pour les traits d'au moins 6 unités (Foudre, Eau, Dragon, Sans élément, Guilde, Berserker, Bastion, Catalyseur, Wyverne volante) ; **2 / 4** pour Feu et Glace (5 unités, en attendant une 6e) ; **2 / 3** pour les petites familles (Léviathan, Wyverne brute) ; 1 / 2 / 3 pour Dragon ancien et 1 pour Dragon noir. Le premier palier garde son effet, celui du milieu reprend l'ancien palier 3, et le palier du haut vaut environ ×1,6 celui du milieu.
+- **Couleur des synergies** : un palier atteint s'affiche en **bronze** (premier palier), **argent** (deuxième) ou **or** (dernier). Le dernier palier est toujours or : un trait à 2 paliers passe de bronze à or, et le Dragon noir (1 palier) est or d'emblée. Chaque synergie porte aussi l'insigne de son trait.
+- Valeurs des paliers : voir [prototype-content.md](prototype-content.md). Elles évolueront avec l'arrivée de nouvelles unités.
 
 ---
 
@@ -298,6 +300,7 @@ Le prototype contient 8 objets avec un effet propre ; les autres combinaisons do
 | Dragons noirs (coût 6) | **1 seul sur le plateau** (on peut en garder d'autres en réserve). Seulement au niveau 9 de la boutique, 3 exemplaires de chacun : le ★2 est un exploit, le ★3 est impossible |
 | Unités obtenues au ★3 | **Plus proposées** par la boutique ni par les récompenses (les offres déjà affichées disparaissent dès que le ★3 se forme). Si le ★3 est revendu, l'unité peut de nouveau apparaître |
 | Réserve | 10 places pour les unités achetées mais non placées |
+| Planificateur d'équipe | Comme dans TFT : on choisit jusqu'à **9 unités** (la taille maximale du plateau, 1 Dragon noir au plus) dans la liste complète, et on voit les synergies de ce plan. En run, les unités du plan sont **signalées dans la boutique** (« 📌 Plan ») et un encadré coche celles déjà possédées. Le plan est **gardé d'une run à l'autre** |
 
 ### 8.3 Valeurs de départ
 
@@ -410,3 +413,5 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-20** : Dragons noirs — coût 6 (fond prismatique) pour Fatalis, Alatreon et Dire Miralis ; boutique au niveau 9 seulement, 3 exemplaires chacun ; trait Dragon noir (Terreur) ; le boss de la chasse 30 peut être un Dragon noir ★1.
 - **2026-11-20** : unités de coût 4 et 5 — 8 unités (dont 3 Dragons anciens au coût 5), traits Eau (Source de vie), Dragon (Rage draconique) et Dragon ancien (Calamité), boutique à 5 coûts, monstres de coût 4 dans les escouades des stages 2 et 3, Dragon ancien ★2 en boss du stage 3.
 - **2026-11-20** : ciblage — une unité vise toujours l'ennemi le plus proche, réévalué en permanence (elle ne garde plus sa cible jusqu'au K.O.). Boutique — une unité obtenue au ★3 n'est plus proposée (boutique et récompenses).
+- **2026-11-21** : interface — filtre par coût dans la liste du bac à sable ; bilan des combats séparé en deux sections, alliés puis ennemis, avec le nombre d'unités encore debout.
+- **2026-11-21** : paliers des traits — 2 / 4 / 6 pour les traits d'au moins 6 unités, 2 / 4 pour Feu et Glace, 2 / 3 pour Léviathan et Wyverne brute ; palier du haut ≈ ×1,6 celui du milieu (provisoire). Couleur des synergies : bronze, argent, or (le dernier palier toujours or), avec l'insigne du trait. Planificateur d'équipe comme dans TFT (9 unités, synergies, unités signalées dans la boutique, gardé d'une run à l'autre).
