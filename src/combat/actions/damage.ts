@@ -22,8 +22,9 @@ export interface Hit {
  * Applique un coup à une cible et renvoie les dégâts infligés (bouclier compris).
  * 1. ✅ l'armure réduit les dégâts physiques, la résistance élémentaire les dégâts élémentaires ;
  * 2. ✅ la mort subite augmente les dégâts ; la réduction de dégâts (Bastion) les diminue ;
- * 3. les boucliers absorbent ce qu'ils peuvent, le reste retire des PV ;
- * 4. ✅ la cible gagne l'énergie prévue par son rôle pour un coup subi ;
+ * 3. ✅ la cible gagne l'énergie prévue par son rôle pour un coup subi, sauf si un bouclier la protège
+ *    au moment du coup (même le coup qui brise le bouclier ne donne pas d'énergie) ;
+ * 4. les boucliers absorbent ce qu'ils peuvent, le reste retire des PV ;
  * 5. une attaque ou une compétence applique les effets d'élément (brûlure, ralentissement, Source de vie).
  * ✅ Rage draconique : une unité Dragon sous 50 % de ses PV inflige des dégâts en plus.
  * ✅ Terreur : tant qu'un Dragon noir adverse est en vie, la source inflige moins de dégâts.
@@ -38,9 +39,9 @@ export function dealDamage(state: CombatState, source: CombatUnit, target: Comba
     suddenDeathDamageMultiplier(elapsedSeconds(state)) *
     (1 - target.stats.damageReduction);
 
+  gainEnergy(target, energyProfileOf(target).perHitTaken);
   const absorbed = absorbWithShields(target, amount);
   target.hp -= amount - absorbed;
-  gainEnergy(target, energyProfileOf(target).perHitTaken);
 
   state.events.push({
     type: 'damage',

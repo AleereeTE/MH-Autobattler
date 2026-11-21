@@ -34,8 +34,16 @@ export interface UnitSnapshot {
   readonly position: Hex;
   readonly maxHp: number;
   readonly maxEnergy: number;
+  /** Énergie au début du combat (0, sauf trait comme la Calamité des Dragons anciens). */
+  readonly energy: number;
   readonly equipment: Equipment;
   readonly stats: SnapshotStats;
+}
+
+/** Énergie d'une unité à un instant donné. */
+export interface EnergyLevel {
+  readonly uid: number;
+  readonly energy: number;
 }
 
 export interface TraitSummary {
@@ -91,6 +99,8 @@ export type CombatEvent =
   | At<{ type: 'lightning'; sourceUid: number; targetUid: number }>
   /** Une attaque de base est esquivée (Léviathan) : ni dégâts ni effet d'élément. */
   | At<{ type: 'dodge'; sourceUid: number; targetUid: number }>
+  /** Relevé de l'énergie des unités en vie, toutes les ENERGY_SNAPSHOT_TICKS (pour la barre d'énergie). */
+  | At<{ type: 'energy'; levels: readonly EnergyLevel[] }>
   | At<{ type: 'death'; uid: number }>
   | At<{ type: 'suddenDeath' }>
   | At<{ type: 'combatEnd'; winner: Winner; reason: CombatEndReason }>;

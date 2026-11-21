@@ -16,6 +16,9 @@
   --board-hp: #3f9b5a;
   --board-hp-back: #00000033;
   --board-shield: #d9d9d9;
+  /* Barre d'énergie des jetons (grisée quand l'énergie est bloquée). */
+  --board-energy: #e0a800;
+  --board-energy-blocked: #9aa3ad;
 
   /* Fond des jetons selon le coût de l'unité. */
   --cost-1: #8a8a8a;
@@ -72,6 +75,8 @@
     --board-hp: #57c178;
     --board-hp-back: #ffffff26;
     --board-shield: #f0f0f0;
+    --board-energy: #f5c542;
+    --board-energy-blocked: #7d858e;
 
     --cost-1: #7d7d7d;
     --cost-2: #3c8f55;
@@ -1370,4 +1375,28 @@ details {
   height: 9px;
   border-radius: 50%;
   flex: none;
+}
+
+/* Barre d'énergie de l'aperçu d'une unité en combat (mêmes couleurs que sur le plateau). */
+.energy {
+  display: grid;
+  gap: 3px;
+  margin: 0 0 8px;
+}
+
+.energy-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--board-hp-back);
+  overflow: hidden;
+}
+
+.energy-bar span {
+  display: block;
+  height: 100%;
+  background: var(--board-energy);
+}
+
+.energy-bar.blocked span {
+  background: var(--board-energy-blocked);
 }

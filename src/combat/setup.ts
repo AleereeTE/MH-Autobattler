@@ -105,6 +105,7 @@ function snapshot(unit: CombatUnit): UnitSnapshot {
     position: { ...unit.position },
     maxHp: unit.stats.hp,
     maxEnergy: unit.stats.maxEnergy,
+    energy: unit.energy,
     equipment: unit.equipment,
     stats: {
       hp: unit.stats.hp,

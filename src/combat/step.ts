@@ -1,5 +1,5 @@
 import { BALANCE } from '../data/balance.ts';
-import { SAFETY_LIMIT_TICKS, secondsToTicks } from './constants.ts';
+import { ENERGY_SNAPSHOT_TICKS, SAFETY_LIMIT_TICKS, secondsToTicks } from './constants.ts';
 import type { CombatEndEvent } from './events.ts';
 import type { CombatState, Side } from './state.ts';
 import { tickLightning } from './traits/lightning.ts';
@@ -22,7 +22,14 @@ export function step(state: CombatState): CombatEndEvent | null {
   }
 
   resolveKnockouts(state);
+  if (state.tick % ENERGY_SNAPSHOT_TICKS === 0) recordEnergy(state);
   return checkEnd(state);
+}
+
+/** Relève l'énergie des unités encore en vie (affichage de la barre d'énergie pendant le replay). */
+function recordEnergy(state: CombatState): void {
+  const levels = state.units.filter((unit) => unit.alive).map((unit) => ({ uid: unit.uid, energy: unit.energy }));
+  state.events.push({ type: 'energy', tick: state.tick, levels });
 }
 
 /**

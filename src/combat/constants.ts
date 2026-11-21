@@ -7,6 +7,13 @@ export const TICKS_PER_SECOND = 20;
  */
 export const SAFETY_LIMIT_TICKS = 600 * TICKS_PER_SECOND;
 
+/**
+ * L'énergie des unités est relevée dans un événement toutes les 2 ticks (0,1 s) : elle change presque
+ * à chaque tick (gain passif), un événement par changement serait trop lourd. Le replay remet aussi
+ * l'énergie à 0 dès qu'une compétence est lancée, sans attendre le relevé suivant.
+ */
+export const ENERGY_SNAPSHOT_TICKS = 2;
+
 export function ticksToSeconds(ticks: number): number {
   return ticks / TICKS_PER_SECOND;
 }

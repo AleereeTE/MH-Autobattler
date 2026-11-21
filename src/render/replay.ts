@@ -25,6 +25,9 @@ export interface FrameUnit {
   /** Déplacement en cours : case d'arrivée et avancement (0 → 1). */
   moving: { readonly to: Hex; readonly progress: number } | null;
   hp: number;
+  /** Énergie (dernier relevé du moteur, remise à 0 au lancement d'une compétence) et son maximum. */
+  energy: number;
+  readonly maxEnergy: number;
   alive: boolean;
   casting: boolean;
   shield: number;
@@ -98,6 +101,8 @@ function createTracker(snapshot: UnitSnapshot): Tracker {
       position: snapshot.position,
       moving: null,
       hp: snapshot.maxHp,
+      energy: snapshot.energy,
+      maxEnergy: snapshot.maxEnergy,
       alive: true,
       casting: false,
       shield: 0,
@@ -182,8 +187,16 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
         case 'dodge':
           if (age < 1 && trackers.has(event.targetUid)) texts.push({ uid: event.targetUid, text: 'Esquive', kind: 'dodge', age });
           break;
+        case 'energy':
+          for (const level of event.levels) {
+            const unit = trackers.get(level.uid)?.unit;
+            if (unit !== undefined) unit.energy = level.energy;
+          }
+          break;
         case 'skillCast':
           if (tracker !== undefined) {
+            // L'énergie retombe à 0 au lancement, sans attendre le relevé suivant.
+            tracker.unit.energy = 0;
             tracker.castingUntil = event.tick + event.castTicks;
             if (age < 1.5) texts.push({ uid: event.uid, text: event.skillName, kind: 'skill', age: age / 1.5 });
           }

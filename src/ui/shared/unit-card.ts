@@ -40,6 +40,22 @@ export function statsTable(stats: DisplayedStats): HTMLElement {
   return el('dl', { className: 'stats' }, rows.flatMap(([label, value]) => [el('dt', { text: label }), el('dd', { text: value })]));
 }
 
+/** Rappel affiché sous la compétence des unités qui se protègent d'un bouclier. */
+export const SHIELD_ENERGY_NOTE = 'Tant que son bouclier tient (jusqu’à ce qu’il soit détruit ou expire), l’unité ne gagne pas d’énergie.';
+
+/** La compétence de l'unité lui donne-t-elle un bouclier ? */
+export function hasShieldSkill(unit: UnitDefinition): boolean {
+  return unit.skill.effects.some((effect) => effect.kind === 'shield');
+}
+
+/** Compétence d'une unité : nom, description, et le rappel du bouclier s'il y a lieu. */
+export function skillBlock(unit: UnitDefinition): HTMLElement[] {
+  return [
+    el('p', {}, [el('strong', { text: `${unit.skill.name} : ` }), unit.skill.description]),
+    ...(hasShieldSkill(unit) ? [el('p', { className: 'muted small', text: SHIELD_ENERGY_NOTE })] : []),
+  ];
+}
+
 /** En-tête commun des fiches : nom, rang, coût, sous-titre et insignes des traits. */
 export function unitHeader(unit: UnitDefinition, rank: StarRank): HTMLElement[] {
   return [
@@ -53,7 +69,7 @@ export function unitHeader(unit: UnitDefinition, rank: StarRank): HTMLElement[] 
 export function unitCard(unit: UnitDefinition, equipment: Equipment, rank: StarRank): HTMLElement {
   return el('div', { className: 'unit-card' }, [
     ...unitHeader(unit, rank),
-    el('p', {}, [el('strong', { text: `${unit.skill.name} : ` }), unit.skill.description]),
+    ...skillBlock(unit),
     statsTable(computeCombatStats(rankedStats(unit.stats, rank), equipmentBonuses(equipment))),
     el('p', { className: 'muted small', text: 'Statistiques au rang choisi, avec l’équipement, hors bonus de traits.' }),
   ]);

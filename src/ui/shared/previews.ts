@@ -5,11 +5,29 @@ import { objectBonuses, recipesWith } from '../../rules/recipes.ts';
 import type { FrameUnit } from '../../render/replay.ts';
 import { el } from '../dom.ts';
 import { describeBonuses } from './bonus-text.ts';
-import { statsTable, unitHeader } from './unit-card.ts';
+import { energyRatio } from './scenes.ts';
+import { skillBlock, statsTable, unitHeader } from './unit-card.ts';
 
 /**
  * Contenus des aperçus ouverts au clic droit : une unité en plein combat, un matériau (ses recettes), un objet.
  */
+
+/** Texte de l'énergie : « Énergie : 45 / 100 », avec la raison si elle est bloquée. */
+export function energyLine(unit: Pick<FrameUnit, 'energy' | 'maxEnergy' | 'shield' | 'casting' | 'alive'>): string {
+  const values = `Énergie : ${Math.floor(Math.max(0, unit.energy))} / ${Math.round(unit.maxEnergy)}`;
+  if (!unit.alive) return values;
+  if (unit.casting) return `${values} · bloquée (compétence en cours)`;
+  if (unit.shield > 0) return `${values} · bloquée (bouclier)`;
+  return values;
+}
+
+/** Barre d'énergie de l'aperçu, de la même couleur que sur le plateau. */
+function energyBar(unit: FrameUnit): HTMLElement {
+  const blocked = unit.alive && (unit.shield > 0 || unit.casting);
+  return el('div', { className: blocked ? 'energy-bar blocked' : 'energy-bar', attrs: { 'aria-hidden': 'true' } }, [
+    el('span', { attrs: { style: `width: ${(energyRatio(unit) * 100).toFixed(1)}%` } }),
+  ]);
+}
 
 /** Aperçu d'une unité pendant un combat : état actuel et statistiques de combat (rang, objets et traits compris). */
 export function combatUnitPreview(unit: FrameUnit): HTMLElement {
@@ -27,8 +45,9 @@ export function combatUnitPreview(unit: FrameUnit): HTMLElement {
     ...(definition === undefined ? [el('h3', { text: unit.name })] : unitHeader(definition, unit.rank)),
     el('p', { className: unit.side === 'player' ? 'side-player' : 'side-enemy', text: unit.side === 'player' ? 'Ton camp' : 'Camp ennemi' }),
     el('p', {}, [el('strong', { text: health })]),
+    el('div', { className: 'energy' }, [el('span', { className: 'small', text: energyLine(unit) }), energyBar(unit)]),
     states.length > 0 ? el('p', { className: 'muted small', text: states.join(' · ') }) : null,
-    definition === undefined ? null : el('p', {}, [el('strong', { text: `${definition.skill.name} : ` }), definition.skill.description]),
+    ...(definition === undefined ? [] : skillBlock(definition)),
     unit.equipment.length > 0 ? el('p', { className: 'small', text: `Équipement : ${unit.equipment.map(slotName).join(', ')}` }) : null,
     statsTable(unit.stats),
     el('p', { className: 'muted small', text: 'Statistiques au début du combat : rang, objets et traits compris.' }),

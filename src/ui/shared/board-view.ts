@@ -75,6 +75,8 @@ function readTheme(element: Element): BoardTheme {
     unitText: '#ffffff',
     hpBack: color('--board-hp-back'),
     shield: color('--board-shield'),
+    energy: color('--board-energy'),
+    energyBlocked: color('--board-energy-blocked'),
     text: color('--fg'),
     crit: color('--accent'),
     heal: color('--board-hp'),

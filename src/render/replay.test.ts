@@ -46,6 +46,7 @@ describe('zones d’effet', () => {
     position: { col: 3, row: 6 },
     maxHp: 500,
     maxEnergy: 60,
+    energy: 0,
     equipment: [],
     stats: { hp: 500, attack: 50, elementalPower: 30, critChance: 0, armor: 0, elementalResist: 0, attackSpeed: 1, range: 2, maxEnergy: 60 },
   };
@@ -93,5 +94,46 @@ describe('summarizeUnits', () => {
     expect(total(middle)).toBeCloseTo(expectedAtMiddle);
     expect(total(middle)).toBeLessThan(total());
     expect(summarizeUnits(result.events, middle).some((unit) => unit.knockedOutAt !== null && unit.knockedOutAt > middle)).toBe(false);
+  });
+});
+
+describe('énergie', () => {
+  const unit: UnitSnapshot = {
+    uid: 1,
+    defId: 'kirin',
+    name: 'Kirin',
+    side: 'player',
+    kind: 'monster',
+    role: 'dps',
+    element: 'thunder',
+    cost: 5,
+    rank: 1,
+    position: { col: 3, row: 6 },
+    maxHp: 500,
+    maxEnergy: 100,
+    energy: 40,
+    equipment: [],
+    stats: { hp: 500, attack: 50, elementalPower: 30, critChance: 0, armor: 0, elementalResist: 0, attackSpeed: 1, range: 3, maxEnergy: 100 },
+  };
+  const events: CombatEvent[] = [
+    { type: 'combatStart', tick: 0, units: [unit], traits: { player: [], enemy: [] } },
+    { type: 'energy', tick: 2, levels: [{ uid: 1, energy: 60 }] },
+    { type: 'energy', tick: 4, levels: [{ uid: 1, energy: 100 }] },
+    { type: 'skillCast', tick: 5, uid: 1, skillId: 'foudre', skillName: 'Foudre divine', castTicks: 0 },
+    { type: 'energy', tick: 6, levels: [{ uid: 1, energy: 3 }] },
+    { type: 'combatEnd', tick: 20, winner: 'player', reason: 'elimination' },
+  ];
+  const energyAt = (tick: number) => createReplay(events).frameAt(tick).units[0]?.energy;
+
+  it('part de l’énergie de départ, puis suit les relevés du moteur', () => {
+    expect(energyAt(0)).toBe(40);
+    expect(energyAt(3)).toBe(60);
+    expect(energyAt(4)).toBe(100);
+    expect(createReplay(events).frameAt(0).units[0]?.maxEnergy).toBe(100);
+  });
+
+  it('retombe à 0 dès le lancement d’une compétence, sans attendre le relevé suivant', () => {
+    expect(energyAt(5)).toBe(0);
+    expect(energyAt(6)).toBe(3);
   });
 });

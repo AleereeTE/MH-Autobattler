@@ -152,6 +152,7 @@ La vitesse de déplacement est identique pour toutes les unités.
 - L'énergie maximale est **propre à chaque unité**.
 - Toutes les unités commencent le combat avec **0 énergie**, sauf effet de trait (Calamité des Dragons anciens, section 4).
 - L'énergie est **bloquée pendant qu'une compétence s'exécute**.
+- L'énergie est aussi **bloquée tant que l'unité porte un bouclier**, jusqu'à ce qu'il soit détruit ou expire : aucune source ne passe (gain passif, attaques, coups subis, Accumulateur). Le coup qui brise le bouclier ne donne pas d'énergie non plus. Sans cette règle, un tank gagnait de l'énergie avec les coups absorbés par son bouclier et enchaînait les boucliers (Barroth en lançait jusqu'à 18 par combat).
 - La façon de générer de l'énergie dépend du rôle :
 
 | Rôle | En attaquant | En subissant des coups | Gain passif |
@@ -416,3 +417,5 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-21** : interface — filtre par coût dans la liste du bac à sable ; bilan des combats séparé en deux sections, alliés puis ennemis, avec le nombre d'unités encore debout.
 - **2026-11-21** : paliers des traits — 2 / 4 / 6 pour les traits d'au moins 6 unités, 2 / 4 pour Feu et Glace, 2 / 3 pour Léviathan et Wyverne brute ; palier du haut ≈ ×1,6 celui du milieu (provisoire). Couleur des synergies : bronze, argent, or (le dernier palier toujours or), avec l'insigne du trait. Planificateur d'équipe comme dans TFT (9 unités, synergies, unités signalées dans la boutique, gardé d'une run à l'autre).
 - **2026-11-21** : interface — aperçu d'un trait au clic droit (sur une synergie ou un insigne d'unité) : tous les paliers avec leur couleur et leur effet, et les unités qui portent le trait.
+- **2026-11-21** : équilibrage des boucliers — une unité ne gagne plus d'énergie tant que son bouclier tient (détruit ou expiré), toutes sources comprises. Les tanks à bouclier n'enchaînent plus leur compétence (Barroth : de 10 à 18 boucliers par combat à 2 ou 3).
+- **2026-11-21** : interface — barre d'énergie sous la barre de vie des jetons en combat (grisée quand l'énergie est bloquée), et énergie actuelle / maximale avec sa barre dans l'aperçu d'une unité en combat.

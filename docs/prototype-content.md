@@ -209,7 +209,7 @@ Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. �
 
 ## Effets de compétence ajoutés au moteur
 
-- **Bouclier** : absorbe les dégâts avant les PV, pendant une durée limitée.
+- **Bouclier** : absorbe les dégâts avant les PV, pendant une durée limitée. ✅ Tant que le bouclier tient (détruit ou expiré), l'unité ne gagne pas d'énergie (Barroth, Garrick, Brann, Dire Miralis). Le rappel figure sur leur fiche.
 - **Soin** : rend des PV sans dépasser le maximum ; réduit pendant la mort subite.
 - **Bonus temporaire** : vitesse d'attaque augmentée pendant une durée limitée.
 - **Ralentissement** : vitesse d'attaque réduite pendant une durée limitée.

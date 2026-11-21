@@ -19,6 +19,9 @@ export interface BoardTheme {
   readonly unitText: string;
   readonly hpBack: string;
   readonly shield: string;
+  /** Barre d'énergie, et sa couleur quand l'énergie est bloquée (bouclier, compétence en cours). */
+  readonly energy: string;
+  readonly energyBlocked: string;
   readonly text: string;
   readonly crit: string;
   readonly heal: string;
@@ -66,6 +69,10 @@ export interface SceneUnit {
   readonly moving?: { readonly to: Hex; readonly progress: number } | null;
   readonly hpRatio: number;
   readonly shieldRatio?: number;
+  /** Remplissage de la barre d'énergie (0 → 1). Absent hors combat : pas de barre. */
+  readonly energyRatio?: number;
+  /** L'unité ne gagne pas d'énergie en ce moment (bouclier, compétence en cours) : barre grisée. */
+  readonly energyBlocked?: boolean;
   readonly alive: boolean;
   readonly selected?: boolean;
   readonly casting?: boolean;
@@ -223,6 +230,13 @@ function drawBars(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   if (shield > 0) {
     ctx.fillStyle = theme.shield;
     ctx.fillRect(x, y - 4, width * shield, 3);
+  }
+  // Barre d'énergie, juste sous la barre de vie : pleine, la compétence part.
+  if (unit.energyRatio !== undefined) {
+    ctx.fillStyle = theme.hpBack;
+    ctx.fillRect(x, y + 6, width, 3);
+    ctx.fillStyle = unit.energyBlocked === true ? theme.energyBlocked : theme.energy;
+    ctx.fillRect(x, y + 6, width * Math.max(0, Math.min(1, unit.energyRatio)), 3);
   }
 }
 

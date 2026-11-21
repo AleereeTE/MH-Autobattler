@@ -45,6 +45,11 @@ export function frameUnitAt(frame: Frame, hex: Hex): FrameUnit | undefined {
   return here.find((unit) => unit.alive) ?? here[0];
 }
 
+/** Remplissage de la barre d'énergie d'une unité (0 → 1). */
+export function energyRatio(unit: Pick<FrameUnit, 'energy' | 'maxEnergy'>): number {
+  return unit.maxEnergy > 0 ? Math.max(0, Math.min(1, unit.energy / unit.maxEnergy)) : 0;
+}
+
 /** Scène d'une image de replay : unités, textes flottants, zones d'effet et bandeau de fin. */
 export function frameScene(frame: Frame, portraits: PortraitStore): BoardScene {
   const banner =
@@ -62,6 +67,8 @@ export function frameScene(frame: Frame, portraits: PortraitStore): BoardScene {
       moving: unit.moving,
       hpRatio: unit.hp / unit.maxHp,
       shieldRatio: unit.shield / unit.maxHp,
+      energyRatio: energyRatio(unit),
+      energyBlocked: unit.shield > 0 || unit.casting,
       alive: unit.alive,
       casting: unit.casting,
       burning: unit.burning,
