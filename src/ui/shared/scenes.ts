@@ -1,8 +1,8 @@
 import type { Side } from '../../combat/index.ts';
-import type { Hex } from '../../core/hex.ts';
+import { hexKey, type Hex } from '../../core/hex.ts';
 import type { StarRank, UnitDefinition } from '../../data/definitions.ts';
 import type { BoardScene, SceneUnit } from '../../render/board-canvas.ts';
-import type { Frame } from '../../render/replay.ts';
+import type { Frame, FrameUnit } from '../../render/replay.ts';
 import type { PortraitStore } from './portraits.ts';
 import { shortLabel } from './unit-label.ts';
 
@@ -35,6 +35,14 @@ export function staticUnitScene(placed: StaticUnit, portraits: PortraitStore): S
     alive: true,
     selected: placed.selected === true,
   };
+}
+
+/** Unité dessinée sur cette case dans une image de replay (les unités en vie d'abord ; une unité en déplacement compte sur sa case d'arrivée passé la moitié du trajet). */
+export function frameUnitAt(frame: Frame, hex: Hex): FrameUnit | undefined {
+  const key = hexKey(hex);
+  const shownAt = (unit: FrameUnit): string => hexKey(unit.moving !== null && unit.moving.progress >= 0.5 ? unit.moving.to : unit.position);
+  const here = frame.units.filter((unit) => shownAt(unit) === key);
+  return here.find((unit) => unit.alive) ?? here[0];
 }
 
 /** Scène d'une image de replay : unités, textes flottants, zones d'effet et bandeau de fin. */

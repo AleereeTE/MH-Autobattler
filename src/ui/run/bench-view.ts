@@ -4,6 +4,8 @@ import { unitAt } from '../../run/index.ts';
 import { el } from '../dom.ts';
 import type { PortraitStore } from '../shared/portraits.ts';
 import type { RunController } from './controller.ts';
+import { onRightClick } from '../shared/popover.ts';
+import { unitCard } from '../shared/unit-card.ts';
 import { unitToken } from './token.ts';
 
 /** Réserve : 10 places. Cliquer sélectionne une unité, ou y range l'unité sélectionnée. */
@@ -27,7 +29,8 @@ export function renderBench(controller: RunController, portraits: PortraitStore)
       unit === undefined ? [] : [unitToken(unit.unitId, unit.rank, portraits), el('span', { className: 'bench-name', text: name })],
     );
     slot.disabled = !controller.canPrepare;
-    return slot;
+    const definition = unit === undefined ? undefined : findUnit(unit.unitId);
+    return unit === undefined || definition === undefined ? slot : onRightClick(slot, () => unitCard(definition, unit.equipment, unit.rank));
   });
   const count = state.units.filter((unit) => unit.location.area === 'bench').length;
   return el('section', { className: 'panel bench' }, [

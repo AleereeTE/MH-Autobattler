@@ -224,20 +224,11 @@ export const TRAITS: readonly TraitDefinition[] = [
     category: 'secondary',
     restrictedTo: 'monster',
     tiers: [
+      // ✅ Un seul palier : un seul Dragon noir est permis par plateau.
       {
         count: 1,
         effect: { kind: 'terror', enemyDamageReduction: 0.15 },
         description: 'Terreur : tant qu’un Dragon noir est en vie, tous les ennemis infligent −15 % de dégâts',
-      },
-      {
-        count: 2,
-        effect: { kind: 'terror', enemyDamageReduction: 0.25 },
-        description: 'Terreur : tant qu’un Dragon noir est en vie, tous les ennemis infligent −25 % de dégâts',
-      },
-      {
-        count: 3,
-        effect: { kind: 'terror', enemyDamageReduction: 0.35 },
-        description: 'Terreur : tant qu’un Dragon noir est en vie, tous les ennemis infligent −35 % de dégâts',
       },
     ],
   },

@@ -3,6 +3,8 @@ import { MATERIALS, MATERIAL_IDS, SIGNATURE_OBJECTS, type Equipment, type Materi
 import { SLOT_CAPACITY, objectFor, slotName } from '../../rules/equipment.ts';
 import { STAR_RANKS, rankStars } from '../../rules/ranks.ts';
 import { button, el, select } from '../dom.ts';
+import { onRightClick, showPopover } from '../shared/popover.ts';
+import { materialPreview, slotPreview } from '../shared/previews.ts';
 import { unitCard } from '../shared/unit-card.ts';
 import type { SandboxModel } from './model.ts';
 
@@ -12,13 +14,16 @@ function equipmentEditor(model: SandboxModel, unit: UnitDefinition, equipment: E
   const objectSelect = select(SIGNATURE_OBJECTS.map((object, index) => ({ value: String(index), label: `${object.name} (${object.description})` })));
 
   const slots = equipment.map((slot, index) =>
-    el('li', { className: 'slot' }, [
-      el('span', {}, [
-        el('strong', { text: slotName(slot) }),
-        slot.kind === 'object' ? ` — ${objectFor(slot.materials).description}` : ' (matériau)',
+    onRightClick(
+      el('li', { className: 'slot', attrs: { title: 'Clic droit : statistiques et recettes' } }, [
+        el('span', {}, [
+          el('strong', { text: slotName(slot) }),
+          slot.kind === 'object' ? ` — ${objectFor(slot.materials).description}` : ' (matériau)',
+        ]),
+        button('Retirer', () => model.removeSlot(index), 'button small'),
       ]),
-      button('Retirer', () => model.removeSlot(index), 'button small'),
-    ]),
+      () => slotPreview(slot),
+    ),
   );
 
   return el('div', { className: 'equipment' }, [
@@ -27,6 +32,12 @@ function equipmentEditor(model: SandboxModel, unit: UnitDefinition, equipment: E
     el('div', { className: 'row' }, [
       materialSelect,
       button('Poser le matériau', () => model.addMaterial(materialSelect.value as MaterialId)),
+      el('button', {
+        className: 'button small',
+        text: 'Recettes',
+        attrs: { type: 'button', title: 'Objets qu’on peut fabriquer avec ce matériau' },
+        onClick: (event) => showPopover(materialPreview(materialSelect.value as MaterialId), event.clientX, event.clientY),
+      }),
     ]),
     el('div', { className: 'row' }, [
       objectSelect,

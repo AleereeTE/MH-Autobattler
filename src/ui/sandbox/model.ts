@@ -5,6 +5,7 @@ import type { Equipment, MaterialId } from '../../data/items.ts';
 import type { SquadDefinition } from '../../data/squads.ts';
 import { findUnit } from '../../data/units/index.ts';
 import { SLOT_CAPACITY, addMaterial, addObject, removeSlot } from '../../rules/equipment.ts';
+import { BLACK_DRAGON_LIMIT_MESSAGE, exceedsBlackDragonLimit } from '../../rules/board-limits.ts';
 import { isStarRank } from '../../rules/ranks.ts';
 
 /**
@@ -96,9 +97,17 @@ export class SandboxModel {
       this.currentSelection = same ? null : { kind: 'board', key };
     } else if (selection?.kind === 'palette') {
       const unit = findUnit(selection.unitId);
+      if (unit !== undefined && this.breaksBlackDragonLimit(unit, hex, null)) {
+        this.changed(BLACK_DRAGON_LIMIT_MESSAGE);
+        return;
+      }
       if (unit !== undefined) this.cells.set(key, { unit, position: hex, equipment: [], rank: 1 });
     } else if (selection?.kind === 'board') {
       const moving = this.cells.get(selection.key);
+      if (moving !== undefined && this.breaksBlackDragonLimit(moving.unit, hex, moving)) {
+        this.changed(BLACK_DRAGON_LIMIT_MESSAGE);
+        return;
+      }
       if (moving !== undefined) {
         this.cells.delete(selection.key);
         this.cells.set(key, { ...moving, position: hex });
@@ -106,6 +115,13 @@ export class SandboxModel {
       }
     }
     this.changed();
+  }
+
+  /** Poser `unit` sur `hex` (en déplaçant éventuellement `moving`) donnerait-il 2 Dragons noirs dans ce camp ? */
+  private breaksBlackDragonLimit(unit: UnitDefinition, hex: Hex, moving: PlacedUnit | null): boolean {
+    const side = sideOf(hex);
+    const others = this.unitsOf(side).filter((placed) => placed !== moving).map((placed) => placed.unit);
+    return exceedsBlackDragonLimit([...others, unit]);
   }
 
   removeSelected(): void {

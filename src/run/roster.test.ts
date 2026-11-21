@@ -64,3 +64,20 @@ describe('réserve et plateau', () => {
     expect(state.units).toEqual([]);
   });
 });
+
+describe('un seul Dragon noir sur le plateau', () => {
+  it('refuse d’en poser un 2e, mais accepte de les échanger', () => {
+    const state = makeRun();
+    const fatalis = giveUnit(state, 'fatalis', board(3, 5));
+    const alatreon = giveUnit(state, 'alatreon', bench(0));
+    const khezu = giveUnit(state, 'khezu', bench(1));
+
+    expect(moveUnit(state, alatreon.uid, board(2, 5))).toEqual({ ok: false, reason: 'Un seul Dragon noir par plateau.' });
+    expect(moveUnit(state, khezu.uid, board(2, 5)).ok).toBe(true);
+    // Échanger Fatalis (plateau) et Alatreon (réserve) garde un seul Dragon noir sur le plateau.
+    expect(moveUnit(state, alatreon.uid, board(3, 5)).ok).toBe(true);
+    expect(fatalis.location).toEqual(bench(0));
+    // Mais remplacer Khezu par Fatalis en ferait deux.
+    expect(moveUnit(state, fatalis.uid, board(2, 5)).ok).toBe(false);
+  });
+});

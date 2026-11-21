@@ -2,6 +2,7 @@ import { isInSideArea, type Placement } from '../combat/index.ts';
 import { hexKey, isOnBoard, type Hex } from '../core/hex.ts';
 import { RUN_STRUCTURE } from '../data/run-balance.ts';
 import { findUnit } from '../data/units/index.ts';
+import { BLACK_DRAGON_LIMIT_MESSAGE, exceedsBlackDragonLimit } from '../rules/board-limits.ts';
 import { withdrawCompletedOffers } from './completed.ts';
 import { copiesForRank, sellValue } from './economy.ts';
 import { resolveMerges } from './merge.ts';
@@ -90,6 +91,14 @@ export function moveUnit(state: RunState, uid: number, to: Location): ActionResu
   if (sameLocation(unit.location, to)) return OK;
 
   const occupant = unitAt(state, to);
+  // ✅ Un seul Dragon noir sur le plateau : on regarde la composition qu'aurait le plateau après le déplacement (échange compris).
+  const boardAfter = state.units.filter((candidate) => {
+    const location = candidate === unit ? to : candidate === occupant ? unit.location : candidate.location;
+    return location.area === 'board';
+  });
+  if (exceedsBlackDragonLimit(boardAfter.flatMap((candidate) => findUnit(candidate.unitId) ?? []))) {
+    return fail(BLACK_DRAGON_LIMIT_MESSAGE);
+  }
   if (occupant !== undefined) {
     occupant.location = unit.location;
     unit.location = to;

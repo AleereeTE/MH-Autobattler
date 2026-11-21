@@ -5,6 +5,9 @@ import { TOTAL_HUNTS, canTakeReward, type RewardOption } from '../../run/index.t
 import { button, el } from '../dom.ts';
 import type { PortraitStore } from '../shared/portraits.ts';
 import type { RunController } from './controller.ts';
+import { onRightClick } from '../shared/popover.ts';
+import { materialPreview } from '../shared/previews.ts';
+import { unitCard } from '../shared/unit-card.ts';
 import { unitToken } from './token.ts';
 
 function rewardCard(controller: RunController, option: RewardOption, index: number, portraits: PortraitStore): HTMLElement {
@@ -33,6 +36,11 @@ function rewardCard(controller: RunController, option: RewardOption, index: numb
   }
   const card = el('button', { className: 'reward-card', attrs: { type: 'button' }, onClick: () => controller.chooseReward(index) }, content);
   card.disabled = !available;
+  // Clic droit : fiche de l'unité proposée, ou recettes du matériau proposé.
+  const unit = option.kind === 'unit' ? findUnit(option.unitId) : undefined;
+  if (unit !== undefined) return onRightClick(card, () => unitCard(unit, [], 1));
+  const material = option.kind === 'materials' ? option.materials[0] : undefined;
+  if (material !== undefined) return onRightClick(card, () => materialPreview(material));
   return card;
 }
 

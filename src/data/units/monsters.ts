@@ -36,10 +36,10 @@ export const KHEZU: UnitDefinition = {
   skill: {
     id: 'decharge',
     name: 'Décharge',
-    description: '60/90/135 + 150 % de la puissance élémentaire aux ennemis adjacents.',
+    description: '30/45/70 + 75 % de la puissance élémentaire aux ennemis adjacents.',
     castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'self', damageType: 'elemental', base: [60, 90, 135], ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 1 },
+      { kind: 'damage', target: 'self', damageType: 'elemental', base: [30, 45, 70], ratios: [{ stat: 'elementalPower', ratio: 0.75 }], radius: 1 },
     ],
   },
 };
@@ -116,15 +116,15 @@ export const LEGIANA: UnitDefinition = {
   skill: {
     id: 'vent-glacial',
     name: 'Vent glacial',
-    description: '70/105/160 + 160 % de la puissance élémentaire sur la cible et ses voisins, et −30 % de vitesse d’attaque pendant 3 s.',
+    description: '35/55/80 + 80 % de la puissance élémentaire sur la cible et ses voisins, et −30 % de vitesse d’attaque pendant 3 s.',
     castTime: 0.5,
     effects: [
       {
         kind: 'damage',
         target: 'currentTarget',
         damageType: 'elemental',
-        base: [70, 105, 160],
-        ratios: [{ stat: 'elementalPower', ratio: 1.6 }],
+        base: [35, 55, 80],
+        ratios: [{ stat: 'elementalPower', ratio: 0.8 }],
         radius: 1,
         slow: { attackSpeedPercent: -0.3, duration: 3 },
       },
@@ -242,10 +242,10 @@ export const JYURATODUS: UnitDefinition = {
   skill: {
     id: 'bain-de-boue',
     name: 'Bain de boue',
-    description: '60/90/135 + 140 % de la puissance élémentaire aux ennemis adjacents, et −25 % de vitesse d’attaque pendant 2 s.',
+    description: '30/45/70 + 70 % de la puissance élémentaire aux ennemis adjacents, et −25 % de vitesse d’attaque pendant 2 s.',
     castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'self', damageType: 'elemental', base: [60, 90, 135], ratios: [{ stat: 'elementalPower', ratio: 1.4 }], radius: 1, slow: { attackSpeedPercent: -0.25, duration: 2 } },
+      { kind: 'damage', target: 'self', damageType: 'elemental', base: [30, 45, 70], ratios: [{ stat: 'elementalPower', ratio: 0.7 }], radius: 1, slow: { attackSpeedPercent: -0.25, duration: 2 } },
     ],
   },
 };
@@ -302,10 +302,10 @@ export const LAGIACRUS: UnitDefinition = {
   skill: {
     id: 'decharge-abyssale',
     name: 'Décharge abyssale',
-    description: '90/135/205 + 160 % de la puissance élémentaire aux ennemis à 2 cases ou moins.',
+    description: '45/70/100 + 80 % de la puissance élémentaire aux ennemis à 2 cases ou moins.',
     castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'self', damageType: 'elemental', base: [90, 135, 205], ratios: [{ stat: 'elementalPower', ratio: 1.6 }], radius: 2 },
+      { kind: 'damage', target: 'self', damageType: 'elemental', base: [45, 70, 100], ratios: [{ stat: 'elementalPower', ratio: 0.8 }], radius: 2 },
     ],
   },
 };

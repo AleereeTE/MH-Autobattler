@@ -1,4 +1,5 @@
-import type { CombatEvent, Side, SkillEffectKind, UnitSnapshot, Winner } from '../combat/index.ts';
+import type { CombatEvent, Side, SkillEffectKind, SnapshotStats, UnitSnapshot, Winner } from '../combat/index.ts';
+import type { Equipment } from '../data/items.ts';
 import type { Hex } from '../core/hex.ts';
 import type { Element, StarRank, UnitCost } from '../data/definitions.ts';
 
@@ -17,6 +18,9 @@ export interface FrameUnit {
   readonly cost: UnitCost;
   readonly rank: StarRank;
   readonly maxHp: number;
+  readonly equipment: Equipment;
+  /** Statistiques de combat au début du combat (pour l'aperçu au clic droit). */
+  readonly stats: SnapshotStats;
   position: Hex;
   /** Déplacement en cours : case d'arrivée et avancement (0 → 1). */
   moving: { readonly to: Hex; readonly progress: number } | null;
@@ -89,6 +93,8 @@ function createTracker(snapshot: UnitSnapshot): Tracker {
       cost: snapshot.cost,
       rank: snapshot.rank,
       maxHp: snapshot.maxHp,
+      equipment: snapshot.equipment,
+      stats: snapshot.stats,
       position: snapshot.position,
       moving: null,
       hp: snapshot.maxHp,

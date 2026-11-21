@@ -46,6 +46,8 @@ describe('zones d’effet', () => {
     position: { col: 3, row: 6 },
     maxHp: 500,
     maxEnergy: 60,
+    equipment: [],
+    stats: { hp: 500, attack: 50, elementalPower: 30, critChance: 0, armor: 0, elementalResist: 0, attackSpeed: 1, range: 2, maxEnergy: 60 },
   };
   const events: CombatEvent[] = [
     { type: 'combatStart', tick: 0, units: [caster], traits: { player: [], enemy: [] } },

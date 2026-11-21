@@ -4,6 +4,7 @@ import type { StarRank, TraitId, UnitDefinition } from '../data/definitions.ts';
 import type { Equipment } from '../data/items.ts';
 import type { TraitTier } from '../data/traits.ts';
 import { SLOT_CAPACITY, equipmentBonuses } from '../rules/equipment.ts';
+import { BLACK_DRAGON_LIMIT_MESSAGE, exceedsBlackDragonLimit } from '../rules/board-limits.ts';
 import { isStarRank, rankedStats } from '../rules/ranks.ts';
 import { computeCombatStats } from '../rules/stats.ts';
 import { traitStatuses, type TraitStatus } from '../rules/traits.ts';
@@ -104,6 +105,18 @@ function snapshot(unit: CombatUnit): UnitSnapshot {
     position: { ...unit.position },
     maxHp: unit.stats.hp,
     maxEnergy: unit.stats.maxEnergy,
+    equipment: unit.equipment,
+    stats: {
+      hp: unit.stats.hp,
+      attack: unit.stats.attack,
+      elementalPower: unit.stats.elementalPower,
+      critChance: unit.stats.critChance,
+      armor: unit.stats.armor,
+      elementalResist: unit.stats.elementalResist,
+      attackSpeed: unit.stats.attackSpeed,
+      range: unit.stats.range,
+      maxEnergy: unit.stats.maxEnergy,
+    },
   };
 }
 
@@ -132,4 +145,7 @@ function validateSetup(setup: CombatSetup): void {
     occupied.add(hexKey(position));
   };
   for (const side of SIDES) setup[side].forEach((placement) => check(side, placement));
+  for (const side of SIDES) {
+    if (exceedsBlackDragonLimit(setup[side].map((placement) => placement.unit))) throw new Error(BLACK_DRAGON_LIMIT_MESSAGE);
+  }
 }

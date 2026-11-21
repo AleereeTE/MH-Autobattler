@@ -8,7 +8,11 @@ export class BoardView {
   private readonly layout = createLayout(34);
   private theme: BoardTheme | null = null;
 
-  constructor(onCellClick: (hex: Hex) => void) {
+  /**
+   * @param onCellClick clic gauche sur une case
+   * @param onCellContextMenu clic droit sur une case (avec la position de la souris, pour placer un aperçu)
+   */
+  constructor(onCellClick: (hex: Hex) => void, onCellContextMenu?: (hex: Hex, clientX: number, clientY: number) => void) {
     this.element = document.createElement('canvas');
     this.element.className = 'board';
     this.element.setAttribute('role', 'img');
@@ -16,15 +20,26 @@ export class BoardView {
     this.element.style.aspectRatio = `${this.layout.width} / ${this.layout.height}`;
 
     this.element.addEventListener('click', (event) => {
-      const rect = this.element.getBoundingClientRect();
-      const hex = hexAtPoint(this.layout, {
-        x: ((event.clientX - rect.left) * this.layout.width) / rect.width,
-        y: ((event.clientY - rect.top) * this.layout.height) / rect.height,
-      });
+      const hex = this.hexAt(event);
       if (hex !== null) onCellClick(hex);
+    });
+    this.element.addEventListener('contextmenu', (event) => {
+      if (onCellContextMenu === undefined) return;
+      event.preventDefault();
+      const hex = this.hexAt(event);
+      if (hex !== null) onCellContextMenu(hex, event.clientX, event.clientY);
     });
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
       this.theme = null;
+    });
+  }
+
+  /** Case sous la souris, ou null hors du plateau. */
+  private hexAt(event: MouseEvent): Hex | null {
+    const rect = this.element.getBoundingClientRect();
+    return hexAtPoint(this.layout, {
+      x: ((event.clientX - rect.left) * this.layout.width) / rect.width,
+      y: ((event.clientY - rect.top) * this.layout.height) / rect.height,
     });
   }
 

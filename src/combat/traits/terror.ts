@@ -1,11 +1,10 @@
+import { BLACK_DRAGON_TRAIT } from '../../rules/board-limits.ts';
 import { SIDES, isTargetable, type CombatState, type CombatUnit, type Side } from '../state.ts';
 
 /**
  * ✅ Terreur (trait Dragon noir) : tant qu'un Dragon noir d'un camp est en vie,
  * toutes les unités du camp adverse infligent moins de dégâts (attaques, compétences, brûlures, éclairs).
  */
-
-export const BLACK_DRAGON_TRAIT = 'black-dragon';
 
 function opposite(side: Side): Side {
   return SIDES.find((other) => other !== side) ?? side;

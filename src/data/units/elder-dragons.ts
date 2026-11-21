@@ -40,10 +40,10 @@ export const NAMIELLE: UnitDefinition = {
     id: 'maree-luminescente',
     name: 'Marée luminescente',
     description:
-      '150/225/340 + 250 % de la puissance élémentaire sur la cible et les ennemis à 2 cases d’elle, et soigne les alliés à 2 cases de 100/150/225 + 150 % de la puissance élémentaire.',
+      '75/115/170 + 125 % de la puissance élémentaire sur la cible et les ennemis à 2 cases d’elle, et soigne les alliés à 2 cases de 100/150/225 + 150 % de la puissance élémentaire.',
     castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [150, 225, 340], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 2 },
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [75, 115, 170], ratios: [{ stat: 'elementalPower', ratio: 1.25 }], radius: 2 },
       { kind: 'heal', base: [100, 150, 225], ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 2 },
     ],
   },

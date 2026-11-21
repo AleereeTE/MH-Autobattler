@@ -143,10 +143,10 @@ export const BRANN: UnitDefinition = {
     id: 'canon-de-wyverne',
     name: 'Canon de wyverne',
     description:
-      '100/150/225 + 150 % de la puissance élémentaire aux ennemis adjacents, puis bouclier de 150/225/340 + 15 % des PV max pendant 4 s.',
+      '50/75/115 + 75 % de la puissance élémentaire aux ennemis adjacents, puis bouclier de 150/225/340 + 15 % des PV max pendant 4 s.',
     castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'self', damageType: 'elemental', base: [100, 150, 225], ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 1 },
+      { kind: 'damage', target: 'self', damageType: 'elemental', base: [50, 75, 115], ratios: [{ stat: 'elementalPower', ratio: 0.75 }], radius: 1 },
       { kind: 'shield', base: [150, 225, 340], ratios: [{ stat: 'hp', ratio: 0.15 }], duration: 4 },
     ],
   },

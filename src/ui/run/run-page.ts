@@ -2,13 +2,17 @@ import type { CombatResult } from '../../combat/index.ts';
 import { findUnit } from '../../data/units/index.ts';
 import type { BoardScene } from '../../render/board-canvas.ts';
 import { createReplay } from '../../render/replay.ts';
-import { boardUnits } from '../../run/index.ts';
+import { hexKey } from '../../core/hex.ts';
+import { boardUnits, unitAt } from '../../run/index.ts';
 import { button, el, select } from '../dom.ts';
 import { BoardView } from '../shared/board-view.ts';
 import { PortraitStore } from '../shared/portraits.ts';
 import { ReplayPlayer } from '../shared/replay-player.ts';
 import { ResultsView } from '../shared/results-view.ts';
-import { frameScene, staticUnitScene } from '../shared/scenes.ts';
+import { showPopover } from '../shared/popover.ts';
+import { combatUnitPreview } from '../shared/previews.ts';
+import { frameScene, frameUnitAt, staticUnitScene } from '../shared/scenes.ts';
+import { unitCard } from '../shared/unit-card.ts';
 import { renderTraits } from '../shared/traits-view.ts';
 import { renderBench } from './bench-view.ts';
 import { RunController } from './controller.ts';
@@ -37,7 +41,26 @@ export function mountRun(root: HTMLElement): () => void {
   let lastFight: CombatResult | null = null;
   let confirmRestart = false;
 
-  const board = new BoardView((hex) => run.clickBoard(hex));
+  const board = new BoardView(
+    (hex) => run.clickBoard(hex),
+    (hex, x, y) => {
+      // Clic droit : état de l'unité en plein combat, ou fiche d'une unité posée (la tienne ou un monstre ennemi).
+      if (run.watching !== null) {
+        const frame = player.currentFrame();
+        const unit = frame === null ? undefined : frameUnitAt(frame, hex);
+        if (unit !== undefined) showPopover(combatUnitPreview(unit), x, y);
+        return;
+      }
+      const own = unitAt(run.state, { area: 'board', hex });
+      const definition = own === undefined ? undefined : findUnit(own.unitId);
+      if (own !== undefined && definition !== undefined) {
+        showPopover(unitCard(definition, own.equipment, own.rank), x, y);
+        return;
+      }
+      const enemy = run.state.enemy.find((placement) => hexKey(placement.position) === hexKey(hex));
+      if (enemy !== undefined) showPopover(unitCard(enemy.unit, enemy.equipment ?? [], enemy.rank ?? 1), x, y);
+    },
+  );
   const results = new ResultsView();
   const player = new ReplayPlayer(
     (frame) => {
@@ -163,7 +186,7 @@ export function mountRun(root: HTMLElement): () => void {
     el('header', { className: 'page-header' }, [
       el('p', {
         className: 'muted',
-        text: '30 chasses en 3 stages, un boss à la fin de chacun. 3 défaites et la run s’arrête. Les valeurs sont provisoires.',
+        text: '30 chasses en 3 stages, un boss à la fin de chacun. 3 défaites et la run s’arrête. Clic droit sur une unité (même en combat) ou un matériau pour son aperçu. Les valeurs sont provisoires.',
       }),
     ]),
     hudSlot,

@@ -13,7 +13,10 @@ import { ResultsView, type BatchResult } from '../shared/results-view.ts';
 import { loadComposition, saveComposition } from './storage.ts';
 import { renderTraits } from '../shared/traits-view.ts';
 import { renderUnitPanel } from './unit-panel.ts';
-import { frameScene, staticUnitScene } from '../shared/scenes.ts';
+import { showPopover } from '../shared/popover.ts';
+import { combatUnitPreview } from '../shared/previews.ts';
+import { frameScene, frameUnitAt, staticUnitScene } from '../shared/scenes.ts';
+import { unitCard } from '../shared/unit-card.ts';
 
 const BATCH_SIZE = 100;
 const SPEEDS = [0.5, 1, 2, 4];
@@ -29,9 +32,22 @@ export function mountSandbox(root: HTMLElement): () => void {
   let batch: BatchResult | null = null;
   let error: string | null = null;
 
-  const board = new BoardView((hex) => {
-    if (mode === 'edit') model.clickCell(hex);
-  });
+  const board = new BoardView(
+    (hex) => {
+      if (mode === 'edit') model.clickCell(hex);
+    },
+    (hex, x, y) => {
+      // Clic droit : fiche de l'unité posée, ou son état en plein combat.
+      if (mode === 'edit') {
+        const placed = model.placedUnits().find((candidate) => hexKey(candidate.position) === hexKey(hex));
+        if (placed !== undefined) showPopover(unitCard(placed.unit, placed.equipment, placed.rank), x, y);
+        return;
+      }
+      const frame = player.currentFrame();
+      const unit = frame === null ? undefined : frameUnitAt(frame, hex);
+      if (unit !== undefined) showPopover(combatUnitPreview(unit), x, y);
+    },
+  );
   const player = new ReplayPlayer(
     (frame) => {
       board.render(frameScene(frame, portraits));
@@ -168,7 +184,7 @@ export function mountSandbox(root: HTMLElement): () => void {
     el('header', { className: 'page-header' }, [
       el('p', {
         className: 'muted',
-        text: 'Compose les deux camps, lance un combat et regarde-le. Même graine = même combat. Les valeurs sont provisoires.',
+        text: 'Compose les deux camps, lance un combat et regarde-le. Clic droit sur une unité (même en combat) ou un matériau pour son aperçu. Même graine = même combat. Les valeurs sont provisoires.',
       }),
     ]),
     el('div', { className: 'sandbox' }, [

@@ -1,11 +1,25 @@
 import type { Hex } from '../core/hex.ts';
 import type { DamageType, Element, Role, SkillEffect, StarRank, TraitId, UnitCost, UnitKind } from '../data/definitions.ts';
+import type { Equipment } from '../data/items.ts';
 import type { Side } from './state.ts';
 
 /**
  * Événements de combat : le moteur les produit, le rendu les rejoue.
  * Chaque événement porte le tick auquel il s'est produit.
  */
+
+/** Statistiques de combat d'une unité au début du combat (rang, objets et traits compris), pour l'affichage. */
+export interface SnapshotStats {
+  readonly hp: number;
+  readonly attack: number;
+  readonly elementalPower: number;
+  readonly critChance: number;
+  readonly armor: number;
+  readonly elementalResist: number;
+  readonly attackSpeed: number;
+  readonly range: number;
+  readonly maxEnergy: number;
+}
 
 export interface UnitSnapshot {
   readonly uid: number;
@@ -20,6 +34,8 @@ export interface UnitSnapshot {
   readonly position: Hex;
   readonly maxHp: number;
   readonly maxEnergy: number;
+  readonly equipment: Equipment;
+  readonly stats: SnapshotStats;
 }
 
 export interface TraitSummary {

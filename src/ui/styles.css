@@ -862,3 +862,121 @@ details {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ------------------------------------------------------------------
+   Insignes des traits
+   ------------------------------------------------------------------ */
+.trait-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.trait-badges .trait-badge,
+.palette-item .trait-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px 1px 4px;
+  border: 1px solid var(--badge);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--badge) 16%, var(--panel));
+  color: var(--fg);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.palette-item .trait-badges {
+  margin-top: 3px;
+}
+
+.trait-badge-symbol {
+  font-size: 0.8rem;
+}
+
+.shop-card .trait-badges {
+  justify-content: center;
+}
+
+.shop-card .owned {
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 0.72rem;
+}
+
+.shop-card .owned.merge-ready {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------------
+   Aperçu au clic droit
+   ------------------------------------------------------------------ */
+.popover {
+  position: fixed;
+  z-index: 50;
+  width: min(360px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px);
+  overflow: auto;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--fg);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 0.25);
+}
+
+.popover .unit-card h3,
+.popover .item-preview h3 {
+  margin-top: 0;
+}
+
+.popover .trait-badges {
+  margin: 4px 0 8px;
+}
+
+.side-player {
+  color: var(--side-player);
+  font-weight: 600;
+}
+
+.side-enemy {
+  color: var(--side-enemy);
+  font-weight: 600;
+}
+
+.recipes,
+.bonus-list {
+  margin: 6px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bonus-list li::before {
+  content: '• ';
+  color: var(--muted);
+}
+
+.recipe {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.recipe:last-child {
+  border-bottom: none;
+}
+
+.recipe.available {
+  background: color-mix(in srgb, var(--board-hp) 14%, var(--panel));
+  border-radius: 6px;
+}
+
+.recipe-ready {
+  color: var(--board-hp);
+  font-weight: 700;
+  font-size: 0.8rem;
+}

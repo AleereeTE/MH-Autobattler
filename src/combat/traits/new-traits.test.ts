@@ -130,11 +130,8 @@ describe('Dragon noir — Terreur', () => {
     expect(dealDamage(state, unit(state, 'ennemi'), unit(state, 'noir-0'), hit(100))).toBeCloseTo(85);
   });
 
-  it('passe à −25 % puis −35 % avec 2 et 3 Dragons noirs', () => {
-    const two = fight(2);
-    expect(dealDamage(two, unit(two, 'ennemi'), unit(two, 'noir-0'), hit(100))).toBeCloseTo(75);
-    const three = fight(3);
-    expect(dealDamage(three, unit(three, 'ennemi'), unit(three, 'noir-0'), hit(100))).toBeCloseTo(65);
+  it('n’accepte qu’un seul Dragon noir par camp', () => {
+    expect(() => fight(2)).toThrow(/Un seul Dragon noir/);
   });
 
   it('cesse quand plus aucun Dragon noir n’est en vie, et ne touche pas son propre camp', () => {

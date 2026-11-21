@@ -2,6 +2,8 @@ import { findUnit } from '../../data/units/index.ts';
 import { objectFor, slotName } from '../../rules/equipment.ts';
 import { sellValue } from '../../run/index.ts';
 import { button, el } from '../dom.ts';
+import { onRightClick } from '../shared/popover.ts';
+import { looseMaterials, slotPreview } from '../shared/previews.ts';
 import { unitCard } from '../shared/unit-card.ts';
 import type { RunController } from './controller.ts';
 
@@ -15,10 +17,13 @@ export function renderSelection(controller: RunController): HTMLElement {
   if (own !== null && definition !== undefined) {
     const where = own.location.area === 'board' ? 'Sur le plateau' : 'En réserve';
     const slots = own.equipment.map((slot, index) =>
-      el('li', { className: 'slot' }, [
-        el('span', {}, [el('strong', { text: slotName(slot) }), slot.kind === 'object' ? ` — ${objectFor(slot.materials).description}` : ' (matériau)']),
-        button(slot.kind === 'object' ? 'Retirer (1 retire-objet)' : 'Retirer', () => controller.unequip(index), 'button small'),
-      ]),
+      onRightClick(
+        el('li', { className: 'slot', attrs: { title: 'Clic droit : statistiques et recettes' } }, [
+          el('span', {}, [el('strong', { text: slotName(slot) }), slot.kind === 'object' ? ` — ${objectFor(slot.materials).description}` : ' (matériau)']),
+          button(slot.kind === 'object' ? 'Retirer (1 retire-objet)' : 'Retirer', () => controller.unequip(index), 'button small'),
+        ]),
+        () => slotPreview(slot, looseMaterials(controller.state.inventory)),
+      ),
     );
     const sell = button(`Vendre (${sellValue(definition.cost, own.rank)} zennys)`, () => controller.sellSelected(), 'button danger');
     sell.disabled = !controller.canPrepare;
@@ -64,7 +69,7 @@ export function renderInventory(controller: RunController): HTMLElement {
       ],
     );
     item.disabled = !controller.canPrepare;
-    return item;
+    return onRightClick(item, () => slotPreview(slot, looseMaterials(state.inventory)));
   });
   return el('section', { className: 'panel' }, [
     el('h2', { text: `Inventaire (${state.inventory.length})` }),
@@ -73,7 +78,9 @@ export function renderInventory(controller: RunController): HTMLElement {
       : el('p', { className: 'muted small', text: 'Vide. Les matériaux gagnés en récompense arrivent ici.' }),
     el('p', {
       className: 'muted small',
-      text: targetName === null ? 'Sélectionne une unité, puis clique sur un élément pour l’équiper.' : `Clique sur un élément pour le poser sur ${targetName}.`,
+      text:
+        (targetName === null ? 'Sélectionne une unité, puis clique sur un élément pour l’équiper.' : `Clique sur un élément pour le poser sur ${targetName}.`) +
+        ' Clic droit : recettes et statistiques.',
     }),
   ]);
 }

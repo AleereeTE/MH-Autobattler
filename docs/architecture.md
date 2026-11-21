@@ -87,7 +87,8 @@ src/
     app.ts              Coquille : titre et onglets (« Mode run », « Bac à sable »), choisis par l'adresse (#run, #sandbox)
     run/                Page « Mode run » (bandeau, boutique, réserve, inventaire, fin de combat)
     sandbox/            Page « bac à sable » (composition, équipement)
-    shared/             Éléments communs : plateau, lecteur de replay, bilan, portraits, fiche d'unité, synergies
+    shared/             Éléments communs : plateau, lecteur de replay, bilan, portraits, fiche d'unité, synergies,
+                        insignes des traits, aperçus au clic droit
     dom.ts              Petit utilitaire de création d'éléments
     styles.css          Styles (thème clair et sombre)
   assets/portraits/     Images des jetons, une par unité (voir la section 5)
@@ -178,6 +179,12 @@ Les statistiques de combat sont calculées au début du combat : statistiques de
 | Points sur le côté gauche | États : brûlure, ralentissement, accélération |
 
 Les couleurs sont des variables CSS (`--cost-1` à `--cost-5`, `--side-player`, `--side-enemy`…) dans `src/ui/styles.css`, avec une variante pour le thème sombre.
+
+### Insignes et aperçus
+
+- **Insignes des traits** (`ui/shared/trait-badges.ts`) : un symbole et une couleur par trait, affichés sur les cartes (liste du bac à sable, boutique) et dans les fiches. Un test vérifie que chaque trait a le sien.
+- **Clic droit** (`ui/shared/popover.ts`, `previews.ts`) : fiche d'une unité (liste, boutique, réserve, plateau), état d'une unité en plein combat (PV, bouclier, états, statistiques de début de combat), recettes d'un matériau (les 8 objets possibles et leurs statistiques, en signalant ceux qu'on peut faire avec l'inventaire) ou statistiques d'un objet.
+- Pour l'aperçu en combat, l'événement `combatStart` contient l'équipement et les statistiques de combat de chaque unité (rang, objets et traits compris).
 
 ### Portraits
 

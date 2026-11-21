@@ -28,6 +28,11 @@ export class ReplayPlayer {
     return this.tick;
   }
 
+  /** Image affichée en ce moment (null si aucun replay n'est chargé). */
+  currentFrame(): Frame | null {
+    return this.replay === null ? null : this.replay.frameAt(this.tick);
+  }
+
   /** Le replay chargé est arrivé à la fin du combat. */
   get isFinished(): boolean {
     return this.replay !== null && this.tick >= this.replay.durationTicks;

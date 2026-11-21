@@ -35,3 +35,20 @@ describe('SandboxModel — rangs ★', () => {
     expect(restored.placedUnits().map((placed) => placed.rank)).toEqual([1, 1, 2]);
   });
 });
+
+describe('SandboxModel — un seul Dragon noir par camp', () => {
+  it('refuse d’en poser un 2e dans le même camp, mais pas dans l’autre', () => {
+    const model = new SandboxModel();
+    model.selectPalette('fatalis');
+    model.clickCell({ col: 2, row: 5 });
+    model.selectPalette('alatreon');
+    model.clickCell({ col: 3, row: 5 });
+
+    expect(model.notice).toBe('Un seul Dragon noir par plateau.');
+    expect(model.placedUnits().map((placed) => placed.unit.id)).toEqual(['fatalis']);
+
+    // Alatreon reste choisi dans la liste après le refus : on le pose dans le camp ennemi.
+    model.clickCell({ col: 3, row: 2 });
+    expect(model.placedUnits().map((placed) => placed.unit.id)).toEqual(['fatalis', 'alatreon']);
+  });
+});
