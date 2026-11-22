@@ -34,6 +34,11 @@
   --rank-1: #c98a4b;
   --rank-2: #d9dee6;
   --rank-3: #ffcc33;
+  /* Cases de la carte du mode run. */
+  --map-urgent: #c0392b;
+  --map-forge: #b5651d;
+  --map-merchant: #d4a72c;
+  --map-boss: #7b1f2a;
   /* Paliers des synergies : bronze (1er), argent (2e), or (dernier). */
   --medal-bronze: #c98a4b;
   --medal-silver: #b9c3cd;
@@ -729,9 +734,25 @@ details {
   letter-spacing: 0.5px;
 }
 
-.badge.boss {
+.badge.boss,
+.badge.kind-boss {
   background: var(--danger);
   color: #fff;
+}
+
+.badge.kind-urgent {
+  background: var(--map-urgent);
+  color: #fff;
+}
+
+.badge.kind-forge {
+  background: var(--map-forge);
+  color: #fff;
+}
+
+.badge.kind-merchant {
+  background: var(--map-merchant);
+  color: #1a1410;
 }
 
 .defeats {
@@ -1399,4 +1420,218 @@ details {
 
 .energy-bar.blocked span {
   background: var(--board-energy-blocked);
+}
+
+/* ------------------------------------------------------------------
+   Carte du stage (mode run)
+   ------------------------------------------------------------------ */
+.map-panel.choosing {
+  border-color: var(--accent);
+}
+
+.map-scroll {
+  overflow-x: auto;
+}
+
+.map-drawing {
+  display: block;
+  width: 100%;
+  min-width: 440px;
+  height: auto;
+}
+
+.map-edge {
+  stroke: var(--border);
+  stroke-width: 2;
+}
+
+.map-edge.walked {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.map-edge.open {
+  stroke: var(--accent);
+  stroke-dasharray: 4 3;
+}
+
+.map-edge.faded {
+  opacity: 0.3;
+}
+
+.map-node circle {
+  fill: var(--bg);
+  stroke: var(--border);
+  stroke-width: 2;
+}
+
+.map-node.kind-urgent circle {
+  fill: color-mix(in srgb, var(--map-urgent) 22%, var(--bg));
+  stroke: var(--map-urgent);
+}
+
+.map-node.kind-forge circle {
+  fill: color-mix(in srgb, var(--map-forge) 22%, var(--bg));
+  stroke: var(--map-forge);
+}
+
+.map-node.kind-merchant circle {
+  fill: color-mix(in srgb, var(--map-merchant) 25%, var(--bg));
+  stroke: var(--map-merchant);
+}
+
+.map-node.kind-boss circle {
+  fill: color-mix(in srgb, var(--map-boss) 30%, var(--bg));
+  stroke: var(--map-boss);
+  stroke-width: 3;
+}
+
+/* Cases déjà parcourues et case actuelle. */
+.map-node.visited circle {
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+
+.map-node.current circle {
+  stroke: var(--accent);
+  stroke-width: 4;
+}
+
+/* Cases que l'on peut choisir : contour animé, cliquables. */
+.map-node.reachable {
+  cursor: pointer;
+}
+
+.map-node.reachable circle {
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-dasharray: 5 3;
+}
+
+.map-node.reachable:hover circle {
+  fill: color-mix(in srgb, var(--accent) 25%, var(--bg));
+}
+
+.map-node.faded {
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .map-node.reachable circle {
+    animation: map-pulse 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes map-pulse {
+  50% {
+    stroke-dashoffset: 8;
+  }
+}
+
+/* Cases proposées pour l'étape suivante. */
+.map-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.map-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.map-choice:hover {
+  border-color: var(--accent);
+}
+
+.map-choice.kind-urgent {
+  border-left-color: var(--map-urgent);
+}
+
+.map-choice.kind-forge {
+  border-left-color: var(--map-forge);
+}
+
+.map-choice.kind-merchant {
+  border-left-color: var(--map-merchant);
+}
+
+.map-choice.kind-boss {
+  border-left-color: var(--map-boss);
+}
+
+.map-choice-head,
+.map-choice-target {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-choice-target .token {
+  width: 32px;
+  height: 32px;
+}
+
+/* Forge et marchand. */
+.stop-panel.forge {
+  border-color: var(--map-forge);
+}
+
+.stop-panel.merchant {
+  border-color: var(--map-merchant);
+}
+
+.reforge-sources,
+.reforge-targets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.merchant-offers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.merchant-offer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.merchant-offer:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.merchant-offer.sold {
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  border-style: dashed;
+  cursor: default;
 }

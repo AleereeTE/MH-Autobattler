@@ -1,21 +1,29 @@
 import type { CombatResult } from '../../combat/index.ts';
 import { hexKey, type Hex } from '../../core/hex.ts';
+import type { MaterialId } from '../../data/items.ts';
 import {
   buy,
+  buyItemRemover,
+  buyMaterial,
+  chooseNode,
   chooseReward,
   createRun,
+  currentNode,
   equipFromInventory,
   fight,
   findRunUnit,
   huntInfo,
   isPlayerHex,
+  leaveNode,
   levelUp,
   moveUnit,
+  reforge,
   reroll,
   sellUnit,
   unequip,
   unitAt,
   type ActionResult,
+  type MapNodeKind,
   type RunState,
   type RunUnit,
 } from '../../run/index.ts';
@@ -32,6 +40,8 @@ export interface WatchedFight {
   readonly result: CombatResult;
   readonly hunt: number;
   readonly boss: boolean;
+  /** Type de la case (chasse, quête urgente, boss). */
+  readonly kind: MapNodeKind | null;
   /** Valeurs d'avant le combat, affichées pendant le replay pour ne pas dévoiler l'issue. */
   readonly before: { readonly zennys: number; readonly defeats: number; readonly itemRemovers: number };
 }
@@ -43,6 +53,8 @@ export class RunController {
   notice: string | null = null;
   /** Combat en cours de visionnage ; null pendant la préparation. */
   watching: WatchedFight | null = null;
+  /** À la forge : matériau de l'inventaire choisi pour être reforgé (sa position), ou null. */
+  reforgeIndex: number | null = null;
   private readonly listeners = new Set<() => void>();
 
   constructor(seed: number) {
@@ -68,6 +80,11 @@ export class RunController {
     return this.watching === null && this.state.phase === 'prep';
   }
 
+  /** On peut choisir la prochaine case de la carte. */
+  get canChooseNode(): boolean {
+    return this.watching === null && this.state.phase === 'map';
+  }
+
   selectedUnit(): RunUnit | null {
     return this.selection?.kind === 'unit' ? (findRunUnit(this.state, this.selection.uid) ?? null) : null;
   }
@@ -77,7 +94,47 @@ export class RunController {
     this.selection = null;
     this.watching = null;
     this.notice = null;
+    this.reforgeIndex = null;
     this.changed();
+  }
+
+  /** Choisit la prochaine case de la carte (sa position dans l'étape suivante). */
+  chooseNode(index: number): void {
+    if (!this.canChooseNode) return;
+    this.selection = null;
+    this.reforgeIndex = null;
+    this.apply(chooseNode(this.state, index));
+  }
+
+  /** Quitte une forge ou un marchand pour reprendre la route. */
+  leaveNode(): void {
+    if (!this.canPrepare) return;
+    this.selection = null;
+    this.reforgeIndex = null;
+    this.apply(leaveNode(this.state));
+  }
+
+  /** Forge : choisit le matériau de l'inventaire à reforger (ou annule en le choisissant de nouveau). */
+  selectReforge(inventoryIndex: number): void {
+    this.reforgeIndex = this.reforgeIndex === inventoryIndex ? null : inventoryIndex;
+    this.notice = null;
+    this.changed();
+  }
+
+  /** Forge : transforme le matériau choisi en `material`. */
+  reforge(material: MaterialId): void {
+    if (!this.canPrepare || this.reforgeIndex === null) return;
+    const result = reforge(this.state, this.reforgeIndex, material);
+    if (result.ok) this.reforgeIndex = null;
+    this.apply(result);
+  }
+
+  buyMaterial(offerIndex: number): void {
+    if (this.canPrepare) this.apply(buyMaterial(this.state, offerIndex));
+  }
+
+  buyItemRemover(): void {
+    if (this.canPrepare) this.apply(buyItemRemover(this.state));
   }
 
   buy(slot: number): void {
@@ -107,6 +164,7 @@ export class RunController {
       this.apply({ ok: false, reason: 'Sélectionne d’abord une de tes unités, puis clique sur un matériau ou un objet.' });
       return;
     }
+    this.reforgeIndex = null;
     this.apply(equipFromInventory(this.state, inventoryIndex, unit.uid));
   }
 
@@ -160,6 +218,7 @@ export class RunController {
     if (!this.canPrepare) return;
     const hunt = this.state.hunt;
     const boss = huntInfo(hunt).isBoss;
+    const kind = currentNode(this.state)?.kind ?? null;
     const { zennys, defeats, itemRemovers } = this.state;
     const outcome = fight(this.state);
     if (!outcome.ok) {
@@ -168,7 +227,7 @@ export class RunController {
     }
     this.selection = null;
     this.notice = null;
-    this.watching = { result: outcome.result, hunt, boss, before: { zennys, defeats, itemRemovers } };
+    this.watching = { result: outcome.result, hunt, boss, kind, before: { zennys, defeats, itemRemovers } };
     this.changed();
   }
 

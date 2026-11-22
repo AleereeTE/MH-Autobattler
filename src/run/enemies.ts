@@ -53,13 +53,17 @@ function placeMembers(members: readonly Member[], rng: Rng): Placement[] {
   });
 }
 
-export function generateSquad(hunt: number, rng: Rng): Placement[] {
+/**
+ * Escouade de la chasse `hunt`. `extraHunts` (quête urgente) : budget et nombre de monstres de quelques chasses
+ * plus loin, mais toujours avec les limites de coût et de rang du stage en cours.
+ */
+export function generateSquad(hunt: number, rng: Rng, extraHunts = 0): Placement[] {
   const info = huntInfo(hunt);
   const stageIndex = info.stage - 1;
   const maxCost = ENEMY_BUDGET.maxCostByStage[stageIndex] ?? 3;
   const maxRank = ENEMY_BUDGET.maxRankByStage[stageIndex] ?? 3;
-  let budget = huntBudget(hunt);
-  let slots = maxEnemyUnits(hunt);
+  let budget = huntBudget(hunt + extraHunts);
+  let slots = maxEnemyUnits(hunt + extraHunts);
 
   const members: Member[] = [];
   const usualBoss = info.isBoss ? BOSSES_BY_STAGE[stageIndex] : undefined;

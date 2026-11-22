@@ -27,7 +27,7 @@ describe('unités obtenues au ★3', () => {
     for (let i = 0; i < 20; i++) {
       refreshShop(state);
       expect(state.shop.every((id) => id === null || id === 'sylvain')).toBe(true);
-      const unit = drawRewards(state, false).find((option) => option.kind === 'unit');
+      const unit = drawRewards(state).find((option) => option.kind === 'unit');
       expect(unit?.kind === 'unit' ? unit.unitId : 'sylvain').toBe('sylvain');
     }
   });

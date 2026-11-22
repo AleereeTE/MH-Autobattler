@@ -1,6 +1,6 @@
 import { findUnit } from '../../data/units/index.ts';
 import { objectFor, slotName } from '../../rules/equipment.ts';
-import { sellValue } from '../../run/index.ts';
+import { isAtForge, sellValue } from '../../run/index.ts';
 import { button, el } from '../dom.ts';
 import { onRightClick } from '../shared/popover.ts';
 import { looseMaterials, slotPreview } from '../shared/previews.ts';
@@ -16,11 +16,13 @@ export function renderSelection(controller: RunController): HTMLElement {
 
   if (own !== null && definition !== undefined) {
     const where = own.location.area === 'board' ? 'Sur le plateau' : 'En réserve';
+    // ✅ À la forge, retirer un objet est gratuit.
+    const objectRemoval = isAtForge(controller.state) ? 'Retirer (gratuit à la forge)' : 'Retirer (1 retire-objet)';
     const slots = own.equipment.map((slot, index) =>
       onRightClick(
         el('li', { className: 'slot', attrs: { title: 'Clic droit : statistiques et recettes' } }, [
           el('span', {}, [el('strong', { text: slotName(slot) }), slot.kind === 'object' ? ` — ${objectFor(slot.materials).description}` : ' (matériau)']),
-          button(slot.kind === 'object' ? 'Retirer (1 retire-objet)' : 'Retirer', () => controller.unequip(index), 'button small'),
+          button(slot.kind === 'object' ? objectRemoval : 'Retirer', () => controller.unequip(index), 'button small'),
         ]),
         () => slotPreview(slot, looseMaterials(controller.state.inventory)),
       ),

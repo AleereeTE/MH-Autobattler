@@ -1,5 +1,6 @@
 import { findUnit } from '../data/units/index.ts';
 import { SLOT_CAPACITY, addMaterial, addObject, removeSlot } from '../rules/equipment.ts';
+import { isAtForge } from './forge.ts';
 import { findRunUnit } from './roster.ts';
 import { OK, fail, type ActionResult, type RunState } from './state.ts';
 
@@ -27,7 +28,8 @@ export function unequip(state: RunState, uid: number, slotIndex: number): Action
   const unit = findRunUnit(state, uid);
   const slot = unit?.equipment[slotIndex];
   if (unit === undefined || slot === undefined) return fail('Choix invalide.');
-  if (slot.kind === 'object') {
+  // ✅ À la forge, les objets se retirent gratuitement.
+  if (slot.kind === 'object' && !isAtForge(state)) {
     if (state.itemRemovers < 1) return fail('Il faut un retire-objet pour déplacer un objet.');
     state.itemRemovers -= 1;
   }

@@ -8,11 +8,10 @@ import { OK, fail, type ActionResult, type RewardOption, type RunState } from '.
 
 /**
  * Récompenses « 1 parmi 3 » simplifiées (game-design §11) : un matériau, des zennys ou une unité ★1.
- * ⚠️ Après un boss, les quantités sont doublées.
+ * Après un boss ou une quête urgente, les quantités sont multipliées (`multiplier`, ×2).
  */
 
-export function drawRewards(state: RunState, boss: boolean): RewardOption[] {
-  const multiplier = boss ? REWARDS.bossMultiplier : 1;
+export function drawRewards(state: RunState, multiplier = 1): RewardOption[] {
   const materials: MaterialId[] = [];
   for (let i = 0; i < REWARDS.materials * multiplier; i++) {
     const material = pickOne(state.rng, MATERIAL_IDS);

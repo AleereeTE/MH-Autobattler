@@ -95,3 +95,38 @@ export const REWARDS = {
   /** ✅ Retire-objets garantis après chaque boss. */
   bossItemRemovers: 1,
 } as const;
+
+/**
+ * Carte d'un stage (game-design §2.1) : 9 étapes de 2 à 3 cases reliées par des chemins, puis le boss.
+ * ✅ Forme et types de cases · ⚠️ nombre de cases spéciales par stage, [minimum, maximum].
+ */
+export const MAP = {
+  /** ✅ 9 étapes avant le boss (l'étape 10 est le boss). */
+  stepsBeforeBoss: 9,
+  /** ✅ 2 à 3 cases par étape. */
+  minNodesPerStep: 2,
+  maxNodesPerStep: 3,
+  forges: [1, 2] as readonly [number, number],
+  merchants: [1, 2] as readonly [number, number],
+  urgentQuests: [2, 3] as readonly [number, number],
+  /** ⚠️ Première étape où une quête urgente peut apparaître. */
+  urgentFromStep: 3,
+} as const;
+
+/** Quête urgente : ⚠️ escouade générée avec le budget de 3 chasses plus loin ; ✅ récompenses doublées. */
+export const URGENT_QUEST = {
+  extraHunts: 3,
+  rewardMultiplier: 2,
+} as const;
+
+/** ✅ Forge : objets déplaçables sans retire-objet pendant l'étape, et jusqu'à 2 matériaux reforgés. */
+export const FORGE = {
+  reforges: 2,
+} as const;
+
+/** ⚠️ Marchand : 4 matériaux tirés au hasard à 3 zennys pièce, un retire-objet à 4 zennys. */
+export const MERCHANT = {
+  materialsOffered: 4,
+  materialPrice: 3,
+  itemRemoverPrice: 4,
+} as const;

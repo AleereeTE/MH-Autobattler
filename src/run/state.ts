@@ -3,6 +3,8 @@ import type { Hex } from '../core/hex.ts';
 import type { Rng } from '../core/rng.ts';
 import type { StarRank } from '../data/definitions.ts';
 import type { Equipment, EquipmentSlot, MaterialId } from '../data/items.ts';
+import type { StageMap } from './map.ts';
+import type { MerchantStock } from './merchant.ts';
 
 /**
  * État d'une run : tout ce que le joueur possède et où il en est.
@@ -34,13 +36,18 @@ export interface LastCombat {
   readonly won: boolean;
 }
 
-export type RunPhase = 'prep' | 'reward' | 'over';
+/** `map` : choisir la prochaine case de la carte · `prep` : préparation sur la case choisie · `reward` · `over`. */
+export type RunPhase = 'map' | 'prep' | 'reward' | 'over';
 
 export interface RunState {
   readonly seed: number;
   readonly rng: Rng;
-  /** Chasse en cours, de 1 à 30. */
+  /** Étape en cours (ou à choisir sur la carte), de 1 à 30. */
   hunt: number;
+  /** Carte du stage en cours. */
+  map: StageMap;
+  /** Cases choisies depuis le début du stage (leur position dans chaque étape) : la dernière est la case actuelle. */
+  path: number[];
   defeats: number;
   zennys: number;
   /** Niveau de boutique : c'est aussi le nombre maximum d'unités sur le plateau. */
@@ -54,10 +61,12 @@ export interface RunState {
   inventory: EquipmentSlot[];
   itemRemovers: number;
   phase: RunPhase;
-  /** Escouade de la chasse en cours, visible pendant la préparation. */
+  /** Escouade de la case en cours, visible pendant la préparation (vide sur une case sans combat). */
   enemy: Placement[];
-  /** Chasse pour laquelle `enemy` a été générée (un boss perdu se réaffronte à l'identique). */
-  enemyHunt: number;
+  /** Marchandises du marchand, quand on est sur sa case. */
+  merchant: MerchantStock | null;
+  /** Matériaux qu'il reste à reforger, quand on est sur une forge. */
+  reforgesLeft: number;
   /** Graine du prochain combat. */
   combatSeed: number;
   /** Bonus de victoire à verser au début du prochain tour. */

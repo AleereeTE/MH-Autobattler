@@ -22,7 +22,9 @@ import { RunController } from './controller.ts';
 import { renderHud } from './hud-view.ts';
 import { renderOutcome } from './outcome-view.ts';
 import { renderShop } from './shop-view.ts';
+import { renderMap } from './map-view.ts';
 import { renderInventory, renderSelection } from './side-panels.ts';
+import { renderStop } from './stop-views.ts';
 
 const SPEEDS = [1, 2, 4];
 
@@ -84,6 +86,8 @@ export function mountRun(root: HTMLElement): () => void {
   const inventorySlot = el('div');
   const traitsSlot = el('div');
   const planSlot = el('div');
+  const mapSlot = el('div');
+  const stopSlot = el('div');
 
   /** Plateau pendant la préparation : tes unités posées et l'escouade de la chasse. */
   function prepScene(): BoardScene {
@@ -161,6 +165,9 @@ export function mountRun(root: HTMLElement): () => void {
     shopSlot.replaceChildren(renderShop(run, portraits, plan));
     const outcome = renderOutcome(run, run.watching === null || player.isFinished, portraits, startNewRun);
     outcomeSlot.replaceChildren(...(outcome === null ? [] : [outcome]));
+    mapSlot.replaceChildren(...(run.state.phase === 'over' ? [] : [renderMap(run, portraits)]));
+    const stop = renderStop(run);
+    stopSlot.replaceChildren(...(stop === null ? [] : [stop]));
     selectionSlot.replaceChildren(renderSelection(run));
     inventorySlot.replaceChildren(renderInventory(run));
     const ownedIds = new Set(run.state.units.map((unit) => unit.unitId));
@@ -195,14 +202,14 @@ export function mountRun(root: HTMLElement): () => void {
     el('header', { className: 'page-header' }, [
       el('p', {
         className: 'muted',
-        text: '30 chasses en 3 stages, un boss à la fin de chacun. 3 défaites et la run s’arrête. Clic droit sur une unité (même en combat) ou un matériau pour son aperçu. Les valeurs sont provisoires.',
+        text: '30 étapes en 3 stages : choisis ta route sur la carte (chasses, quêtes urgentes, forges, marchands), un boss à la fin de chaque stage. 3 défaites et la run s’arrête. Clic droit sur une unité (même en combat), un matériau ou une case de la carte pour son aperçu. Les valeurs sont provisoires.',
       }),
     ]),
     hudSlot,
     noticeSlot,
     el('div', { className: 'run' }, [
-      el('section', { className: 'board-column' }, [board.element, benchSlot, shopSlot, results.element]),
-      el('aside', { className: 'details-column' }, [outcomeSlot, selectionSlot, inventorySlot, planSlot, traitsSlot]),
+      el('section', { className: 'board-column' }, [mapSlot, board.element, benchSlot, shopSlot, results.element]),
+      el('aside', { className: 'details-column' }, [outcomeSlot, stopSlot, selectionSlot, inventorySlot, planSlot, traitsSlot]),
     ]),
   );
   results.show(lastFight, null, null);

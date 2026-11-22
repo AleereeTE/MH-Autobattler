@@ -27,9 +27,26 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 | Un stage | 9 chasses classiques, puis 1 boss |
 | Boss des stages 1 et 2 | Tiré au hasard parmi plusieurs grands monstres |
 | Boss du stage 3 | Tiré au hasard parmi plusieurs Dragons anciens ; avec un peu de chance (ou de malchance), un Dragon noir |
-| Carte | À chaque étape, le joueur choisit entre 2 ou 3 chasses |
+| Carte | Une **carte visible par stage**, façon Slay the Spire : 9 étapes de 2 à 3 cases reliées par des chemins, puis le boss. On choisit sa route case par case (section 2.1) |
 | Durée visée | 45 à 60 minutes |
 | Défaite de la run | 3 combats perdus (chasses classiques et boss confondus) |
+| Mode infini | **Principe validé** : après les 30 étapes, on peut continuer dans un mode infini où les statistiques des ennemis augmentent à chaque combat, pour voir jusqu'où on tient. Détails à définir (section 14) |
+
+### 2.1 Carte d'un stage
+
+| Élément | Décision |
+|---|---|
+| Forme | Tout le stage est affiché : 9 étapes de **2 à 3 cases**, reliées par des chemins, puis le boss (étape 10). On avance d'une étape à la fois en suivant un chemin, ce qui permet de planifier sa route (ex. passer par une forge juste avant le boss) |
+| Durée | La run garde **30 étapes**. Une case sans combat remplace une chasse : moins de combats, donc moins de risques de défaite, mais ni bonus de victoire ni récompense |
+| Revenus | ⚠️ Les revenus du tour (base + intérêts) sont versés à chaque étape, combat ou non |
+| Informations visibles | Pour une case de combat : le **monstre cible** (le plus fort de l'escouade) et le **type de récompense**. L'escouade complète se découvre en entrant |
+| Chasse | Une chasse normale (escouade générée selon le budget, section 9) |
+| Quête urgente | Une chasse plus difficile : ⚠️ escouade générée avec le budget de 3 chasses plus loin (sans dépasser les limites de coût et de rang du stage). En cas de victoire, **récompenses doublées** comme après un boss. ⚠️ Une défaite compte comme une défaite normale |
+| Forge (sans combat) | Pendant l'étape, **les objets se retirent des unités sans retire-objet** (on refait ses builds), et on peut **reforger jusqu'à 2 matériaux** de l'inventaire en matériaux au choix |
+| Marchand (sans combat) | ⚠️ 4 matériaux tirés au hasard à 3 zennys pièce, et un retire-objet à 4 zennys |
+| Boutique | Disponible à chaque étape, y compris à la forge et chez le marchand |
+| Fréquence | ⚠️ Par stage, environ 1 à 2 forges, 1 à 2 marchands et 2 à 3 quêtes urgentes. L'étape 1 n'a que des chasses ; l'étape 9 (avant le boss) propose toujours une forge ou un marchand ; chaque étape garde au moins une chasse normale |
+| Plus tard | Cases « Événement » (une petite situation avec un choix), talents de chasseur, récompenses variées |
 
 ### Déroulement d'un tour
 
@@ -50,7 +67,7 @@ Les zennys de base et les intérêts sont gagnés à chaque tour, **même en cas
 
 | Élément | Décision |
 |---|---|
-| Enchaînement | **Suite imposée** : les 30 chasses s'enchaînent sans choix. La carte (2 ou 3 chasses au choix) viendra plus tard |
+| Enchaînement | Carte par stage (section 2.1). Avant elle, les 30 chasses s'enchaînaient sans choix |
 | Ennemis | Escouades générées selon un budget (section 9) |
 | Boss (chasses 10, 20, 30) | **Escouade renforcée** en attendant la « version boss » (section 9) |
 | Récompenses | **1 parmi 3 simplifié** (section 11) |
@@ -388,7 +405,8 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 4. La capture du boss fait-elle toujours partie des choix de récompense après un boss ?
 5. Formule des ratios de compétence : valeur de base + ratio × statistique, ou pourcentage d'amplification comme la puissance magique de TFT ?
 6. Contenu de la version boss d'un monstre (PV, plusieurs compétences, état enragé ?).
-7. Informations visibles sur chaque chasse proposée par la carte (ennemis, type de récompense ?).
+7. ~~Informations visibles sur chaque chasse proposée par la carte.~~ Tranché : monstre cible et type de récompense.
+12. Mode infini : de combien les statistiques des ennemis augmentent-elles à chaque combat ? Y a-t-il encore une carte, des récompenses, une limite de défaites ? Comment afficher le record ?
 
 
 ### Confort de jeu
@@ -419,3 +437,4 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-21** : interface — aperçu d'un trait au clic droit (sur une synergie ou un insigne d'unité) : tous les paliers avec leur couleur et leur effet, et les unités qui portent le trait.
 - **2026-11-21** : équilibrage des boucliers — une unité ne gagne plus d'énergie tant que son bouclier tient (détruit ou expiré), toutes sources comprises. Les tanks à bouclier n'enchaînent plus leur compétence (Barroth : de 10 à 18 boucliers par combat à 2 ou 3).
 - **2026-11-21** : interface — barre d'énergie sous la barre de vie des jetons en combat (grisée quand l'énergie est bloquée), et énergie actuelle / maximale avec sa barre dans l'aperçu d'une unité en combat.
+- **2026-11-22** : carte du mode run — carte visible par stage (9 étapes de 2 à 3 cases puis le boss), cases Chasse, Quête urgente (budget de 3 chasses plus loin, récompenses doublées), Forge (objets déplaçables sans retire-objet, 2 matériaux reforgés) et Marchand (4 matériaux à 3 zennys, retire-objet à 4) ; une case sans combat remplace une chasse (la run garde 30 étapes) ; on voit le monstre cible et le type de récompense. Principe d'un mode infini après les 30 étapes (détails à définir).

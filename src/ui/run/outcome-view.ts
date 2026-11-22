@@ -57,7 +57,7 @@ export function renderOutcome(
   const { state, watching } = controller;
   if (watching !== null && !replayFinished) {
     return el('section', { className: 'panel outcome-panel' }, [
-      el('h2', { text: watching.boss ? `Boss — chasse ${watching.hunt}` : `Chasse ${watching.hunt}` }),
+      el('h2', { text: `${watching.boss ? 'Boss' : watching.kind === 'urgent' ? 'Quête urgente' : 'Chasse'} — étape ${watching.hunt}` }),
       el('p', { className: 'muted', text: 'Combat en cours… Le résultat s’affichera à la fin (ou clique sur « Passer »).' }),
     ]);
   }
@@ -68,8 +68,8 @@ export function renderOutcome(
       el('h2', { text: won ? 'Run gagnée !' : 'Run perdue' }),
       el('p', {
         text: won
-          ? `Les ${TOTAL_HUNTS} chasses sont terminées, avec ${state.defeats} défaite${state.defeats > 1 ? 's' : ''}.`
-          : `${RUN_STRUCTURE.maxDefeats} défaites : la run s’arrête à la chasse ${state.hunt} / ${TOTAL_HUNTS}.`,
+          ? `Les ${TOTAL_HUNTS} étapes sont terminées, avec ${state.defeats} défaite${state.defeats > 1 ? 's' : ''}.`
+          : `${RUN_STRUCTURE.maxDefeats} défaites : la run s’arrête à l’étape ${state.hunt} / ${TOTAL_HUNTS}.`,
       }),
       button('Nouvelle run', onNewRun, 'button primary'),
     ]);
@@ -79,8 +79,12 @@ export function renderOutcome(
 
   if (state.phase === 'reward' && state.rewards !== null) {
     return el('section', { className: 'panel outcome-panel won' }, [
-      el('h2', { text: watching.boss ? 'Boss vaincu !' : 'Victoire !' }),
-      watching.boss ? el('p', { className: 'small', text: '+1 retire-objet, et des récompenses doublées.' }) : null,
+      el('h2', { text: watching.boss ? 'Boss vaincu !' : watching.kind === 'urgent' ? 'Quête urgente réussie !' : 'Victoire !' }),
+      watching.boss
+        ? el('p', { className: 'small', text: '+1 retire-objet, et des récompenses doublées.' })
+        : watching.kind === 'urgent'
+          ? el('p', { className: 'small', text: 'Récompenses doublées.' })
+          : null,
       el('p', { className: 'muted small', text: 'Choisis une récompense :' }),
       el(
         'div',
@@ -93,7 +97,7 @@ export function renderOutcome(
   return el('section', { className: 'panel outcome-panel lost' }, [
     el('h2', { text: `Défaite (${state.defeats} / ${RUN_STRUCTURE.maxDefeats})` }),
     el('p', {
-      text: watching.boss ? 'Pas de récompense. Tu réaffronteras le boss au prochain tour.' : 'Pas de récompense. Tu passes à la chasse suivante.',
+      text: watching.boss ? 'Pas de récompense. Tu réaffronteras le boss au prochain tour.' : 'Pas de récompense. Retour à la carte pour l’étape suivante.',
     }),
     button('Continuer', () => controller.stopWatching(), 'button primary'),
   ]);

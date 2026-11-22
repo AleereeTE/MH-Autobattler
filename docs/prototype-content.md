@@ -198,12 +198,25 @@ Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. �
 
 ### Récompenses (1 parmi 3)
 
-| Choix | Chasse classique | Boss |
+| Choix | Chasse classique | Boss ou quête urgente |
 |---|---|---|
 | Matériau au hasard | 1 | 2 |
 | Zennys | 4 | 8 |
 | Unité ★1 tirée comme en boutique | 1 exemplaire | 2 exemplaires de la même unité |
-| Retire-objet | — | +1 garanti, en plus du choix |
+| Retire-objet | — | Boss seulement : +1 garanti, en plus du choix |
+
+### Carte (game-design §2.1)
+
+| Élément | Valeur |
+|---|---|
+| Forme | 9 étapes de 2 à 3 cases (tirées au hasard), puis le boss ; chemins sans croisement (✅) |
+| Embranchements | ⚠️ 80 % de chances d'ajouter un chemin vers une case voisine quand il ne croise rien (environ 1,6 chemin par case en moyenne ; sans croisement, on ne peut guère faire plus) |
+| Cases spéciales par stage | ⚠️ Forges : 1 à 2 · marchands : 1 à 2 · quêtes urgentes : 2 à 3, à partir de l'étape 3 |
+| Règles de placement | Étape 1 : que des chasses · étape 9 : une forge ou un marchand · chaque étape garde au moins une chasse normale |
+| Quête urgente | ⚠️ Budget et nombre de monstres de 3 chasses plus loin, limites de coût et de rang du stage en cours ; récompenses ×2 |
+| Forge | Objets retirés gratuitement pendant l'étape · 2 matériaux de l'inventaire reforgés au choix |
+| Marchand | ⚠️ 4 matériaux tirés au hasard à 3 zennys · 1 retire-objet à 4 zennys |
+| Monstre cible affiché | Le plus fort de l'escouade : coût × exemplaires (★1 = 1, ★2 = 3, ★3 = 9), puis le coût |
 
 ---
 
