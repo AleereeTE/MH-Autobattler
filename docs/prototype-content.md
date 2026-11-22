@@ -21,40 +21,40 @@ Les noms des chasseurs sont provisoires. Les valeurs « a/b/c » des compétence
 
 | Unité | Type | Rôle | Élément | Traits secondaires | Coût | Portée | Compétence |
 |---|---|---|---|---|---|---|---|
-| Barroth | Monstre | Tank | — | Bastion, Wyverne brute | 1 | 1 | **Carapace de boue** : bouclier de 150/225/340 + 15 % des PV max pendant 4 s |
-| Khezu | Monstre | Tank | Foudre | Wyverne volante, Bastion | 1 | 1 | **Décharge** : 30/45/70 + 75 % puiss. élém. aux ennemis adjacents |
-| Garrick (Lance) | Chasseur | Tank | Glace | Bastion | 2 | 1 | **Garde** : bouclier de 200/300/450 + 20 % des PV max pendant 4 s |
-| Helga (Marteau) | Chasseur | Bruiser | — | Guilde | 1 | 1 | **Big Bang** : 80/120/180 + 160 % attaque brute (physique) |
-| Anjanath | Monstre | Bruiser | Feu | Berserker, Wyverne brute | 2 | 1 | **Souffle ardent** : 70/105/160 + 180 % puiss. élém. sur la cible et ses voisins |
-| Tobi-Kadachi | Monstre | Bruiser | Foudre | Berserker | 2 | 1 | **Charge électrique** : bondit sur l'ennemi le plus faible, 60/90/135 + 180 % puiss. élém. |
-| Akira (Grande épée) | Chasseur | DPS | — | Guilde, Berserker | 3 | 1 | **Coup chargé** : incantation de 1,5 s, puis 150/225/340 + 300 % attaque brute |
+| Barroth | Monstre | Tank | — | Bastion, Wyverne brute | 1 | 1 | **Carapace de boue** : bouclier de 150/225/340 + 15/19/23 % des PV max pendant 4 s |
+| Khezu | Monstre | Tank | Foudre | Wyverne volante, Bastion | 1 | 1 | **Décharge** : 30/45/70 + 75/94/113 % puiss. élém. aux ennemis adjacents |
+| Garrick (Lance) | Chasseur | Tank | Glace | Bastion | 2 | 1 | **Garde** : bouclier de 200/300/450 + 20/25/30 % des PV max pendant 4 s |
+| Helga (Marteau) | Chasseur | Bruiser | — | Guilde | 1 | 1 | **Big Bang** : 80/120/180 + 160/200/240 % attaque brute (physique) |
+| Anjanath | Monstre | Bruiser | Feu | Berserker, Wyverne brute | 2 | 1 | **Souffle ardent** : 70/105/160 + 180/225/270 % puiss. élém. sur la cible et ses voisins |
+| Tobi-Kadachi | Monstre | Bruiser | Foudre | Berserker | 2 | 1 | **Charge électrique** : bondit sur l'ennemi le plus faible, 60/90/135 + 180/225/270 % puiss. élém. |
+| Akira (Grande épée) | Chasseur | DPS | — | Guilde, Berserker | 3 | 1 | **Coup chargé** : incantation de 1,5 s, puis 150/225/340 + 300/375/450 % attaque brute |
 | Lysa (Doubles lames) | Chasseur | DPS | Foudre | Guilde | 1 | 1 | **Mode démon** : +60 % de vitesse d'attaque pendant 4 s |
-| Sylvain (Arc) | Chasseur | DPS | Glace | Catalyseur | 1 | 4 | **Pluie de flèches** : 50/75/115 + 160 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
-| Rathalos | Monstre | DPS | Feu | Wyverne volante, Catalyseur | 3 | 3 | **Boule de feu** : 120/180/270 + 250 % puiss. élém. sur la cible et ses voisins |
-| Odette (Corne de chasse) | Chasseur | Support | Feu | Guilde | 2 | 2 | **Mélodie de soin** : soigne de 80/120/180 + 200 % puiss. élém. les alliés à 2 cases ou moins |
-| Legiana | Monstre | Support | Glace | Wyverne volante, Catalyseur | 3 | 3 | **Vent glacial** : 35/55/80 + 80 % puiss. élém. sur la cible et ses voisins, −30 % de vitesse d'attaque pendant 3 s |
-| Zinogre | Monstre | Bruiser | Foudre | Berserker | 4 | 1 | **Supercharge** : bondit sur la cible, 100/150/225 + 220 % puiss. élém. sur elle et ses voisins |
-| Deviljho | Monstre | Bruiser | Dragon | Berserker, Wyverne brute | 4 | 1 | **Souffle draconique** : 110/165/250 + 200 % puiss. élém. sur la cible et ses voisins |
-| Mizutsune | Monstre | Support | Eau | Catalyseur, Léviathan | 4 | 3 | **Danse des bulles** : soigne de 120/180/270 + 220 % puiss. élém. les alliés à 2 cases ou moins |
-| Brann (Lancecanon) | Chasseur | Tank | Dragon | Guilde, Bastion | 4 | 1 | **Canon de wyverne** : 50/75/115 + 75 % puiss. élém. aux ennemis adjacents, puis bouclier de 150/225/340 + 15 % des PV max pendant 4 s |
-| Ondine (Morpho-hache) | Chasseur | Bruiser | Eau | Guilde | 4 | 1 | **Décharge élémentaire** : incantation de 1 s, puis 150/225/340 + 250 % puiss. élém. sur la cible |
-| Teostra | Monstre | Bruiser | Feu | Dragon ancien | 5 | 1 | **Supernova** : incantation de 1,5 s, puis 250/375/565 + 350 % puiss. élém. aux ennemis à 2 cases ou moins |
-| Namielle | Monstre | Support | Eau | Dragon ancien, Catalyseur | 5 | 3 | **Marée luminescente** : 75/115/170 + 125 % puiss. élém. sur la cible et les ennemis à 2 cases d'elle, et soigne les alliés à 2 cases de 100/150/225 + 150 % puiss. élém. |
-| Safi'jiiva | Monstre | DPS | Dragon | Dragon ancien | 5 | 3 | **Rayon draconique** : 220/330/495 + 300 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
-| Fatalis | Monstre | Bruiser | Dragon | Dragon noir | 6 | 1 | **Souffle du Fatalis** : incantation de 1,5 s, puis 300/450/675 + 400 % puiss. élém. sur la cible et les ennemis à 2 cases d'elle |
-| Alatreon | Monstre | DPS | Glace | Dragon noir | 6 | 3 | **Jugement d'Escaton** : incantation de 2 s, puis 220/330/495 + 280 % puiss. élém. à tous les ennemis, et −30 % de vitesse d'attaque pendant 3 s |
-| Dire Miralis | Monstre | Tank | Feu | Dragon noir | 6 | 1 | **Éruption** : 200/300/450 + 250 % puiss. élém. aux ennemis à 2 cases ou moins, puis bouclier de 400/600/900 + 20 % des PV max pendant 5 s |
-| Royal Ludroth | Monstre | Support | Eau | Catalyseur, Léviathan | 1 | 2 | **Crinière spongieuse** : soigne de 50/75/115 + 150 % puiss. élém. les alliés à 2 cases ou moins |
-| Kulu-Ya-Ku | Monstre | Bruiser | — | Berserker | 1 | 1 | **Coup de rocher** : 70/105/160 + 150 % attaque brute (physique) sur la cible |
-| Mira (Épée et bouclier) | Chasseur | Bruiser | Dragon | Guilde, Bastion | 1 | 1 | **Frappe tournoyante** : 50/75/115 + 150 % puiss. élém. sur la cible et ses voisins |
-| Jyuratodus | Monstre | Tank | Eau | Bastion | 2 | 1 | **Bain de boue** : 30/45/70 + 70 % puiss. élém. aux ennemis adjacents, −25 % de vitesse d'attaque pendant 2 s |
-| Barioth | Monstre | Bruiser | Glace | Wyverne volante | 2 | 1 | **Charge glaciale** : bondit sur l'ennemi le plus faible, 60/90/135 + 170 % puiss. élém., −20 % de vitesse d'attaque pendant 2 s |
-| Kaede (Épée longue) | Chasseur | DPS | Eau | Guilde, Berserker | 2 | 1 | **Coup spirituel** : 70/105/160 + 200 % puiss. élém. sur la cible |
-| Nargacuga | Monstre | DPS | — | Wyverne volante | 3 | 1 | **Queue tranchante** : bondit sur l'ennemi le plus faible, 110/165/250 + 220 % attaque brute (physique) |
-| Lagiacrus | Monstre | Tank | Foudre | Bastion, Léviathan | 3 | 1 | **Décharge abyssale** : 45/70/100 + 80 % puiss. élém. aux ennemis à 2 cases ou moins |
-| Dorian (Fusarbalète lourd) | Chasseur | DPS | Dragon | Guilde, Catalyseur | 3 | 4 | **Tir draconique** : incantation de 1 s, puis 130/195/295 + 250 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
-| Tigrex | Monstre | Bruiser | — | Wyverne volante, Berserker | 4 | 1 | **Rugissement** : 110/165/250 + 230 % attaque brute (physique) aux ennemis adjacents |
-| Kirin | Monstre | DPS | Foudre | Dragon ancien | 5 | 3 | **Foudre divine** : 200/300/450 + 280 % puiss. élém. sur l'ennemi le plus faible et ses voisins |
+| Sylvain (Arc) | Chasseur | DPS | Glace | Catalyseur | 1 | 4 | **Pluie de flèches** : 50/75/115 + 160/200/240 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
+| Rathalos | Monstre | DPS | Feu | Wyverne volante, Catalyseur | 3 | 3 | **Boule de feu** : 120/180/270 + 250/313/375 % puiss. élém. sur la cible et ses voisins |
+| Odette (Corne de chasse) | Chasseur | Support | Feu | Guilde | 2 | 2 | **Mélodie de soin** : soigne de 80/120/180 + 200/250/300 % puiss. élém. les alliés à 2 cases ou moins |
+| Legiana | Monstre | Support | Glace | Wyverne volante, Catalyseur | 3 | 3 | **Vent glacial** : 35/55/80 + 80/100/120 % puiss. élém. sur la cible et ses voisins, −30 % de vitesse d'attaque pendant 3 s |
+| Zinogre | Monstre | Bruiser | Foudre | Berserker | 4 | 1 | **Supercharge** : bondit sur la cible, 100/150/225 + 220/275/330 % puiss. élém. sur elle et ses voisins |
+| Deviljho | Monstre | Bruiser | Dragon | Berserker, Wyverne brute | 4 | 1 | **Souffle draconique** : 110/165/250 + 200/250/300 % puiss. élém. sur la cible et ses voisins |
+| Mizutsune | Monstre | Support | Eau | Catalyseur, Léviathan | 4 | 3 | **Danse des bulles** : soigne de 120/180/270 + 220/275/330 % puiss. élém. les alliés à 2 cases ou moins |
+| Brann (Lancecanon) | Chasseur | Tank | Dragon | Guilde, Bastion | 4 | 1 | **Canon de wyverne** : 50/75/115 + 75/94/113 % puiss. élém. aux ennemis adjacents, puis bouclier de 150/225/340 + 15/19/23 % des PV max pendant 4 s |
+| Ondine (Morpho-hache) | Chasseur | Bruiser | Eau | Guilde | 4 | 1 | **Décharge élémentaire** : incantation de 1 s, puis 150/225/340 + 250/313/375 % puiss. élém. sur la cible |
+| Teostra | Monstre | Bruiser | Feu | Dragon ancien | 5 | 1 | **Supernova** : incantation de 1,5 s, puis 250/375/565 + 350/438/525 % puiss. élém. aux ennemis à 2 cases ou moins |
+| Namielle | Monstre | Support | Eau | Dragon ancien, Catalyseur | 5 | 3 | **Marée luminescente** : 75/115/170 + 125/156/188 % puiss. élém. sur la cible et les ennemis à 2 cases d'elle, et soigne les alliés à 2 cases de 100/150/225 + 150/188/225 % puiss. élém. |
+| Safi'jiiva | Monstre | DPS | Dragon | Dragon ancien | 5 | 3 | **Rayon draconique** : 220/330/495 + 300/375/450 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
+| Fatalis | Monstre | Bruiser | Dragon | Dragon noir | 6 | 1 | **Souffle du Fatalis** : incantation de 1,5 s, puis 300/450/675 + 400/500/600 % puiss. élém. sur la cible et les ennemis à 2 cases d'elle |
+| Alatreon | Monstre | DPS | Glace | Dragon noir | 6 | 3 | **Jugement d'Escaton** : incantation de 2 s, puis 220/330/495 + 280/350/420 % puiss. élém. à tous les ennemis, et −30 % de vitesse d'attaque pendant 3 s |
+| Dire Miralis | Monstre | Tank | Feu | Dragon noir | 6 | 1 | **Éruption** : 200/300/450 + 250/313/375 % puiss. élém. aux ennemis à 2 cases ou moins, puis bouclier de 400/600/900 + 20/25/30 % des PV max pendant 5 s |
+| Royal Ludroth | Monstre | Support | Eau | Catalyseur, Léviathan | 1 | 2 | **Crinière spongieuse** : soigne de 50/75/115 + 150/188/225 % puiss. élém. les alliés à 2 cases ou moins |
+| Kulu-Ya-Ku | Monstre | Bruiser | — | Berserker | 1 | 1 | **Coup de rocher** : 70/105/160 + 150/188/225 % attaque brute (physique) sur la cible |
+| Mira (Épée et bouclier) | Chasseur | Bruiser | Dragon | Guilde, Bastion | 1 | 1 | **Frappe tournoyante** : 50/75/115 + 150/188/225 % puiss. élém. sur la cible et ses voisins |
+| Jyuratodus | Monstre | Tank | Eau | Bastion | 2 | 1 | **Bain de boue** : 30/45/70 + 70/88/105 % puiss. élém. aux ennemis adjacents, −25 % de vitesse d'attaque pendant 2 s |
+| Barioth | Monstre | Bruiser | Glace | Wyverne volante | 2 | 1 | **Charge glaciale** : bondit sur l'ennemi le plus faible, 60/90/135 + 170/213/255 % puiss. élém., −20 % de vitesse d'attaque pendant 2 s |
+| Kaede (Épée longue) | Chasseur | DPS | Eau | Guilde, Berserker | 2 | 1 | **Coup spirituel** : 70/105/160 + 200/250/300 % puiss. élém. sur la cible |
+| Nargacuga | Monstre | DPS | — | Wyverne volante | 3 | 1 | **Queue tranchante** : bondit sur l'ennemi le plus faible, 110/165/250 + 220/275/330 % attaque brute (physique) |
+| Lagiacrus | Monstre | Tank | Foudre | Bastion, Léviathan | 3 | 1 | **Décharge abyssale** : 45/70/100 + 80/100/120 % puiss. élém. aux ennemis à 2 cases ou moins |
+| Dorian (Fusarbalète lourd) | Chasseur | DPS | Dragon | Guilde, Catalyseur | 3 | 4 | **Tir draconique** : incantation de 1 s, puis 130/195/295 + 250/313/375 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
+| Tigrex | Monstre | Bruiser | — | Wyverne volante, Berserker | 4 | 1 | **Rugissement** : 110/165/250 + 230/288/345 % attaque brute (physique) aux ennemis adjacents |
+| Kirin | Monstre | DPS | Foudre | Dragon ancien | 5 | 3 | **Foudre divine** : 200/300/450 + 280/350/420 % puiss. élém. sur l'ennemi le plus faible et ses voisins |
 
 ### Rangs ★
 

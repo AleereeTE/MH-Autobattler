@@ -159,8 +159,8 @@ La vitesse de déplacement est identique pour toutes les unités.
 | Compétence | Valeur de base ★1 | Valeur de base ★2 | Valeur de base ★3 |
 
 - **Statistiques** : seuls les PV et l'attaque brute augmentent. La puissance élémentaire, l'armure, la résistance, la vitesse d'attaque, la portée et l'énergie ne changent pas.
-- **Compétences** : chaque fiche définit **une valeur de base par rang** (exemple : 60 / 90 / 135). Les ratios (pourcentage d'attaque brute ou de puissance élémentaire) restent identiques. Ce choix permet de régler chaque unité finement ; c'est aussi par ce biais que les unités élémentaires progressent, puisque leur puissance élémentaire ne monte pas.
-- **Durées et pourcentages** des compétences (durée d'un bouclier, bonus de vitesse d'attaque, ralentissement…) : **identiques à tous les rangs** pour l'instant.
+- **Compétences** : chaque fiche définit **une valeur de base par rang** (exemple : 60 / 90 / 135). **Les pourcentages de statistique** (attaque brute, puissance élémentaire, PV) **augmentent aussi avec le rang : ×1,25 au ★2, ×1,5 au ★3** (exemple : 250 / 313 / 375 % de la puissance élémentaire). Tous les pourcentages sont concernés, y compris ceux d'attaque brute et de PV, qui profitent en plus de la hausse de la statistique.
+- **Durées et autres pourcentages** des compétences (durée d'un bouclier, bonus de vitesse d'attaque, ralentissement…) : **identiques à tous les rangs** pour l'instant.
 - Valeurs de base du prototype : voir [prototype-content.md](prototype-content.md).
 
 ### 3.5 Énergie et compétences
@@ -438,3 +438,4 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-21** : équilibrage des boucliers — une unité ne gagne plus d'énergie tant que son bouclier tient (détruit ou expiré), toutes sources comprises. Les tanks à bouclier n'enchaînent plus leur compétence (Barroth : de 10 à 18 boucliers par combat à 2 ou 3).
 - **2026-11-21** : interface — barre d'énergie sous la barre de vie des jetons en combat (grisée quand l'énergie est bloquée), et énergie actuelle / maximale avec sa barre dans l'aperçu d'une unité en combat.
 - **2026-11-22** : carte du mode run — carte visible par stage (9 étapes de 2 à 3 cases puis le boss), cases Chasse, Quête urgente (budget de 3 chasses plus loin, récompenses doublées), Forge (objets déplaçables sans retire-objet, 2 matériaux reforgés) et Marchand (4 matériaux à 3 zennys, retire-objet à 4) ; une case sans combat remplace une chasse (la run garde 30 étapes) ; on voit le monstre cible et le type de récompense. Principe d'un mode infini après les 30 étapes (détails à définir).
+- **2026-11-22** : rangs ★ — les pourcentages de statistique des compétences augmentent avec le rang (×1,25 au ★2, ×1,5 au ★3), pour tous les pourcentages. Mesure sur des équipes de 6 au hasard : les combats ★2 et ★3 raccourcissent de moins d'une seconde (environ 28 à 30 s), la part des compétences dans les dégâts passe de 27 à 29 % (★2) et de 23 à 27 % (★3). **PV des unités inchangés** : on les gardera tels quels, quitte à les revoir en jouant (un multiplicateur global de PV serait alors le levier le plus simple).

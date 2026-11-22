@@ -40,9 +40,9 @@ describe('scaledAmount', () => {
     expect(scaledAmount(effect, stats, 1)).toBe(50 + 150 + 20);
   });
 
-  it('prend la base du rang, sans changer les ratios', () => {
+  it('prend la base du rang, et des pourcentages ×1,25 au ★2 puis ×1,5 au ★3', () => {
     const { stats } = makeUnit({ stats: { attack: 100, elementalPower: 40 } });
-    expect(scaledAmount(effect, stats, 2)).toBe(75 + 150 + 20);
-    expect(scaledAmount(effect, stats, 3)).toBe(115 + 150 + 20);
+    expect(scaledAmount(effect, stats, 2)).toBe(75 + (150 + 20) * 1.25);
+    expect(scaledAmount(effect, stats, 3)).toBe(115 + (150 + 20) * 1.5);
   });
 });

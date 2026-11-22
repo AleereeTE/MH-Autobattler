@@ -19,7 +19,7 @@ export const GARRICK: UnitDefinition = {
   skill: {
     id: 'garde',
     name: 'Garde',
-    description: 'Bouclier de 200/300/450 + 20 % des PV max pendant 4 s.',
+    description: 'Bouclier de 200/300/450 + 20/25/30 % des PV max pendant 4 s.',
     castTime: 0.25,
     effects: [{ kind: 'shield', base: [200, 300, 450], ratios: [{ stat: 'hp', ratio: 0.2 }], duration: 4 }],
   },
@@ -38,7 +38,7 @@ export const HELGA: UnitDefinition = {
   skill: {
     id: 'big-bang',
     name: 'Big Bang',
-    description: '80/120/180 + 160 % de l’attaque brute en dégâts physiques sur sa cible.',
+    description: '80/120/180 + 160/200/240 % de l’attaque brute en dégâts physiques sur sa cible.',
     castTime: 0.5,
     effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'physical', base: [80, 120, 180], ratios: [{ stat: 'attack', ratio: 1.6 }] }],
   },
@@ -57,7 +57,7 @@ export const AKIRA: UnitDefinition = {
   skill: {
     id: 'coup-charge',
     name: 'Coup chargé',
-    description: 'Charge pendant 1,5 s, puis inflige 150/225/340 + 300 % de l’attaque brute en dégâts physiques.',
+    description: 'Charge pendant 1,5 s, puis inflige 150/225/340 + 300/375/450 % de l’attaque brute en dégâts physiques.',
     castTime: 1.5,
     effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'physical', base: [150, 225, 340], ratios: [{ stat: 'attack', ratio: 3 }] }],
   },
@@ -95,7 +95,7 @@ export const SYLVAIN: UnitDefinition = {
   skill: {
     id: 'pluie-de-fleches',
     name: 'Pluie de flèches',
-    description: '50/75/115 + 160 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
+    description: '50/75/115 + 160/200/240 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
     castTime: 0.5,
     effects: [
       {
@@ -123,7 +123,7 @@ export const ODETTE: UnitDefinition = {
   skill: {
     id: 'melodie-de-soin',
     name: 'Mélodie de soin',
-    description: 'Soigne de 80/120/180 + 200 % de la puissance élémentaire les alliés à 2 cases ou moins.',
+    description: 'Soigne de 80/120/180 + 200/250/300 % de la puissance élémentaire les alliés à 2 cases ou moins.',
     castTime: 0.5,
     effects: [{ kind: 'heal', base: [80, 120, 180], ratios: [{ stat: 'elementalPower', ratio: 2 }], radius: 2 }],
   },
@@ -143,7 +143,7 @@ export const BRANN: UnitDefinition = {
     id: 'canon-de-wyverne',
     name: 'Canon de wyverne',
     description:
-      '50/75/115 + 75 % de la puissance élémentaire aux ennemis adjacents, puis bouclier de 150/225/340 + 15 % des PV max pendant 4 s.',
+      '50/75/115 + 75/94/113 % de la puissance élémentaire aux ennemis adjacents, puis bouclier de 150/225/340 + 15/19/23 % des PV max pendant 4 s.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [50, 75, 115], ratios: [{ stat: 'elementalPower', ratio: 0.75 }], radius: 1 },
@@ -165,7 +165,7 @@ export const ONDINE: UnitDefinition = {
   skill: {
     id: 'decharge-elementaire',
     name: 'Décharge élémentaire',
-    description: 'Incantation de 1 s, puis 150/225/340 + 250 % de la puissance élémentaire sur la cible.',
+    description: 'Incantation de 1 s, puis 150/225/340 + 250/313/375 % de la puissance élémentaire sur la cible.',
     castTime: 1,
     effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [150, 225, 340], ratios: [{ stat: 'elementalPower', ratio: 2.5 }] }],
   },
@@ -184,7 +184,7 @@ export const MIRA: UnitDefinition = {
   skill: {
     id: 'frappe-tournoyante',
     name: 'Frappe tournoyante',
-    description: '50/75/115 + 150 % de la puissance élémentaire sur la cible et ses voisins.',
+    description: '50/75/115 + 150/188/225 % de la puissance élémentaire sur la cible et ses voisins.',
     castTime: 0.25,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [50, 75, 115], ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 1 },
@@ -205,7 +205,7 @@ export const KAEDE: UnitDefinition = {
   skill: {
     id: 'coup-spirituel',
     name: 'Coup spirituel',
-    description: '70/105/160 + 200 % de la puissance élémentaire sur la cible.',
+    description: '70/105/160 + 200/250/300 % de la puissance élémentaire sur la cible.',
     castTime: 0.25,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [70, 105, 160], ratios: [{ stat: 'elementalPower', ratio: 2 }] },
@@ -226,7 +226,7 @@ export const DORIAN: UnitDefinition = {
   skill: {
     id: 'tir-draconique',
     name: 'Tir draconique',
-    description: 'Incantation de 1 s, puis 130/195/295 + 250 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
+    description: 'Incantation de 1 s, puis 130/195/295 + 250/313/375 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
     castTime: 1,
     effects: [
       { kind: 'damage', target: 'farthestEnemy', damageType: 'elemental', base: [130, 195, 295], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 1 },

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { makeUnit } from '../test-utils/factories.ts';
-import { isStarRank, rankMultiplier, rankStars, rankedStats, valueForRank } from './ranks.ts';
+import { isStarRank, rankMultiplier, rankStars, rankedStats, ratioForRank, skillRatioMultiplier, valueForRank } from './ranks.ts';
 
 describe('rangs ★', () => {
   it('multiplie PV et attaque brute par 1,8 à chaque rang', () => {
@@ -15,6 +15,12 @@ describe('rangs ★', () => {
     expect(ranked.hp).toBeCloseTo(900);
     expect(ranked.attack).toBeCloseTo(90);
     expect({ ...ranked, hp: base.hp, attack: base.attack }).toEqual(base);
+  });
+
+  it('augmente les pourcentages des compétences : ×1, ×1,25 puis ×1,5', () => {
+    expect([1, 2, 3].map((rank) => skillRatioMultiplier(rank as 1 | 2 | 3))).toEqual([1, 1.25, 1.5]);
+    expect(ratioForRank(2.5, 2)).toBeCloseTo(3.125);
+    expect(ratioForRank(2.5, 3)).toBeCloseTo(3.75);
   });
 
   it('choisit la valeur du rang dans une liste [★1, ★2, ★3]', () => {

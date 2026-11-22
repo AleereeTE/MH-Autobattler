@@ -22,7 +22,7 @@ export const FATALIS: UnitDefinition = {
   skill: {
     id: 'souffle-du-fatalis',
     name: 'Souffle du Fatalis',
-    description: 'Incantation de 1,5 s, puis 300/450/675 + 400 % de la puissance élémentaire sur la cible et les ennemis à 2 cases d’elle.',
+    description: 'Incantation de 1,5 s, puis 300/450/675 + 400/500/600 % de la puissance élémentaire sur la cible et les ennemis à 2 cases d’elle.',
     castTime: 1.5,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [300, 450, 675], ratios: [{ stat: 'elementalPower', ratio: 4 }], radius: 2 },
@@ -42,7 +42,7 @@ export const ALATREON: UnitDefinition = {
   skill: {
     id: 'jugement-d-escaton',
     name: 'Jugement d’Escaton',
-    description: 'Incantation de 2 s, puis 220/330/495 + 280 % de la puissance élémentaire à tous les ennemis, et −30 % de vitesse d’attaque pendant 3 s.',
+    description: 'Incantation de 2 s, puis 220/330/495 + 280/350/420 % de la puissance élémentaire à tous les ennemis, et −30 % de vitesse d’attaque pendant 3 s.',
     castTime: 2,
     effects: [
       {
@@ -70,7 +70,7 @@ export const DIRE_MIRALIS: UnitDefinition = {
   skill: {
     id: 'eruption',
     name: 'Éruption',
-    description: '200/300/450 + 250 % de la puissance élémentaire aux ennemis à 2 cases ou moins, puis bouclier de 400/600/900 + 20 % des PV max pendant 5 s.',
+    description: '200/300/450 + 250/313/375 % de la puissance élémentaire aux ennemis à 2 cases ou moins, puis bouclier de 400/600/900 + 20/25/30 % des PV max pendant 5 s.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [200, 300, 450], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 2 },

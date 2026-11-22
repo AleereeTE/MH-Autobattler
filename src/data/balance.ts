@@ -9,6 +9,11 @@ export const BALANCE = {
   critMultiplier: 1.5,
   /** ✅ PV et attaque brute multipliés à chaque rang ★ (×1,8 au ★2, ×3,24 au ★3). */
   rankStatMultiplier: 1.8,
+  /**
+   * ✅ Pourcentages de statistique des compétences (ratios) selon le rang ★ : ×1, ×1,25 puis ×1,5.
+   * Tous les ratios sont concernés (puissance élémentaire, attaque brute, PV).
+   */
+  skillRatioRankMultipliers: [1, 1.25, 1.5] as readonly [number, number, number],
   /** ⚠️ Mort subite : dégâts +20 % par seconde écoulée après la durée normale. */
   suddenDeathDamageRampPerSecond: 0.2,
   /** ⚠️ Mort subite : soins −5 % par seconde écoulée après la durée normale (minimum 0). */

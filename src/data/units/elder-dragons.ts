@@ -19,7 +19,7 @@ export const TEOSTRA: UnitDefinition = {
   skill: {
     id: 'supernova',
     name: 'Supernova',
-    description: 'Incantation de 1,5 s, puis 250/375/565 + 350 % de la puissance élémentaire aux ennemis à 2 cases ou moins.',
+    description: 'Incantation de 1,5 s, puis 250/375/565 + 350/438/525 % de la puissance élémentaire aux ennemis à 2 cases ou moins.',
     castTime: 1.5,
     effects: [
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [250, 375, 565], ratios: [{ stat: 'elementalPower', ratio: 3.5 }], radius: 2 },
@@ -40,7 +40,7 @@ export const NAMIELLE: UnitDefinition = {
     id: 'maree-luminescente',
     name: 'Marée luminescente',
     description:
-      '75/115/170 + 125 % de la puissance élémentaire sur la cible et les ennemis à 2 cases d’elle, et soigne les alliés à 2 cases de 100/150/225 + 150 % de la puissance élémentaire.',
+      '75/115/170 + 125/156/188 % de la puissance élémentaire sur la cible et les ennemis à 2 cases d’elle, et soigne les alliés à 2 cases de 100/150/225 + 150/188/225 % de la puissance élémentaire.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [75, 115, 170], ratios: [{ stat: 'elementalPower', ratio: 1.25 }], radius: 2 },
@@ -61,7 +61,7 @@ export const SAFI_JIIVA: UnitDefinition = {
   skill: {
     id: 'rayon-draconique',
     name: 'Rayon draconique',
-    description: '220/330/495 + 300 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
+    description: '220/330/495 + 300/375/450 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'farthestEnemy', damageType: 'elemental', base: [220, 330, 495], ratios: [{ stat: 'elementalPower', ratio: 3 }], radius: 1 },
@@ -81,7 +81,7 @@ export const KIRIN: UnitDefinition = {
   skill: {
     id: 'foudre-divine',
     name: 'Foudre divine',
-    description: '200/300/450 + 280 % de la puissance élémentaire sur l’ennemi le plus faible et ses voisins.',
+    description: '200/300/450 + 280/350/420 % de la puissance élémentaire sur l’ennemi le plus faible et ses voisins.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'lowestHpEnemy', damageType: 'elemental', base: [200, 300, 450], ratios: [{ stat: 'elementalPower', ratio: 2.8 }], radius: 1 },

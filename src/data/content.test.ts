@@ -3,6 +3,7 @@ import { simulateCombat } from '../combat/simulate.ts';
 import { objectFor } from '../rules/equipment.ts';
 import { unitTraitIds } from '../rules/traits.ts';
 import { createDemoSetup, squadPlacements } from '../sandbox/presets.ts';
+import { BALANCE } from './balance.ts';
 import { MATERIAL_IDS, SIGNATURE_OBJECTS } from './items.ts';
 import { DEMO_PLAYER_TEAM, ENEMY_SQUADS } from './squads.ts';
 import { findTrait } from './traits.ts';
@@ -91,6 +92,21 @@ describe('contenu du prototype', () => {
     for (const squad of ENEMY_SQUADS) {
       const result = simulateCombat(createDemoSetup(squad.id), 1);
       expect(result.reason, squad.name).toBe('elimination');
+    }
+  });
+});
+
+describe('descriptions des compétences', () => {
+  it('affichent chaque pourcentage de statistique à ses 3 rangs (×1, ×1,25, ×1,5)', () => {
+    for (const unit of UNITS) {
+      for (const effect of unit.skill.effects) {
+        if (!('ratios' in effect)) continue;
+        for (const { ratio } of effect.ratios) {
+          const percent = Math.round(ratio * 100);
+          const text = BALANCE.skillRatioRankMultipliers.map((multiplier) => Math.floor(percent * multiplier + 0.5)).join('/');
+          expect(unit.skill.description, unit.name).toContain(`${text} %`);
+        }
+      }
     }
   });
 });

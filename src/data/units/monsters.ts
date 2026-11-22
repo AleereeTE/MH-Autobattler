@@ -18,7 +18,7 @@ export const BARROTH: UnitDefinition = {
   skill: {
     id: 'carapace-de-boue',
     name: 'Carapace de boue',
-    description: 'Bouclier de 150/225/340 + 15 % des PV max pendant 4 s.',
+    description: 'Bouclier de 150/225/340 + 15/19/23 % des PV max pendant 4 s.',
     castTime: 0.25,
     effects: [{ kind: 'shield', base: [150, 225, 340], ratios: [{ stat: 'hp', ratio: 0.15 }], duration: 4 }],
   },
@@ -36,7 +36,7 @@ export const KHEZU: UnitDefinition = {
   skill: {
     id: 'decharge',
     name: 'Décharge',
-    description: '30/45/70 + 75 % de la puissance élémentaire aux ennemis adjacents.',
+    description: '30/45/70 + 75/94/113 % de la puissance élémentaire aux ennemis adjacents.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [30, 45, 70], ratios: [{ stat: 'elementalPower', ratio: 0.75 }], radius: 1 },
@@ -56,7 +56,7 @@ export const ANJANATH: UnitDefinition = {
   skill: {
     id: 'souffle-ardent',
     name: 'Souffle ardent',
-    description: '70/105/160 + 180 % de la puissance élémentaire sur la cible et ses voisins.',
+    description: '70/105/160 + 180/225/270 % de la puissance élémentaire sur la cible et ses voisins.',
     castTime: 0.75,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [70, 105, 160], ratios: [{ stat: 'elementalPower', ratio: 1.8 }], radius: 1 },
@@ -76,7 +76,7 @@ export const TOBI_KADACHI: UnitDefinition = {
   skill: {
     id: 'charge-electrique',
     name: 'Charge électrique',
-    description: 'Bondit sur l’ennemi le plus faible et inflige 60/90/135 + 180 % de la puissance élémentaire.',
+    description: 'Bondit sur l’ennemi le plus faible et inflige 60/90/135 + 180/225/270 % de la puissance élémentaire.',
     castTime: 0.25,
     effects: [
       { kind: 'damage', target: 'lowestHpEnemy', damageType: 'elemental', base: [60, 90, 135], ratios: [{ stat: 'elementalPower', ratio: 1.8 }], leap: true },
@@ -96,7 +96,7 @@ export const RATHALOS: UnitDefinition = {
   skill: {
     id: 'boule-de-feu',
     name: 'Boule de feu',
-    description: '120/180/270 + 250 % de la puissance élémentaire sur la cible et ses voisins.',
+    description: '120/180/270 + 250/313/375 % de la puissance élémentaire sur la cible et ses voisins.',
     castTime: 0.75,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [120, 180, 270], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 1 },
@@ -116,7 +116,7 @@ export const LEGIANA: UnitDefinition = {
   skill: {
     id: 'vent-glacial',
     name: 'Vent glacial',
-    description: '35/55/80 + 80 % de la puissance élémentaire sur la cible et ses voisins, et −30 % de vitesse d’attaque pendant 3 s.',
+    description: '35/55/80 + 80/100/120 % de la puissance élémentaire sur la cible et ses voisins, et −30 % de vitesse d’attaque pendant 3 s.',
     castTime: 0.5,
     effects: [
       {
@@ -144,7 +144,7 @@ export const ZINOGRE: UnitDefinition = {
   skill: {
     id: 'supercharge',
     name: 'Supercharge',
-    description: 'Bondit sur la cible et inflige 100/150/225 + 220 % de la puissance élémentaire à elle et à ses voisins.',
+    description: 'Bondit sur la cible et inflige 100/150/225 + 220/275/330 % de la puissance élémentaire à elle et à ses voisins.',
     castTime: 0.25,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [100, 150, 225], ratios: [{ stat: 'elementalPower', ratio: 2.2 }], radius: 1, leap: true },
@@ -164,7 +164,7 @@ export const DEVILJHO: UnitDefinition = {
   skill: {
     id: 'souffle-draconique',
     name: 'Souffle draconique',
-    description: '110/165/250 + 200 % de la puissance élémentaire sur la cible et ses voisins.',
+    description: '110/165/250 + 200/250/300 % de la puissance élémentaire sur la cible et ses voisins.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [110, 165, 250], ratios: [{ stat: 'elementalPower', ratio: 2 }], radius: 1 },
@@ -184,7 +184,7 @@ export const MIZUTSUNE: UnitDefinition = {
   skill: {
     id: 'danse-des-bulles',
     name: 'Danse des bulles',
-    description: 'Soigne de 120/180/270 + 220 % de la puissance élémentaire les alliés à 2 cases ou moins.',
+    description: 'Soigne de 120/180/270 + 220/275/330 % de la puissance élémentaire les alliés à 2 cases ou moins.',
     castTime: 0.5,
     effects: [{ kind: 'heal', base: [120, 180, 270], ratios: [{ stat: 'elementalPower', ratio: 2.2 }], radius: 2 }],
   },
@@ -202,7 +202,7 @@ export const ROYAL_LUDROTH: UnitDefinition = {
   skill: {
     id: 'criniere-spongieuse',
     name: 'Crinière spongieuse',
-    description: 'Soigne de 50/75/115 + 150 % de la puissance élémentaire les alliés à 2 cases ou moins.',
+    description: 'Soigne de 50/75/115 + 150/188/225 % de la puissance élémentaire les alliés à 2 cases ou moins.',
     castTime: 0.5,
     effects: [
       { kind: 'heal', base: [50, 75, 115], ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 2 },
@@ -222,7 +222,7 @@ export const KULU_YA_KU: UnitDefinition = {
   skill: {
     id: 'coup-de-rocher',
     name: 'Coup de rocher',
-    description: '70/105/160 + 150 % de l’attaque brute en dégâts physiques sur sa cible.',
+    description: '70/105/160 + 150/188/225 % de l’attaque brute en dégâts physiques sur sa cible.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'physical', base: [70, 105, 160], ratios: [{ stat: 'attack', ratio: 1.5 }] },
@@ -242,7 +242,7 @@ export const JYURATODUS: UnitDefinition = {
   skill: {
     id: 'bain-de-boue',
     name: 'Bain de boue',
-    description: '30/45/70 + 70 % de la puissance élémentaire aux ennemis adjacents, et −25 % de vitesse d’attaque pendant 2 s.',
+    description: '30/45/70 + 70/88/105 % de la puissance élémentaire aux ennemis adjacents, et −25 % de vitesse d’attaque pendant 2 s.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [30, 45, 70], ratios: [{ stat: 'elementalPower', ratio: 0.7 }], radius: 1, slow: { attackSpeedPercent: -0.25, duration: 2 } },
@@ -262,7 +262,7 @@ export const BARIOTH: UnitDefinition = {
   skill: {
     id: 'charge-glaciale',
     name: 'Charge glaciale',
-    description: 'Bondit sur l’ennemi le plus faible et inflige 60/90/135 + 170 % de la puissance élémentaire, et −20 % de vitesse d’attaque pendant 2 s.',
+    description: 'Bondit sur l’ennemi le plus faible et inflige 60/90/135 + 170/213/255 % de la puissance élémentaire, et −20 % de vitesse d’attaque pendant 2 s.',
     castTime: 0.25,
     effects: [
       { kind: 'damage', target: 'lowestHpEnemy', damageType: 'elemental', base: [60, 90, 135], ratios: [{ stat: 'elementalPower', ratio: 1.7 }], leap: true, slow: { attackSpeedPercent: -0.2, duration: 2 } },
@@ -282,7 +282,7 @@ export const NARGACUGA: UnitDefinition = {
   skill: {
     id: 'queue-tranchante',
     name: 'Queue tranchante',
-    description: 'Bondit sur l’ennemi le plus faible et inflige 110/165/250 + 220 % de l’attaque brute en dégâts physiques.',
+    description: 'Bondit sur l’ennemi le plus faible et inflige 110/165/250 + 220/275/330 % de l’attaque brute en dégâts physiques.',
     castTime: 0.25,
     effects: [
       { kind: 'damage', target: 'lowestHpEnemy', damageType: 'physical', base: [110, 165, 250], ratios: [{ stat: 'attack', ratio: 2.2 }], leap: true },
@@ -302,7 +302,7 @@ export const LAGIACRUS: UnitDefinition = {
   skill: {
     id: 'decharge-abyssale',
     name: 'Décharge abyssale',
-    description: '45/70/100 + 80 % de la puissance élémentaire aux ennemis à 2 cases ou moins.',
+    description: '45/70/100 + 80/100/120 % de la puissance élémentaire aux ennemis à 2 cases ou moins.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [45, 70, 100], ratios: [{ stat: 'elementalPower', ratio: 0.8 }], radius: 2 },
@@ -322,7 +322,7 @@ export const TIGREX: UnitDefinition = {
   skill: {
     id: 'rugissement',
     name: 'Rugissement',
-    description: '110/165/250 + 230 % de l’attaque brute en dégâts physiques aux ennemis adjacents.',
+    description: '110/165/250 + 230/288/345 % de l’attaque brute en dégâts physiques aux ennemis adjacents.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'self', damageType: 'physical', base: [110, 165, 250], ratios: [{ stat: 'attack', ratio: 2.3 }], radius: 1 },
