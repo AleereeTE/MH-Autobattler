@@ -38,9 +38,9 @@ describe('fusion automatique', () => {
 
   it('ne fusionne pas des rangs différents', () => {
     const state = makeRun();
-    giveUnit(state, 'helga', bench(0), 2);
-    giveUnit(state, 'helga', bench(1));
-    giveUnit(state, 'helga', bench(2));
+    giveUnit(state, 'olivia', bench(0), 2);
+    giveUnit(state, 'olivia', bench(1));
+    giveUnit(state, 'olivia', bench(2));
     resolveMerges(state);
     expect(state.units).toHaveLength(3);
   });

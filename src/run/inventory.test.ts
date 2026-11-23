@@ -5,7 +5,7 @@ import { equipFromInventory, unequip } from './inventory.ts';
 describe('inventaire et équipement', () => {
   it('pose des matériaux : le second fusionne avec le premier en objet', () => {
     const state = makeRun();
-    const hunter = giveUnit(state, 'helga', bench(0));
+    const hunter = giveUnit(state, 'olivia', bench(0));
     state.inventory = [
       { kind: 'material', material: 'bone' },
       { kind: 'material', material: 'membrane' },
@@ -26,7 +26,7 @@ describe('inventaire et équipement', () => {
 
   it('retire un matériau gratuitement, un objet contre un retire-objet', () => {
     const state = makeRun();
-    const hunter = giveUnit(state, 'garrick', bench(0), 1, [
+    const hunter = giveUnit(state, 'fabius', bench(0), 1, [
       { kind: 'material', material: 'horn' },
       { kind: 'object', materials: ['gem', 'gem'] },
     ]);

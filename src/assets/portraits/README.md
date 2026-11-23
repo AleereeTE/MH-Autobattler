@@ -10,17 +10,17 @@ Une image par unité, nommée d'après son identifiant (`id` de la fiche dans `s
 | Tobi-Kadachi | `tobi-kadachi.png` |
 | Rathalos | `rathalos.png` |
 | Legiana | `legiana.png` |
-| Garrick (Lance) | `garrick.png` |
-| Helga (Marteau) | `helga.png` |
-| Akira (Grande épée) | `akira.png` |
-| Lysa (Doubles lames) | `lysa.png` |
-| Sylvain (Arc) | `sylvain.png` |
-| Odette (Corne de chasse) | `odette.png` |
+| Fabius (Lance) | `fabius.webp` |
+| Olivia (Marteau) | `olivia.webp` |
+| Fiorayne (Grande épée) | `fiorayne.webp` |
+| Fugen (Doubles lames) | `fugen.webp` |
+| Hinoa (Arc) | `hinoa.webp` |
+| Minoto (Corne de chasse) | `minoto.webp` |
 | Zinogre | `zinogre.png` |
 | Deviljho | `deviljho.png` |
 | Mizutsune | `mizutsune.png` |
-| Brann (Lancecanon) | `brann.webp` |
-| Ondine (Morpho-hache) | `ondine.webp` |
+| Arlow (Lancecanon) | `arlow.webp` |
+| Galleus (Morpho-hache) | `galleus.webp` |
 | Teostra | `teostra.png` |
 | Namielle | `namielle.png` |
 | Safi'jiiva | `safi-jiiva.png` |
@@ -29,13 +29,13 @@ Une image par unité, nommée d'après son identifiant (`id` de la fiche dans `s
 | Dire Miralis | `dire-miralis.jpg` |
 | Royal Ludroth | `royal-ludroth.png` |
 | Kulu-Ya-Ku | `kulu-ya-ku.png` |
-| Mira (Épée et bouclier) | `mira.webp` |
+| Aiden (Épée et bouclier) | `aiden.webp` |
 | Jyuratodus | `jyuratodus.png` |
 | Barioth | `barioth.png` |
-| Kaede (Épée longue) | `kaede.webp` |
+| Rondine (Épée longue) | `rondine.webp` |
 | Nargacuga | `nargacuga.png` |
 | Lagiacrus | `lagiacrus.png` |
-| Dorian (Fusarbalète lourd) | `dorian.webp` |
+| Luchika (Fusarbalète lourd) | `luchika.webp` |
 | Tigrex | `tigrex.png` |
 | Kirin | `kirin.png` |
 

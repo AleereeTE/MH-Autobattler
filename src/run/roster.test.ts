@@ -6,7 +6,7 @@ describe('réserve et plateau', () => {
   it('range les unités reçues dans la première place libre', () => {
     const state = makeRun();
     giveUnit(state, 'khezu', bench(0));
-    expect(receiveUnit(state, 'helga').ok).toBe(true);
+    expect(receiveUnit(state, 'olivia').ok).toBe(true);
     expect(state.units.at(-1)?.location).toEqual(bench(1));
   });
 
@@ -14,7 +14,7 @@ describe('réserve et plateau', () => {
     const state = makeRun();
     giveUnit(state, 'barroth', bench(0));
     giveUnit(state, 'barroth', bench(1));
-    for (let index = 2; index < 10; index++) giveUnit(state, 'lysa', bench(index), 3); // ★3 : ne fusionnent plus
+    for (let index = 2; index < 10; index++) giveUnit(state, 'fugen', bench(index), 3); // ★3 : ne fusionnent plus
 
     expect(canReceive(state, 'khezu')).toBe(false);
     expect(receiveUnit(state, 'khezu').ok).toBe(false);
@@ -26,7 +26,7 @@ describe('réserve et plateau', () => {
     const state = makeRun();
     giveUnit(state, 'barroth', bench(0));
     giveUnit(state, 'barroth', bench(1));
-    for (let index = 2; index < 10; index++) giveUnit(state, 'lysa', bench(index), 3); // ★3 : ne fusionnent plus
+    for (let index = 2; index < 10; index++) giveUnit(state, 'fugen', bench(index), 3); // ★3 : ne fusionnent plus
     // Le 1er exemplaire fusionne (et libère la place 1), le 2e s'y installe.
     expect(canReceive(state, 'barroth', 2)).toBe(true);
     expect(canReceive(state, 'barroth', 3)).toBe(false);
@@ -37,8 +37,8 @@ describe('réserve et plateau', () => {
   it('pose une unité sur le plateau dans la limite du niveau', () => {
     const state = makeRun({ level: 2 });
     const a = giveUnit(state, 'khezu', bench(0));
-    const b = giveUnit(state, 'helga', bench(1));
-    const c = giveUnit(state, 'lysa', bench(2));
+    const b = giveUnit(state, 'olivia', bench(1));
+    const c = giveUnit(state, 'fugen', bench(2));
     expect(moveUnit(state, a.uid, board(2, 4)).ok).toBe(true);
     expect(moveUnit(state, b.uid, board(3, 4)).ok).toBe(true);
     expect(moveUnit(state, c.uid, board(4, 4)).ok).toBe(false);

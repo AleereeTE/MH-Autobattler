@@ -140,7 +140,7 @@ describe('déroulement d’une run', () => {
 
   it('ne laisse pas prendre une unité en récompense sans place en réserve', () => {
     const state = makeRun();
-    for (let index = 0; index < 10; index++) giveUnit(state, 'odette', bench(index), 3);
+    for (let index = 0; index < 10; index++) giveUnit(state, 'minoto', bench(index), 3);
     state.phase = 'reward';
     state.rewards = [{ kind: 'unit', unitId: 'khezu', copies: 1 }];
     expect(chooseReward(state, 0)).toMatchObject({ ok: false });

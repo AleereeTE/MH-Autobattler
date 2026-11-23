@@ -8,15 +8,15 @@ import { drawRewards } from './rewards.ts';
 import { sellUnit } from './roster.ts';
 import { buy, refreshShop } from './shop.ts';
 
-/** Toutes les unités de coût 1 sauf Sylvain : en les excluant, seul Sylvain peut sortir aux niveaux 1 et 2. */
-const COST_1_EXCEPT_SYLVAIN = UNITS.filter((u) => u.cost === 1 && u.id !== 'sylvain').map((u) => u.id);
+/** Toutes les unités de coût 1 sauf Hinoa : en les excluant, seul Hinoa peut sortir aux niveaux 1 et 2. */
+const COST_1_EXCEPT_SYLVAIN = UNITS.filter((u) => u.cost === 1 && u.id !== 'hinoa').map((u) => u.id);
 
 describe('unités obtenues au ★3', () => {
   it('ne sont jamais tirées', () => {
     const pool = createPool();
     const excluded = new Set(COST_1_EXCEPT_SYLVAIN);
     const rng = createRng(2);
-    for (let i = 0; i < 200; i++) expect(drawUnitId(pool, 1, rng, excluded)).toBe('sylvain');
+    for (let i = 0; i < 200; i++) expect(drawUnitId(pool, 1, rng, excluded)).toBe('hinoa');
   });
 
   it('ne sont plus proposées par la boutique ni par les récompenses', () => {
@@ -26,9 +26,9 @@ describe('unités obtenues au ★3', () => {
 
     for (let i = 0; i < 20; i++) {
       refreshShop(state);
-      expect(state.shop.every((id) => id === null || id === 'sylvain')).toBe(true);
+      expect(state.shop.every((id) => id === null || id === 'hinoa')).toBe(true);
       const unit = drawRewards(state).find((option) => option.kind === 'unit');
-      expect(unit?.kind === 'unit' ? unit.unitId : 'sylvain').toBe('sylvain');
+      expect(unit?.kind === 'unit' ? unit.unitId : 'hinoa').toBe('hinoa');
     }
   });
 
@@ -50,9 +50,9 @@ describe('unités obtenues au ★3', () => {
 
   it('peuvent revenir si le ★3 est revendu', () => {
     const state = makeRun();
-    const star3 = giveUnit(state, 'sylvain', bench(0), 3);
-    expect(completedUnitIds(state).has('sylvain')).toBe(true);
+    const star3 = giveUnit(state, 'hinoa', bench(0), 3);
+    expect(completedUnitIds(state).has('hinoa')).toBe(true);
     sellUnit(state, star3.uid);
-    expect(completedUnitIds(state).has('sylvain')).toBe(false);
+    expect(completedUnitIds(state).has('hinoa')).toBe(false);
   });
 });

@@ -35,8 +35,8 @@ describe('createReplay', () => {
 describe('zones d’effet', () => {
   const caster: UnitSnapshot = {
     uid: 1,
-    defId: 'odette',
-    name: 'Odette',
+    defId: 'minoto',
+    name: 'Minoto',
     side: 'player',
     kind: 'hunter',
     role: 'support',

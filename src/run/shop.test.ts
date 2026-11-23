@@ -18,7 +18,7 @@ describe('boutique', () => {
 
   it('achète une unité : zennys payés, unité en réserve, emplacement vidé', () => {
     const state = makeRun({ zennys: 10 });
-    state.shop = ['khezu', 'helga', null, null, null];
+    state.shop = ['khezu', 'olivia', null, null, null];
     expect(buy(state, 0).ok).toBe(true);
     expect(state.zennys).toBe(9);
     expect(state.shop[0]).toBeNull();
@@ -35,14 +35,14 @@ describe('boutique', () => {
 
   it('fusionne aussitôt le 3e exemplaire acheté, même réserve pleine', () => {
     const state = makeRun();
-    giveUnit(state, 'sylvain', bench(0));
-    giveUnit(state, 'sylvain', bench(1));
-    for (let index = 2; index < 10; index++) giveUnit(state, 'odette', bench(index), 3);
-    state.shop = ['sylvain', 'khezu', null, null, null];
+    giveUnit(state, 'hinoa', bench(0));
+    giveUnit(state, 'hinoa', bench(1));
+    for (let index = 2; index < 10; index++) giveUnit(state, 'minoto', bench(index), 3);
+    state.shop = ['hinoa', 'khezu', null, null, null];
 
     expect(buy(state, 1).ok).toBe(false); // réserve pleine, pas de fusion
     expect(buy(state, 0).ok).toBe(true);
-    expect(state.units.find((unit) => unit.unitId === 'sylvain')).toMatchObject({ rank: 2, location: bench(0) });
+    expect(state.units.find((unit) => unit.unitId === 'hinoa')).toMatchObject({ rank: 2, location: bench(0) });
   });
 
   it('relance pour 2 zennys', () => {

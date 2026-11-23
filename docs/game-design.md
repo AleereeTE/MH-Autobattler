@@ -415,7 +415,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 
 ### Contenu
 10. Effets des 36 objets (conçus par Théo).
-11. Unités supplémentaires : arme de chasseur restante (Fusarbalète léger), autres monstres (dont des Wyvernes à crocs) et Dragons anciens.
+11. Unités supplémentaires : arme de chasseur restante (Fusarbalète léger, pour Nadia de Wilds), autres monstres (dont des Wyvernes à crocs) et Dragons anciens.
 
 ---
 
@@ -439,3 +439,4 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-21** : interface — barre d'énergie sous la barre de vie des jetons en combat (grisée quand l'énergie est bloquée), et énergie actuelle / maximale avec sa barre dans l'aperçu d'une unité en combat.
 - **2026-11-22** : carte du mode run — carte visible par stage (9 étapes de 2 à 3 cases puis le boss), cases Chasse, Quête urgente (budget de 3 chasses plus loin, récompenses doublées), Forge (objets déplaçables sans retire-objet, 2 matériaux reforgés) et Marchand (4 matériaux à 3 zennys, retire-objet à 4) ; une case sans combat remplace une chasse (la run garde 30 étapes) ; on voit le monstre cible et le type de récompense. Principe d'un mode infini après les 30 étapes (détails à définir).
 - **2026-11-22** : rangs ★ — les pourcentages de statistique des compétences augmentent avec le rang (×1,25 au ★2, ×1,5 au ★3), pour tous les pourcentages. Mesure sur des équipes de 6 au hasard : les combats ★2 et ★3 raccourcissent de moins d'une seconde (environ 28 à 30 s), la part des compétences dans les dégâts passe de 27 à 29 % (★2) et de 23 à 27 % (★3). **PV des unités inchangés** : on les gardera tels quels, quitte à les revoir en jouant (un multiplicateur global de PV serait alors le levier le plus simple).
+- **2026-11-23** : les chasseurs prennent des noms officiels de la série, avec une arme qu'ils utilisent dans les jeux : Garrick → Fabius (Lance), Helga → Olivia (Marteau), Akira → Fiorayne (Grande épée), Lysa → Fugen (Doubles lames), Sylvain → Hinoa (Arc), Odette → Minoto (Corne de chasse), Kaede → Rondine (Épée longue), Dorian → Luchika (Fusarbalète lourd), Mira → Aiden (Épée et bouclier), Brann → Arlow (Lancecanon), Ondine → Galleus (Morpho-hache). Nadia (Wilds, Fusarbalète léger) est gardée pour le futur Fusarbalète léger. Les anciens noms restent dans les entrées précédentes de l'historique.

@@ -20,7 +20,7 @@ function atStop(kind: 'forge' | 'merchant'): RunState {
 describe('forge', () => {
   it('retire un objet sans retire-objet', () => {
     const state = atStop('forge');
-    const unit = giveUnit(state, 'helga', board(3, 5), 1, [{ kind: 'object', materials: ['bone', 'bone'] }]);
+    const unit = giveUnit(state, 'olivia', board(3, 5), 1, [{ kind: 'object', materials: ['bone', 'bone'] }]);
     expect(unequip(state, unit.uid, 0).ok).toBe(true);
     expect(state.itemRemovers).toBe(0);
     expect(state.inventory).toEqual([{ kind: 'object', materials: ['bone', 'bone'] }]);
@@ -28,7 +28,7 @@ describe('forge', () => {
 
   it('hors de la forge, retirer un objet demande toujours un retire-objet', () => {
     const state = makeRun();
-    const unit = giveUnit(state, 'helga', board(3, 5), 1, [{ kind: 'object', materials: ['bone', 'bone'] }]);
+    const unit = giveUnit(state, 'olivia', board(3, 5), 1, [{ kind: 'object', materials: ['bone', 'bone'] }]);
     expect(unequip(state, unit.uid, 0)).toMatchObject({ ok: false });
   });
 

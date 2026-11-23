@@ -60,11 +60,11 @@ export const DEMO_PLAYER_TEAM: SquadDefinition = {
   id: 'demo',
   name: 'Équipe de démonstration',
   members: [
-    { unitId: 'garrick', col: 3, row: 4, equipment: [{ kind: 'object', materials: ['horn', 'fang'] }] },
-    { unitId: 'helga', col: 2, row: 4, equipment: [{ kind: 'material', material: 'bone' }] },
+    { unitId: 'fabius', col: 3, row: 4, equipment: [{ kind: 'object', materials: ['horn', 'fang'] }] },
+    { unitId: 'olivia', col: 2, row: 4, equipment: [{ kind: 'material', material: 'bone' }] },
     { unitId: 'anjanath', col: 4, row: 4 },
-    { unitId: 'odette', col: 3, row: 6 },
-    { unitId: 'sylvain', col: 2, row: 7, equipment: [{ kind: 'object', materials: ['feather', 'bone'] }] },
+    { unitId: 'minoto', col: 3, row: 6 },
+    { unitId: 'hinoa', col: 2, row: 7, equipment: [{ kind: 'object', materials: ['feather', 'bone'] }] },
     { unitId: 'rathalos', col: 4, row: 7, equipment: [{ kind: 'object', materials: ['gem', 'gem'] }] },
   ],
 };

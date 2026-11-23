@@ -7,8 +7,8 @@ import type { UnitDefinition } from '../definitions.ts';
  */
 
 export const GARRICK: UnitDefinition = {
-  id: 'garrick',
-  name: 'Garrick',
+  id: 'fabius',
+  name: 'Fabius',
   kind: 'hunter',
   weapon: 'Lance',
   role: 'tank',
@@ -26,8 +26,8 @@ export const GARRICK: UnitDefinition = {
 };
 
 export const HELGA: UnitDefinition = {
-  id: 'helga',
-  name: 'Helga',
+  id: 'olivia',
+  name: 'Olivia',
   kind: 'hunter',
   weapon: 'Marteau',
   role: 'bruiser',
@@ -45,8 +45,8 @@ export const HELGA: UnitDefinition = {
 };
 
 export const AKIRA: UnitDefinition = {
-  id: 'akira',
-  name: 'Akira',
+  id: 'fiorayne',
+  name: 'Fiorayne',
   kind: 'hunter',
   weapon: 'Grande épée',
   role: 'dps',
@@ -64,8 +64,8 @@ export const AKIRA: UnitDefinition = {
 };
 
 export const LYSA: UnitDefinition = {
-  id: 'lysa',
-  name: 'Lysa',
+  id: 'fugen',
+  name: 'Fugen',
   kind: 'hunter',
   weapon: 'Doubles lames',
   role: 'dps',
@@ -83,8 +83,8 @@ export const LYSA: UnitDefinition = {
 };
 
 export const SYLVAIN: UnitDefinition = {
-  id: 'sylvain',
-  name: 'Sylvain',
+  id: 'hinoa',
+  name: 'Hinoa',
   kind: 'hunter',
   weapon: 'Arc',
   role: 'dps',
@@ -111,8 +111,8 @@ export const SYLVAIN: UnitDefinition = {
 };
 
 export const ODETTE: UnitDefinition = {
-  id: 'odette',
-  name: 'Odette',
+  id: 'minoto',
+  name: 'Minoto',
   kind: 'hunter',
   weapon: 'Corne de chasse',
   role: 'support',
@@ -130,8 +130,8 @@ export const ODETTE: UnitDefinition = {
 };
 
 export const BRANN: UnitDefinition = {
-  id: 'brann',
-  name: 'Brann',
+  id: 'arlow',
+  name: 'Arlow',
   kind: 'hunter',
   weapon: 'Lancecanon',
   role: 'tank',
@@ -153,8 +153,8 @@ export const BRANN: UnitDefinition = {
 };
 
 export const ONDINE: UnitDefinition = {
-  id: 'ondine',
-  name: 'Ondine',
+  id: 'galleus',
+  name: 'Galleus',
   kind: 'hunter',
   weapon: 'Morpho-hache',
   role: 'bruiser',
@@ -172,8 +172,8 @@ export const ONDINE: UnitDefinition = {
 };
 
 export const MIRA: UnitDefinition = {
-  id: 'mira',
-  name: 'Mira',
+  id: 'aiden',
+  name: 'Aiden',
   kind: 'hunter',
   weapon: 'Épée et bouclier',
   role: 'bruiser',
@@ -193,8 +193,8 @@ export const MIRA: UnitDefinition = {
 };
 
 export const KAEDE: UnitDefinition = {
-  id: 'kaede',
-  name: 'Kaede',
+  id: 'rondine',
+  name: 'Rondine',
   kind: 'hunter',
   weapon: 'Épée longue',
   role: 'dps',
@@ -214,8 +214,8 @@ export const KAEDE: UnitDefinition = {
 };
 
 export const DORIAN: UnitDefinition = {
-  id: 'dorian',
-  name: 'Dorian',
+  id: 'luchika',
+  name: 'Luchika',
   kind: 'hunter',
   weapon: 'Fusarbalète lourd',
   role: 'dps',
