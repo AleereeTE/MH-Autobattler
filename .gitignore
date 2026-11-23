@@ -2,3 +2,15 @@ node_modules/
 dist/
 coverage/
 *.log
+
+# Secrets et réglages locaux (précaution : aucun de ces fichiers n'existe aujourd'hui)
+.env
+.env.*
+!.env.example
+*.local
+.claude/settings.local.json
+
+# Fichiers créés par le système
+Thumbs.db
+desktop.ini
+.DS_Store
