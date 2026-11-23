@@ -69,6 +69,22 @@ export interface CombatUnit {
   modifiers: TimedModifier[];
   shields: Shield[];
   burn: Burn | null;
+  /** Armure retirée à cette unité par les attaques de Briseur (pour tout le combat). */
+  armorShred: number;
+  /** Coups critiques portés (Furie). */
+  critStacks: number;
+  /** Attaques de base qui ont touché (Attaque explosion). */
+  landedAttacks: number;
+  /** Coups subis, hors brûlure (Ressentiment). */
+  hitsTaken: number;
+  /** Compétences déjà lancées jusqu'au bout (Coalescence). */
+  skillsResolved: number;
+  /** Armure et résistance en plus pour un temps, après une compétence (Garde renforcée). */
+  defenseBuff: { readonly amount: number; remainingTicks: number } | null;
+  /** Poison en cours (Attaque poison) : mêmes règles de tic que la brûlure. */
+  poison: Burn | null;
+  /** Ticks de paralysie restants (Attaque paralysie) : l'unité n'agit pas tant qu'il en reste. */
+  paralyzedTicks: number;
 }
 
 export interface CombatState {

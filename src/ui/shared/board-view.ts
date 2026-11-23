@@ -80,6 +80,7 @@ function readTheme(element: Element): BoardTheme {
     text: color('--fg'),
     crit: color('--accent'),
     heal: color('--board-hp'),
+    statuses: { poison: color('--status-poison'), paralysis: color('--status-paralysis') },
     elements: {
       fire: color('--element-fire'),
       water: color('--element-water'),

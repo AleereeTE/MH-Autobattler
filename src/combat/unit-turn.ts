@@ -7,6 +7,7 @@ import { gainEnergy, isEnergyFull, passiveEnergyPerTick } from './energy.ts';
 import { progressCast, startCast } from './skills/cast.ts';
 import { elapsedSeconds, type CombatState, type CombatUnit } from './state.ts';
 import { attackSpeedOf } from './status/modifiers.ts';
+import { isParalyzed } from './status/ailments.ts';
 import { tickStatuses } from './status/tick-statuses.ts';
 
 /**
@@ -19,6 +20,8 @@ import { tickStatuses } from './status/tick-statuses.ts';
 export function updateUnit(state: CombatState, unit: CombatUnit): void {
   tickStatuses(state, unit);
   gainEnergy(unit, passiveEnergyPerTick(unit));
+  // ✅ Attaque paralysie : une unité paralysée ne fait rien d'autre (son incantation est suspendue).
+  if (isParalyzed(unit)) return;
 
   if (unit.cast !== null) {
     progressCast(state, unit);

@@ -1,4 +1,13 @@
 import type { StatBonus } from '../../data/definitions.ts';
+import {
+  BLAST_EVERY_ATTACKS,
+  LATENT_POWER_DELAY_SECONDS,
+  PARALYSIS_SECONDS,
+  POISON_HEALING_REDUCTION,
+  POISON_SECONDS,
+  POST_CAST_DEFENSE_SECONDS,
+  WIDE_RANGE_RADIUS,
+} from '../../data/items.ts';
 import { sumBonuses } from '../../rules/stats.ts';
 
 /**
@@ -44,5 +53,50 @@ export function describeBonuses(bonuses: readonly StatBonus[]): string[] {
   add(b.lowHpDamageBonus !== 0, () => `+${pct(b.lowHpDamageBonus)} de dégâts sous 50 % des PV`);
   add(b.startingEnergyRatio !== 0, () => `commence le combat avec ${pct(b.startingEnergyRatio)} d’énergie`);
   add(b.dodgeChance !== 0, () => `${pct(b.dodgeChance)} d’esquive des attaques de base`);
+  add(b.range !== 0, () => `${signed(b.range)} de portée`);
+  add(b.maxEnergyPercent !== 0, () => `${signedPct(b.maxEnergyPercent)} d’énergie maximale`);
+  add(b.onHitElementalRatio !== 0, () => `les attaques de base infligent en plus ${pct(b.onHitElementalRatio)} de la puissance élémentaire`);
+  add(b.lifesteal !== 0, () => `se soigne de ${pct(b.lifesteal)} des dégâts infligés`);
+  add(b.armorShredPerAttack !== 0, () => `chaque attaque de base retire ${frNumber(b.armorShredPerAttack)} armure à la cible (max −${frNumber(b.armorShredMax)})`);
+  add(b.armorPenetration !== 0, () => `les attaques de base ignorent ${pct(b.armorPenetration)} de l’armure`);
+  add(b.executeCritChance !== 0, () => `+${pct(b.executeCritChance)} de critique contre les cibles sous 50 % des PV`);
+  add(b.attackSpeedPerCrit !== 0, () => `+${pct(b.attackSpeedPerCrit)} de vitesse d’attaque par coup critique (max +${pct(b.attackSpeedPerCritMax)})`);
+  add(
+    b.latentCritChance !== 0 || b.latentAttackSpeedPercent !== 0,
+    () => `après ${LATENT_POWER_DELAY_SECONDS} s de combat : +${pct(b.latentCritChance)} de critique et +${pct(b.latentAttackSpeedPercent)} de vitesse d’attaque`,
+  );
+  add(
+    b.blastDamage !== 0,
+    () => `toutes les ${BLAST_EVERY_ATTACKS} attaques qui touchent : explosion de ${frNumber(b.blastDamage)} + ${pct(b.blastElementalRatio)} de la puissance élémentaire`,
+  );
+  add(b.guardReduction !== 0, () => `attaques de base subies : jamais critiques, −${pct(b.guardReduction)} de dégâts`);
+  add(b.thornsRatio !== 0, () => `renvoie ${pct(b.thornsRatio)} des dégâts des attaques de base subies`);
+  add(b.divineBlessingChance !== 0, () => `${pct(b.divineBlessingChance)} de chances de réduire de moitié les dégâts d’un coup subi`);
+  add(b.regenPercentPerSecond !== 0, () => `régénère ${pct(b.regenPercentPerSecond)} des PV max par seconde`);
+  add(
+    b.attackSpeedPerHitTaken !== 0,
+    () => `+${pct(b.attackSpeedPerHitTaken)} de vitesse d’attaque par coup subi (max +${pct(b.attackSpeedPerHitTakenMax)})`,
+  );
+  add(b.energyPerHitTaken !== 0, () => `+${frNumber(b.energyPerHitTaken)} énergie à chaque coup subi`);
+  add(
+    b.postCastDefense !== 0,
+    () => `après chaque compétence : +${frNumber(b.postCastDefense)} armure et résistance élémentaire pendant ${POST_CAST_DEFENSE_SECONDS} s`,
+  );
+  add(b.healShieldBonus !== 0, () => `+${pct(b.healShieldBonus)} de soins et de boucliers de la compétence`);
+  add(
+    b.skillDamagePerCast !== 0,
+    () => `+${pct(b.skillDamagePerCast)} de dégâts des compétences par compétence lancée (max +${pct(b.skillDamagePerCastMax)})`,
+  );
+  add(b.statusImmunity !== 0, () => 'immunité à la brûlure, aux ralentissements, au poison et à la paralysie');
+  add(
+    b.poisonDamage !== 0,
+    () =>
+      `les compétences empoisonnent : ${frNumber(b.poisonDamage)} + ${pct(b.poisonElementalRatio)} de la puissance élémentaire par seconde pendant ${frNumber(POISON_SECONDS)} s (soins reçus −${pct(POISON_HEALING_REDUCTION)})`,
+  );
+  add(b.paralysisChance !== 0, () => `${pct(b.paralysisChance)} de chances de paralyser la cible ${frNumber(PARALYSIS_SECONDS)} s`);
+  add(b.energyDrainPerAttack !== 0, () => `les attaques de base retirent ${frNumber(b.energyDrainPerAttack)} énergie à la cible`);
+  add(b.allyEnergyOnCast !== 0, () => `après sa compétence : +${frNumber(b.allyEnergyOnCast)} énergie aux alliés à ${WIDE_RANGE_RADIUS} cases`);
+  add(b.energyPerCrit !== 0, () => `+${frNumber(b.energyPerCrit)} énergie par coup critique`);
+  add(b.energyPerAttack !== 0, () => `+${frNumber(b.energyPerAttack)} énergie par attaque de base`);
   return lines;
 }

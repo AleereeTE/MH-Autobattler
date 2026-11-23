@@ -74,6 +74,72 @@ export interface StatBonus {
   readonly startingEnergyRatio?: number;
   /** Chance d'esquiver une attaque de base (Léviathan : 0,15 = 15 %). */
   readonly dodgeChance?: number;
+  /** Portée en plus, en hexagones (Balistique). */
+  readonly range?: number;
+  /** Énergie maximale en plus ou en moins (Concentration : −0,2 = −20 %). */
+  readonly maxEnergyPercent?: number;
+  /** Les attaques de base infligent en plus cette part de la puissance élémentaire (Éveil élémentaire : 0,4). */
+  readonly onHitElementalRatio?: number;
+  /** Part des dégâts infligés rendue en soin à l'unité elle-même (Soif de sang : 0,15). */
+  readonly lifesteal?: number;
+  /** Armure retirée à la cible par attaque de base qui touche (Briseur : 4)… */
+  readonly armorShredPerAttack?: number;
+  /** … jusqu'à ce total (Briseur : 24). */
+  readonly armorShredMax?: number;
+  /** Part de l'armure ignorée par les attaques de base (Œil de l'esprit : 0,5). */
+  readonly armorPenetration?: number;
+  /** Chance de critique en plus contre une cible sous 50 % de ses PV (Faiblesse exploitée : 0,25). */
+  readonly executeCritChance?: number;
+  /** Vitesse d'attaque gagnée à chaque coup critique (Furie : 0,06)… */
+  readonly attackSpeedPerCrit?: number;
+  /** … jusqu'à ce maximum (Furie : 0,36). */
+  readonly attackSpeedPerCritMax?: number;
+  /** Après quelques secondes de combat : chance de critique en plus (Pouvoir latent : 0,3)… */
+  readonly latentCritChance?: number;
+  /** … et vitesse d'attaque en plus (Pouvoir latent : 0,2). */
+  readonly latentAttackSpeedPercent?: number;
+  /** Explosion régulière des attaques de base : dégâts de base (Attaque explosion : 60)… */
+  readonly blastDamage?: number;
+  /** … plus cette part de la puissance élémentaire (Attaque explosion : 0,6). */
+  readonly blastElementalRatio?: number;
+  /** Attaques de base subies : jamais critiques, et dégâts réduits de cette part (Garde : 0,2). */
+  readonly guardReduction?: number;
+  /** Part des dégâts des attaques de base subies renvoyée à l'attaquant (Contre-attaque : 0,3). */
+  readonly thornsRatio?: number;
+  /** Chance de réduire de moitié les dégâts d'un coup subi (Bénédiction divine : 0,25). */
+  readonly divineBlessingChance?: number;
+  /** PV max régénérés chaque seconde (Récupération : 0,015). */
+  readonly regenPercentPerSecond?: number;
+  /** Vitesse d'attaque gagnée à chaque coup subi (Ressentiment : 0,02)… */
+  readonly attackSpeedPerHitTaken?: number;
+  /** … jusqu'à ce maximum (Ressentiment : 0,4). */
+  readonly attackSpeedPerHitTakenMax?: number;
+  /** Énergie gagnée à chaque coup subi, quel que soit le rôle (Garde offensive : 4). */
+  readonly energyPerHitTaken?: number;
+  /** Armure et résistance élémentaire gagnées pendant quelques secondes après chaque compétence (Garde renforcée : 30). */
+  readonly postCastDefense?: number;
+  /** Soins et boucliers de la compétence en plus (Bonus soin : 0,3). */
+  readonly healShieldBonus?: number;
+  /** Dégâts des compétences gagnés à chaque compétence lancée (Coalescence : 0,1)… */
+  readonly skillDamagePerCast?: number;
+  /** … jusqu'à ce maximum (Coalescence : 0,5). */
+  readonly skillDamagePerCastMax?: number;
+  /** 1 = immunité à la brûlure, aux ralentissements, au poison et à la paralysie (Anti-fléaux). */
+  readonly statusImmunity?: number;
+  /** Les compétences empoisonnent : dégâts par seconde (Attaque poison : 20)… */
+  readonly poisonDamage?: number;
+  /** … plus cette part de la puissance élémentaire par seconde (Attaque poison : 0,2). */
+  readonly poisonElementalRatio?: number;
+  /** Chance qu'une attaque de base qui touche paralyse la cible (Attaque paralysie : 0,1). */
+  readonly paralysisChance?: number;
+  /** Énergie retirée à la cible par attaque de base qui touche (Intimidateur : 5). */
+  readonly energyDrainPerAttack?: number;
+  /** Énergie donnée aux alliés proches quand l'unité lance sa compétence (Grand rayon : 10). */
+  readonly allyEnergyOnCast?: number;
+  /** Énergie gagnée à chaque coup critique (Coups en chaîne : 5). */
+  readonly energyPerCrit?: number;
+  /** Énergie en plus à chaque attaque de base (Récupération d'endurance : 3). */
+  readonly energyPerAttack?: number;
 }
 
 /** Statistique sur laquelle un ratio de compétence peut s'appuyer ('hp' = PV max). */

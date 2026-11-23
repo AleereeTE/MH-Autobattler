@@ -5,7 +5,9 @@ import { dealDamage } from '../actions/damage.ts';
 import { leapNextTo } from '../actions/leap.ts';
 import { livingEnemies, selectTarget } from '../behaviors/targeting.ts';
 import { secondsToTicks } from '../constants.ts';
-import type { CombatState, CombatUnit } from '../state.ts';
+import { critChanceAgainst, registerCrit, skillDamageMultiplier } from '../items/item-stats.ts';
+import { elapsedSeconds, type CombatState, type CombatUnit } from '../state.ts';
+import { applyPoison, isImmuneToStatuses } from '../status/ailments.ts';
 import { addModifier } from '../status/modifiers.ts';
 import { pushSkillArea } from './area.ts';
 
@@ -28,11 +30,13 @@ export function applyDamageEffect(state: CombatState, caster: CombatUnit, effect
   if (center === null) return;
   const radius = effect.radius ?? 0;
   pushSkillArea(state, caster, 'damage', center, radius);
-  const amount = scaledAmount(effect, caster.stats, caster.rank);
+  const amount = scaledAmount(effect, caster.stats, caster.rank) * skillDamageMultiplier(caster);
 
   for (const victim of findVictims(state, caster, center, radius)) {
     // ✅ Par défaut une compétence ne peut pas être critique ; certains traits (Berserker) le permettent.
-    const isCrit = caster.stats.skillsCanCrit && state.rng.chance(caster.stats.critChance);
+    // Objets : Pouvoir latent et Faiblesse exploitée comptent aussi pour les critiques des compétences.
+    const isCrit = caster.stats.skillsCanCrit && state.rng.chance(critChanceAgainst(caster, victim, elapsedSeconds(state)));
+    if (isCrit) registerCrit(caster);
     dealDamage(state, caster, victim, {
       amount: isCrit ? applyCrit(amount, caster.stats.critMultiplier) : amount,
       type: effect.damageType,
@@ -40,7 +44,10 @@ export function applyDamageEffect(state: CombatState, caster: CombatUnit, effect
       cause: 'skill',
     });
 
-    if (effect.slow !== undefined) {
+    // ✅ Attaque poison : chaque ennemi touché par la compétence est empoisonné.
+    applyPoison(state, caster, victim);
+
+    if (effect.slow !== undefined && !isImmuneToStatuses(victim)) {
       const durationTicks = secondsToTicks(effect.slow.duration);
       addModifier(victim, `skill:${caster.def.skill.id}`, effect.slow.attackSpeedPercent, durationTicks);
       state.events.push({ type: 'status', tick: state.tick, uid: victim.uid, status: 'chill', durationTicks });

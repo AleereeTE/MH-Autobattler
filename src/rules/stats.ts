@@ -13,6 +13,37 @@ export interface CombatStats extends Stats {
   readonly lowHpDamageBonus: number;
   readonly startingEnergyRatio: number;
   readonly dodgeChance: number;
+  readonly onHitElementalRatio: number;
+  readonly lifesteal: number;
+  readonly armorShredPerAttack: number;
+  readonly armorShredMax: number;
+  readonly armorPenetration: number;
+  readonly executeCritChance: number;
+  readonly attackSpeedPerCrit: number;
+  readonly attackSpeedPerCritMax: number;
+  readonly latentCritChance: number;
+  readonly latentAttackSpeedPercent: number;
+  readonly blastDamage: number;
+  readonly blastElementalRatio: number;
+  readonly guardReduction: number;
+  readonly thornsRatio: number;
+  readonly divineBlessingChance: number;
+  readonly regenPercentPerSecond: number;
+  readonly attackSpeedPerHitTaken: number;
+  readonly attackSpeedPerHitTakenMax: number;
+  readonly energyPerHitTaken: number;
+  readonly postCastDefense: number;
+  readonly healShieldBonus: number;
+  readonly skillDamagePerCast: number;
+  readonly skillDamagePerCastMax: number;
+  readonly statusImmunity: number;
+  readonly poisonDamage: number;
+  readonly poisonElementalRatio: number;
+  readonly paralysisChance: number;
+  readonly energyDrainPerAttack: number;
+  readonly allyEnergyOnCast: number;
+  readonly energyPerCrit: number;
+  readonly energyPerAttack: number;
 }
 
 type NumericKey = Exclude<keyof StatBonus, 'skillsCanCrit'>;
@@ -39,6 +70,39 @@ const NUMERIC_KEYS: readonly NumericKey[] = [
   'lowHpDamageBonus',
   'startingEnergyRatio',
   'dodgeChance',
+  'range',
+  'maxEnergyPercent',
+  'onHitElementalRatio',
+  'lifesteal',
+  'armorShredPerAttack',
+  'armorShredMax',
+  'armorPenetration',
+  'executeCritChance',
+  'attackSpeedPerCrit',
+  'attackSpeedPerCritMax',
+  'latentCritChance',
+  'latentAttackSpeedPercent',
+  'blastDamage',
+  'blastElementalRatio',
+  'guardReduction',
+  'thornsRatio',
+  'divineBlessingChance',
+  'regenPercentPerSecond',
+  'attackSpeedPerHitTaken',
+  'attackSpeedPerHitTakenMax',
+  'energyPerHitTaken',
+  'postCastDefense',
+  'healShieldBonus',
+  'skillDamagePerCast',
+  'skillDamagePerCastMax',
+  'statusImmunity',
+  'poisonDamage',
+  'poisonElementalRatio',
+  'paralysisChance',
+  'energyDrainPerAttack',
+  'allyEnergyOnCast',
+  'energyPerCrit',
+  'energyPerAttack',
 ];
 
 /** Additionne plusieurs bonus, champ par champ. */
@@ -74,8 +138,9 @@ export function computeCombatStats(base: Stats, bonuses: readonly StatBonus[]): 
     armor: base.armor + b.armor,
     elementalResist: base.elementalResist + b.elementalResist,
     attackSpeed: base.attackSpeed * (1 + b.attackSpeedPercent),
-    range: base.range,
-    maxEnergy: base.maxEnergy,
+    range: base.range + b.range,
+    // Concentration : l'énergie maximale baisse, sans descendre sous 10 % de celle de la fiche.
+    maxEnergy: base.maxEnergy * Math.max(0.1, 1 + b.maxEnergyPercent),
     energyRegenBonus: base.energyRegenBonus + b.energyRegen,
     critMultiplier: BALANCE.critMultiplier + b.critMultiplier,
     damageReduction: Math.min(BALANCE.maxDamageReduction, Math.max(0, b.damageReduction)),
@@ -87,5 +152,36 @@ export function computeCombatStats(base: Stats, bonuses: readonly StatBonus[]): 
     lowHpDamageBonus: b.lowHpDamageBonus,
     startingEnergyRatio: Math.min(1, Math.max(0, b.startingEnergyRatio)),
     dodgeChance: Math.min(BALANCE.maxDodgeChance, Math.max(0, b.dodgeChance)),
+    onHitElementalRatio: b.onHitElementalRatio,
+    lifesteal: b.lifesteal,
+    armorShredPerAttack: b.armorShredPerAttack,
+    armorShredMax: b.armorShredMax,
+    armorPenetration: Math.min(1, Math.max(0, b.armorPenetration)),
+    executeCritChance: b.executeCritChance,
+    attackSpeedPerCrit: b.attackSpeedPerCrit,
+    attackSpeedPerCritMax: b.attackSpeedPerCritMax,
+    latentCritChance: b.latentCritChance,
+    latentAttackSpeedPercent: b.latentAttackSpeedPercent,
+    blastDamage: b.blastDamage,
+    blastElementalRatio: b.blastElementalRatio,
+    guardReduction: Math.min(1, Math.max(0, b.guardReduction)),
+    thornsRatio: b.thornsRatio,
+    divineBlessingChance: Math.min(1, Math.max(0, b.divineBlessingChance)),
+    regenPercentPerSecond: b.regenPercentPerSecond,
+    attackSpeedPerHitTaken: b.attackSpeedPerHitTaken,
+    attackSpeedPerHitTakenMax: b.attackSpeedPerHitTakenMax,
+    energyPerHitTaken: b.energyPerHitTaken,
+    postCastDefense: b.postCastDefense,
+    healShieldBonus: b.healShieldBonus,
+    skillDamagePerCast: b.skillDamagePerCast,
+    skillDamagePerCastMax: b.skillDamagePerCastMax,
+    statusImmunity: Math.min(1, Math.max(0, b.statusImmunity)),
+    poisonDamage: b.poisonDamage,
+    poisonElementalRatio: b.poisonElementalRatio,
+    paralysisChance: Math.min(1, Math.max(0, b.paralysisChance)),
+    energyDrainPerAttack: b.energyDrainPerAttack,
+    allyEnergyOnCast: b.allyEnergyOnCast,
+    energyPerCrit: b.energyPerCrit,
+    energyPerAttack: b.energyPerAttack,
   };
 }

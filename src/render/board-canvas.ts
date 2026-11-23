@@ -35,6 +35,8 @@ export interface BoardTheme {
   readonly rankBadge: string;
   /** Couleurs des zones d'effet qui ne dépendent pas de l'élément du lanceur. */
   readonly areas: Readonly<Record<Exclude<AreaTone, 'damage'>, string>>;
+  /** Pastilles des statuts apportés par les objets : poison et paralysie. */
+  readonly statuses: { readonly poison: string; readonly paralysis: string };
 }
 
 /** Image affichée dans le jeton d'une unité. */
@@ -79,6 +81,8 @@ export interface SceneUnit {
   readonly burning?: boolean;
   readonly chilled?: boolean;
   readonly hasted?: boolean;
+  readonly poisoned?: boolean;
+  readonly paralyzed?: boolean;
 }
 
 export interface BoardScene {
@@ -257,12 +261,14 @@ function drawRank(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   ctx.fillText(stars, center.x, center.y + radius + 1.5);
 }
 
-/** Pastilles d'état (brûlure, ralentissement, accélération), en colonne sur le côté gauche du jeton. */
+/** Pastilles d'état (brûlure, ralentissement, accélération, poison, paralysie), en colonne sur le côté gauche du jeton. */
 function drawStatusDots(ctx: CanvasRenderingContext2D, theme: BoardTheme, unit: SceneUnit, center: Point, radius: number): void {
   const dots: string[] = [];
   if (unit.burning === true) dots.push(theme.elements.fire);
   if (unit.chilled === true) dots.push(theme.elements.ice);
   if (unit.hasted === true) dots.push(theme.elements.thunder);
+  if (unit.poisoned === true) dots.push(theme.statuses.poison);
+  if (unit.paralyzed === true) dots.push(theme.statuses.paralysis);
   dots.forEach((color, i) => {
     ctx.beginPath();
     ctx.arc(center.x - radius - 1, center.y - 8 + i * 8, 3.5, 0, Math.PI * 2);

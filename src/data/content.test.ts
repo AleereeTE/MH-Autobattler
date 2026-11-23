@@ -80,11 +80,13 @@ describe('contenu du prototype', () => {
     }
   });
 
-  it('donne un objet à chacune des 36 combinaisons de matériaux, dont 8 objets avec effet propre', () => {
+  it('donne un objet à chacune des 36 combinaisons de matériaux ; chaque objet codé a sa propre combinaison', () => {
     const ids = new Set<string>();
     for (const a of MATERIAL_IDS) for (const b of MATERIAL_IDS) ids.add(objectFor([a, b]).id);
     expect(ids.size).toBe(36);
-    expect(SIGNATURE_OBJECTS).toHaveLength(8);
+    const pairs = SIGNATURE_OBJECTS.map((object) => [...object.materials].sort().join('+'));
+    expect(new Set(pairs).size).toBe(SIGNATURE_OBJECTS.length);
+    expect(new Set(SIGNATURE_OBJECTS.map((object) => object.id)).size).toBe(SIGNATURE_OBJECTS.length);
   });
 
   it('a des escouades valides, qui se terminent toutes par une élimination', () => {

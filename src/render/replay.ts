@@ -34,6 +34,8 @@ export interface FrameUnit {
   burning: boolean;
   chilled: boolean;
   hasted: boolean;
+  poisoned: boolean;
+  paralyzed: boolean;
 }
 
 export interface FloatingText {
@@ -83,6 +85,8 @@ interface Tracker {
   burningUntil: number;
   chilledUntil: number;
   hastedUntil: number;
+  poisonedUntil: number;
+  paralyzedUntil: number;
 }
 
 function createTracker(snapshot: UnitSnapshot): Tracker {
@@ -109,6 +113,8 @@ function createTracker(snapshot: UnitSnapshot): Tracker {
       burning: false,
       chilled: false,
       hasted: false,
+      poisoned: false,
+      paralyzed: false,
     },
     move: null,
     castingUntil: -1,
@@ -116,6 +122,8 @@ function createTracker(snapshot: UnitSnapshot): Tracker {
     burningUntil: -1,
     chilledUntil: -1,
     hastedUntil: -1,
+    poisonedUntil: -1,
+    paralyzedUntil: -1,
   };
 }
 
@@ -182,6 +190,8 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
             if (event.status === 'burn') tracker.burningUntil = until;
             if (event.status === 'chill') tracker.chilledUntil = Math.max(tracker.chilledUntil, until);
             if (event.status === 'haste') tracker.hastedUntil = until;
+            if (event.status === 'poison') tracker.poisonedUntil = until;
+            if (event.status === 'paralysis') tracker.paralyzedUntil = Math.max(tracker.paralyzedUntil, until);
           }
           break;
         case 'dodge':
@@ -247,4 +257,6 @@ function finalize(tracker: Tracker, tick: number): void {
   unit.burning = unit.alive && tick < tracker.burningUntil;
   unit.chilled = unit.alive && tick < tracker.chilledUntil;
   unit.hasted = unit.alive && tick < tracker.hastedUntil;
+  unit.poisoned = unit.alive && tick < tracker.poisonedUntil;
+  unit.paralyzed = unit.alive && tick < tracker.paralyzedUntil;
 }

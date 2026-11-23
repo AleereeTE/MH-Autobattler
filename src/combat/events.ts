@@ -57,8 +57,9 @@ export interface TraitSummary {
 /** null = combat interrompu par la limite de sécurité (signe d'un bug). */
 export type Winner = Side | null;
 export type CombatEndReason = 'elimination' | 'safetyLimit';
-export type DamageCause = 'attack' | 'skill' | 'burn' | 'lightning';
-export type StatusKind = 'burn' | 'chill' | 'haste';
+/** `item` : dégâts d'un effet d'objet (Éveil élémentaire, Attaque explosion…). */
+export type DamageCause = 'attack' | 'skill' | 'burn' | 'lightning' | 'item' | 'poison';
+export type StatusKind = 'burn' | 'chill' | 'haste' | 'poison' | 'paralysis';
 export type SkillEffectKind = SkillEffect['kind'];
 
 type At<T> = T & { readonly tick: number };

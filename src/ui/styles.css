@@ -16,6 +16,9 @@
   --board-hp: #3f9b5a;
   --board-hp-back: #00000033;
   --board-shield: #d9d9d9;
+  /* Statuts des objets : poison (violet) et paralysie (jaune pâle). */
+  --status-poison: #9b4dca;
+  --status-paralysis: #f2e46b;
   /* Barre d'énergie des jetons (grisée quand l'énergie est bloquée). */
   --board-energy: #e0a800;
   --board-energy-blocked: #9aa3ad;

@@ -153,7 +153,7 @@ Les statistiques de combat sont calculées au début du combat : statistiques de
 | `move` | Une unité part vers une case voisine (avec la durée du trajet) | Animer le déplacement |
 | `leap` | Une unité bondit à côté de sa cible | Animation de bond |
 | `attack` | Une unité attaque sa cible | Animation d'attaque |
-| `damage` | Dégâts subis (montant, part absorbée, type, cause, critique, PV restants) | Chiffres de dégâts, barre de vie |
+| `damage` | Dégâts subis (montant, part absorbée, type, cause — attaque, compétence, brûlure, éclair ou effet d'objet —, critique, PV restants) | Chiffres de dégâts, barre de vie |
 | `heal` | PV rendus | Chiffres de soin |
 | `shield` | Bouclier gagné | Barre de bouclier |
 | `status` | Brûlure, ralentissement ou bonus appliqué (avec sa durée) | Icônes d'état |
@@ -179,7 +179,7 @@ Les statistiques de combat sont calculées au début du combat : statistiques de
 | Barre de vie | Camp : bleue pour le joueur, rouge pour l'ennemi |
 | Barre fine sous la barre de vie | Énergie (en combat seulement) : jaune, grise quand elle est bloquée (bouclier, compétence en cours). Pleine, la compétence part |
 | Pastille du bas | Rang : ★ bronze, ★★ argent, ★★★ or |
-| Points sur le côté gauche | États : brûlure, ralentissement, accélération |
+| Points sur le côté gauche | États : brûlure, ralentissement, accélération, poison (violet), paralysie (jaune pâle) |
 
 Les couleurs sont des variables CSS (`--cost-1` à `--cost-6`, `--side-player`, `--side-enemy`, `--board-energy`…) dans `src/ui/styles.css`, avec une variante pour le thème sombre.
 
@@ -194,6 +194,20 @@ Les couleurs sont des variables CSS (`--cost-1` à `--cost-6`, `--side-player`, 
 
 - **Filtre par coût** (`ui/shared/palette-groups.ts`, `cost-filter.ts`, partagés avec le planificateur) : la liste des unités reste groupée par coût croissant ; des boutons « Tous », 1 à 6 (aux couleurs des jetons) n'affichent qu'un coût. Recliquer sur le coût actif réaffiche tout. Le filtre ne touche que l'affichage : il ne relance pas la composition et n'arrête pas un replay.
 - **Bilan par camp** (`render/combat-summary.ts` → `summariesBySide`, `ui/shared/results-view.ts`) : le tableau a une section « Alliés » puis une section « Ennemis », chacune ouverte par une ligne de titre à la couleur du camp avec le nombre d'unités encore debout, et triée par dégâts infligés. Commun au bac à sable et au mode run, il suit le replay en direct.
+
+### Objets
+
+- Chaque effet d'objet est un champ de bonus (`StatBonus`), comme les effets des traits : il s'additionne si l'unité porte deux fois le même objet. `computeCombatStats` les range dans les statistiques de combat.
+- Le moteur les applique à des moments précis :
+  - `combat/items/item-stats.ts` : ce qui change pendant le combat — chance de critique (Pouvoir latent, Faiblesse exploitée), vitesse d'attaque (Furie, Ressentiment, Pouvoir latent), dégâts des compétences (Coalescence), soins et boucliers (Bonus soin) ;
+  - `combat/items/on-attack.ts` : effets d'une attaque de base qui touche (Éveil élémentaire, Briseur, Attaque explosion) ;
+  - `actions/damage.ts` : à chaque coup — armure ignorée (Œil de l'esprit), Garde, Bénédiction divine, Garde offensive, Contre-attaque, vol de vie (Soif de sang) ;
+  - `status/tick-statuses.ts` : chaque tick — Récupération (un soin par seconde), poison et paralysie (`status/ailments.ts`), fin du bonus de Garde renforcée ;
+  - `skills/cast.ts` : à la fin d'une compétence — Coalescence, Garde renforcée, Grand rayon ;
+  - énergie : Récupération d'endurance (attaque de base), Coups en chaîne (critique), Intimidateur (attaque qui touche).
+- Statuts des objets (`status/ailments.ts`) : poison (dégâts élémentaires chaque seconde, cause `poison`, soins reçus −40 %) et paralysie (l'unité n'agit plus, son incantation est suspendue). Anti-fléaux en protège, comme de la brûlure et des ralentissements. Le replay les affiche en pastilles, le journal et l'aperçu en combat les nomment.
+- Les tirages au hasard d'un objet (Bénédiction divine) n'ont lieu que si l'unité le porte : sans lui, un combat reste identique à graine égale.
+- Les dégâts d'un objet ont la cause `item` : ils ne déclenchent ni les effets d'élément ni la Source de vie, mais comptent pour le vol de vie.
 
 ### Synergies
 
@@ -269,5 +283,5 @@ Ces choix ont été nécessaires pour faire tourner le moteur. Ils sont isolés 
 ## 9. Prochaines étapes techniques
 
 - **Événements d'énergie** : pour afficher les barres d'énergie dans le rendu.
-- **Les 36 objets définitifs**, une fois conçus.
+- **Les 36 objets** : codés (prototype-content.md) ; leurs valeurs restent à équilibrer en jouant.
 - **Mode run, suite** : carte (2 ou 3 chasses au choix), récompenses complètes (objet fusionné, retire-objet, capture), vraie « version boss », sauvegarde de la run.

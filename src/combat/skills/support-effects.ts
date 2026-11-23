@@ -5,11 +5,12 @@ import { healUnit } from '../actions/heal.ts';
 import { secondsToTicks } from '../constants.ts';
 import { isTargetable, type CombatState, type CombatUnit } from '../state.ts';
 import { addModifier } from '../status/modifiers.ts';
+import { healShieldMultiplier } from '../items/item-stats.ts';
 import { addShield } from '../status/shields.ts';
 import { pushSkillArea } from './area.ts';
 
 export function applyShieldEffect(state: CombatState, caster: CombatUnit, effect: ShieldEffect): void {
-  const amount = scaledAmount(effect, caster.stats, caster.rank);
+  const amount = scaledAmount(effect, caster.stats, caster.rank) * healShieldMultiplier(caster);
   const durationTicks = secondsToTicks(effect.duration);
   pushSkillArea(state, caster, 'shield', caster.position, 0);
   addShield(caster, amount, durationTicks);
@@ -17,7 +18,7 @@ export function applyShieldEffect(state: CombatState, caster: CombatUnit, effect
 }
 
 export function applyHealEffect(state: CombatState, caster: CombatUnit, effect: HealEffect): void {
-  const amount = scaledAmount(effect, caster.stats, caster.rank);
+  const amount = scaledAmount(effect, caster.stats, caster.rank) * healShieldMultiplier(caster);
   pushSkillArea(state, caster, 'heal', caster.position, effect.radius);
   const allies = state.units.filter(
     (unit) =>

@@ -19,7 +19,10 @@ function samePair(a: MaterialPair, b: MaterialPair): boolean {
   return (a[0] === b[0] && a[1] === b[1]) || (a[0] === b[1] && a[1] === b[0]);
 }
 
-/** Objet obtenu en fusionnant deux matériaux (l'ordre ne compte pas). */
+/**
+ * Objet obtenu en fusionnant deux matériaux (l'ordre ne compte pas). Les 36 combinaisons sont codées ;
+ * l'objet générique ne sert plus que de filet de sécurité (un test vérifie qu'il n'apparaît jamais).
+ */
 export function objectFor(materials: MaterialPair): ObjectDefinition {
   const signature = SIGNATURE_OBJECTS.find((object) => samePair(object.materials, materials));
   if (signature !== undefined) return signature;

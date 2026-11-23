@@ -1,4 +1,5 @@
 import { BALANCE } from '../../data/balance.ts';
+import { DIVINE_BLESSING_DAMAGE_FACTOR } from '../../data/items.ts';
 import type { DamageType } from '../../data/definitions.ts';
 import { mitigate } from '../../rules/damage.ts';
 import { suddenDeathDamageMultiplier } from '../../rules/sudden-death.ts';
@@ -16,6 +17,8 @@ export interface Hit {
   readonly type: DamageType;
   readonly isCrit: boolean;
   readonly cause: DamageCause;
+  /** Part de l'armure ignorée (Œil de l'esprit, attaques de base seulement). */
+  readonly armorPenetration?: number;
 }
 
 /**
@@ -31,15 +34,23 @@ export interface Hit {
  * Le K.O. éventuel est résolu plus tard, en fin de tick.
  */
 export function dealDamage(state: CombatState, source: CombatUnit, target: CombatUnit, hit: Hit): number {
-  const defense = hit.type === 'physical' ? target.stats.armor : target.stats.elementalResist;
+  // ✅ Objets : l'armure perdue (Briseur) et l'armure ignorée (Œil de l'esprit) ne valent que contre les dégâts physiques ;
+  // le bonus de Garde renforcée s'ajoute à l'armure comme à la résistance.
+  const buff = target.defenseBuff?.amount ?? 0;
+  const armor = Math.max(0, target.stats.armor + buff - target.armorShred) * (1 - (hit.armorPenetration ?? 0));
+  const defense = hit.type === 'physical' ? armor : target.stats.elementalResist + buff;
   const amount =
     mitigate(hit.amount, defense) *
     rageMultiplier(source) *
     terrorMultiplier(state, source) *
     suddenDeathDamageMultiplier(elapsedSeconds(state)) *
-    (1 - target.stats.damageReduction);
+    (1 - target.stats.damageReduction) *
+    guardMultiplier(target, hit) *
+    blessingMultiplier(state, target, hit);
 
-  gainEnergy(target, energyProfileOf(target).perHitTaken);
+  // ✅ Garde offensive : de l'énergie en plus à chaque coup subi (toujours bloquée par un bouclier).
+  gainEnergy(target, energyProfileOf(target).perHitTaken + target.stats.energyPerHitTaken);
+  if (!isDamageOverTime(hit)) target.hitsTaken += 1;
   const absorbed = absorbWithShields(target, amount);
   target.hp -= amount - absorbed;
 
@@ -60,7 +71,34 @@ export function dealDamage(state: CombatState, source: CombatUnit, target: Comba
     applyOnHitEffects(state, source, target);
     lifeSource(state, source, amount);
   }
+  // ✅ Contre-attaque : une part des dégâts d'une attaque de base revient à l'attaquant (dégâts physiques d'objet).
+  if (hit.cause === 'attack' && target.stats.thornsRatio > 0 && isTargetable(source)) {
+    dealDamage(state, target, source, { amount: amount * target.stats.thornsRatio, type: 'physical', isCrit: false, cause: 'item' });
+  }
+  // ✅ Soif de sang : l'unité se soigne d'une part des dégâts de ses attaques, compétences et effets d'objets.
+  if (!isDamageOverTime(hit) && hit.cause !== 'lightning' && source.stats.lifesteal > 0 && isTargetable(source) && source.hp < source.stats.hp) {
+    healUnit(state, source, source, amount * source.stats.lifesteal);
+  }
   return amount;
+}
+
+/** Dégâts sur la durée (brûlure, poison) : ce ne sont pas des « coups » pour les objets. */
+function isDamageOverTime(hit: Hit): boolean {
+  return hit.cause === 'burn' || hit.cause === 'poison';
+}
+
+/** ✅ Garde : les attaques de base subies font moins de dégâts (et ne sont jamais critiques, voir basicAttack). */
+function guardMultiplier(target: CombatUnit, hit: Hit): number {
+  return hit.cause === 'attack' ? 1 - target.stats.guardReduction : 1;
+}
+
+/**
+ * ✅ Bénédiction divine : une chance de réduire de moitié les dégâts d'un coup (pas d'un tic de brûlure).
+ * Le tirage n'a lieu que si l'unité porte l'objet : les autres combats restent identiques à graine égale.
+ */
+function blessingMultiplier(state: CombatState, target: CombatUnit, hit: Hit): number {
+  if (isDamageOverTime(hit) || target.stats.divineBlessingChance <= 0) return 1;
+  return state.rng.chance(target.stats.divineBlessingChance) ? DIVINE_BLESSING_DAMAGE_FACTOR : 1;
 }
 
 /** Bonus de la Rage draconique si l'unité est sous le seuil de PV. */

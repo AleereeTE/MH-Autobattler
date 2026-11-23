@@ -84,6 +84,14 @@ function createUnit(uid: number, side: Side, placement: Placement, active: Reado
     modifiers: [],
     shields: [],
     burn: null,
+    armorShred: 0,
+    critStacks: 0,
+    landedAttacks: 0,
+    hitsTaken: 0,
+    skillsResolved: 0,
+    defenseBuff: null,
+    poison: null,
+    paralyzedTicks: 0,
   };
 }
 

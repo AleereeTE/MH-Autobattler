@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Equipment } from '../data/items.ts';
+import { MATERIAL_IDS, type Equipment } from '../data/items.ts';
 import { SLOT_CAPACITY, addMaterial, countObjects, equipmentBonuses, objectFor } from './equipment.ts';
 import { computeCombatStats } from './stats.ts';
 import { makeUnit } from '../test-utils/factories.ts';
@@ -36,10 +36,8 @@ describe('objectFor', () => {
     expect(objectFor(['bone', 'membrane']).name).toBe('Bonus critique');
   });
 
-  it('crée un objet générique : statistiques des matériaux +50 %', () => {
-    const generic = objectFor(['bone', 'carapace']);
-    expect(generic.generic).toBe(true);
-    expect(generic.effect).toEqual({ attack: 7.5, hp: 75 });
+  it('les 36 combinaisons de matériaux donnent toutes un objet codé (plus aucun objet générique)', () => {
+    for (const a of MATERIAL_IDS) for (const b of MATERIAL_IDS) expect(objectFor([a, b]).generic, `${a} + ${b}`).toBe(false);
   });
 });
 

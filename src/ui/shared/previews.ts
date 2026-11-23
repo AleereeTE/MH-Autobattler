@@ -36,6 +36,8 @@ export function combatUnitPreview(unit: FrameUnit): HTMLElement {
     !unit.alive ? 'K.O.' : null,
     unit.burning ? 'Brûlure' : null,
     unit.chilled ? 'Ralenti' : null,
+    unit.poisoned ? 'Empoisonné (soins −40 %)' : null,
+    unit.paralyzed ? 'Paralysé' : null,
     unit.hasted ? 'Accéléré' : null,
     unit.casting ? 'Incante sa compétence' : null,
   ].filter((state): state is string => state !== null);

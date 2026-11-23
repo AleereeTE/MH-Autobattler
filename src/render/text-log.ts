@@ -7,7 +7,7 @@ import { rankStars } from '../rules/ranks.ts';
  */
 
 const DAMAGE_LABELS = { physical: 'physiques', elemental: 'élémentaires' } as const;
-const CAUSE_LABELS = { attack: '', skill: '', burn: ' (brûlure)', lightning: ' (éclair)' } as const;
+const CAUSE_LABELS = { attack: '', skill: '', burn: ' (brûlure)', lightning: ' (éclair)', item: ' (effet d’objet)', poison: ' (poison)' } as const;
 
 function unitLabel(unit: UnitSnapshot): string {
   const stars = unit.rank > 1 ? ` ${rankStars(unit.rank)}` : '';
@@ -63,6 +63,8 @@ export function formatCombatLog(events: readonly CombatEvent[], untilTick = Infi
         break;
       case 'status':
         if (event.status === 'haste') lines.push(`${time}    ${name(event.uid)} accélère`);
+        if (event.status === 'poison') lines.push(`${time}    ${name(event.uid)} est empoisonné`);
+        if (event.status === 'paralysis') lines.push(`${time}    ${name(event.uid)} est paralysé`);
         break; // brûlure et ralentissement : trop fréquents pour le journal
       case 'skillCast':
         lines.push(`${time} ${name(event.uid)} prépare « ${event.skillName} »`);

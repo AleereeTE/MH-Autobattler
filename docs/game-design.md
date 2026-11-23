@@ -282,7 +282,7 @@ Vocabulaire : un **matériau** est l'élément de base ; **2 matériaux fusionn�
 | Extrait | +1 énergie par seconde (gain passif) |
 
 8 matériaux permettent 36 objets différents. Chaque objet donne les statistiques de ses deux matériaux plus son propre effet.
-Le prototype contient 8 objets avec un effet propre ; les autres combinaisons donnent un objet générique. Les 36 objets définitifs seront conçus par Théo.
+Les **36 objets sont définis** (validés le 2026-11-23, liste dans [prototype-content.md](prototype-content.md)) : des noms de talents de Monster Hunter et, pour la plupart, un effet propre (vol de vie, explosion, poison, paralysie, renvoi de dégâts…). Ils sont tous codés (3 lots).
 
 ### 7.2 Règles
 
@@ -360,7 +360,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 ## 12. Hors périmètre
 
 ### Reporté à plus tard (étape 5 ou après)
-- Statuts (Poison, Paralysie, Sommeil, Explosion…), y compris comme traits principaux.
+- Statuts comme traits principaux, et Sommeil. (Poison, Paralysie et Explosion existent déjà comme effets d'objets.)
 - Parties cassables et boss sur plusieurs hexagones.
 - Compagnons (Palicos), endurance, tranchant, consommables.
 - Compétences à ratios mixtes (attaque brute + puissance élémentaire), ou qui utilisent la statistique la plus élevée de l'unité.
@@ -414,7 +414,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 9. Sauvegarde en cours de run ?
 
 ### Contenu
-10. Effets des 36 objets (conçus par Théo).
+10. ~~Effets des 36 objets.~~ Tranché le 2026-11-23 (prototype-content.md).
 11. Unités supplémentaires : arme de chasseur restante (Fusarbalète léger, pour Nadia de Wilds), autres monstres (dont des Wyvernes à crocs) et Dragons anciens.
 
 ---
@@ -440,3 +440,5 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-22** : carte du mode run — carte visible par stage (9 étapes de 2 à 3 cases puis le boss), cases Chasse, Quête urgente (budget de 3 chasses plus loin, récompenses doublées), Forge (objets déplaçables sans retire-objet, 2 matériaux reforgés) et Marchand (4 matériaux à 3 zennys, retire-objet à 4) ; une case sans combat remplace une chasse (la run garde 30 étapes) ; on voit le monstre cible et le type de récompense. Principe d'un mode infini après les 30 étapes (détails à définir).
 - **2026-11-22** : rangs ★ — les pourcentages de statistique des compétences augmentent avec le rang (×1,25 au ★2, ×1,5 au ★3), pour tous les pourcentages. Mesure sur des équipes de 6 au hasard : les combats ★2 et ★3 raccourcissent de moins d'une seconde (environ 28 à 30 s), la part des compétences dans les dégâts passe de 27 à 29 % (★2) et de 23 à 27 % (★3). **PV des unités inchangés** : on les gardera tels quels, quitte à les revoir en jouant (un multiplicateur global de PV serait alors le levier le plus simple).
 - **2026-11-23** : les chasseurs prennent des noms officiels de la série, avec une arme qu'ils utilisent dans les jeux : Garrick → Fabius (Lance), Helga → Olivia (Marteau), Akira → Fiorayne (Grande épée), Lysa → Fugen (Doubles lames), Sylvain → Hinoa (Arc), Odette → Minoto (Corne de chasse), Kaede → Rondine (Épée longue), Dorian → Luchika (Fusarbalète lourd), Mira → Aiden (Épée et bouclier), Brann → Arlow (Lancecanon), Ondine → Galleus (Morpho-hache). Nadia (Wilds, Fusarbalète léger) est gardée pour le futur Fusarbalète léger. Les anciens noms restent dans les entrées précédentes de l'historique.
+- **2026-11-23** : les 36 objets sont validés — les 8 existants sont gardés, 28 nouveaux s'y ajoutent, nommés d'après des talents de Monster Hunter, avec de nouvelles mécaniques (vol de vie, explosion, poison, paralysie, renvoi de dégâts, effets d'énergie…). Codage en 3 lots : effets au coup porté, effets quand l'unité est touchée, statuts et énergie.
+- **2026-11-23** : les 36 objets sont codés (lots 1 à 3). Deux nouveaux statuts arrivent avec les objets : poison (dégâts par seconde, soins reçus −40 %) et paralysie (l'unité n'agit plus) ; Anti-fléaux en protège, comme de la brûlure et des ralentissements.

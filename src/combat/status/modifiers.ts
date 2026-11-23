@@ -1,4 +1,5 @@
 import { BALANCE } from '../../data/balance.ts';
+import { itemAttackSpeedBonus } from '../items/item-stats.ts';
 import type { CombatUnit } from '../state.ts';
 
 /** Ajoute un bonus ou un ralentissement temporaire ; remplace celui de même clé (pas de cumul). */
@@ -17,11 +18,12 @@ export function hasModifier(unit: CombatUnit, predicate: (percent: number) => bo
 }
 
 /**
- * Vitesse d'attaque actuelle : base × (1 + bonus et ralentissements + montée de l'Agitateur).
- * Elle ne descend jamais sous 25 % de la vitesse de base.
+ * Vitesse d'attaque actuelle : base × (1 + bonus et ralentissements + montée de l'Agitateur
+ * + objets : Furie et Pouvoir latent). Elle ne descend jamais sous 25 % de la vitesse de base.
  */
 export function attackSpeedOf(unit: CombatUnit, elapsedSeconds: number): number {
   const fromModifiers = unit.modifiers.reduce((total, modifier) => total + modifier.attackSpeedPercent, 0);
   const ramp = Math.min(unit.stats.attackSpeedRampMax, unit.stats.attackSpeedRampPerSecond * elapsedSeconds);
-  return unit.stats.attackSpeed * Math.max(BALANCE.minAttackSpeedMultiplier, 1 + fromModifiers + ramp);
+  const items = itemAttackSpeedBonus(unit, elapsedSeconds);
+  return unit.stats.attackSpeed * Math.max(BALANCE.minAttackSpeedMultiplier, 1 + fromModifiers + ramp + items);
 }

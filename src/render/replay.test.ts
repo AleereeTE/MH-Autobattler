@@ -137,3 +137,37 @@ describe('énergie', () => {
     expect(energyAt(6)).toBe(3);
   });
 });
+
+describe('statuts des objets', () => {
+  const unit: UnitSnapshot = {
+    uid: 1,
+    defId: 'khezu',
+    name: 'Khezu',
+    side: 'enemy',
+    kind: 'monster',
+    role: 'tank',
+    element: 'thunder',
+    cost: 1,
+    rank: 1,
+    position: { col: 3, row: 2 },
+    maxHp: 500,
+    maxEnergy: 80,
+    energy: 0,
+    equipment: [],
+    stats: { hp: 500, attack: 50, elementalPower: 30, critChance: 0, armor: 0, elementalResist: 0, attackSpeed: 1, range: 1, maxEnergy: 80 },
+  };
+  const events: CombatEvent[] = [
+    { type: 'combatStart', tick: 0, units: [unit], traits: { player: [], enemy: [] } },
+    { type: 'status', tick: 10, uid: 1, status: 'poison', durationTicks: 80 },
+    { type: 'status', tick: 20, uid: 1, status: 'paralysis', durationTicks: 30 },
+    { type: 'combatEnd', tick: 200, winner: 'player', reason: 'elimination' },
+  ];
+  const at = (tick: number) => createReplay(events).frameAt(tick).units[0];
+
+  it('affiche le poison et la paralysie pendant leur durée', () => {
+    expect(at(15)).toMatchObject({ poisoned: true, paralyzed: false });
+    expect(at(30)).toMatchObject({ poisoned: true, paralyzed: true });
+    expect(at(50)).toMatchObject({ poisoned: true, paralyzed: false });
+    expect(at(90)).toMatchObject({ poisoned: false, paralyzed: false });
+  });
+});

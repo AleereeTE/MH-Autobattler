@@ -74,6 +74,8 @@ export function frameScene(frame: Frame, portraits: PortraitStore): BoardScene {
       burning: unit.burning,
       chilled: unit.chilled,
       hasted: unit.hasted,
+      poisoned: unit.poisoned,
+      paralyzed: unit.paralyzed,
     })),
     texts: frame.texts,
     areas: frame.areas.map((area) => ({

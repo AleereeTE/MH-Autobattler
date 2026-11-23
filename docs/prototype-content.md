@@ -127,18 +127,46 @@ Chaque objet donne les statistiques de ses deux matériaux **plus** son propre e
 | Plume | +10 % de vitesse d'attaque |
 | Extrait | +1 énergie par seconde |
 
-| Matériaux | Objet | Effet en plus des matériaux |
-|---|---|---|
-| Os + Os | Bonus d'attaque | +20 attaque brute |
-| Membrane + Membrane | Œil critique | +20 % de chance de critique |
-| Os + Membrane | Bonus critique | Multiplicateur critique +0,3 (×1,8) |
-| Gemme + Gemme | Attaque élémentaire | +20 puissance élémentaire |
-| Gemme + Extrait | Accumulateur | Regagne 20 énergie après chaque compétence |
-| Carapace + Carapace | Santé | +300 PV |
-| Corne + Croc | Défense totale | +20 armure et +20 résistance élémentaire |
-| Plume + Os | Agitateur | +3 % de vitesse d'attaque par seconde de combat (max +45 %) |
+Les 36 objets ont été validés le 2026-11-23. Leurs noms viennent des talents de Monster Hunter. ⚠️ Toutes les valeurs sont provisoires. Les 36 objets sont codés (en 3 lots). Une attaque esquivée ne déclenche aucun effet d'objet « au coup ». Les dégâts sur la durée (brûlure, poison) ne comptent pas comme des « coups » pour les objets (Ressentiment, Bénédiction divine, Soif de sang).
 
-**Les 28 autres combinaisons** donnent un objet générique : les statistiques des deux matériaux, +50 %, sans effet spécial. Elles seront remplacées par les 36 objets que tu concevras.
+| Matériaux | Objet | Effet en plus des matériaux | Lot |
+|---|---|---|---|
+| Os + Os | Bonus d'attaque | +20 attaque brute | ✅ |
+| Membrane + Membrane | Œil critique | +20 % de chance de critique | ✅ |
+| Os + Membrane | Bonus critique | Multiplicateur critique +0,3 (×1,8) | ✅ |
+| Gemme + Gemme | Attaque élémentaire | +20 puissance élémentaire | ✅ |
+| Gemme + Extrait | Accumulateur | Regagne 20 énergie après chaque compétence | ✅ |
+| Carapace + Carapace | Santé | +300 PV | ✅ |
+| Corne + Croc | Défense totale | +20 armure et +20 résistance élémentaire | ✅ |
+| Plume + Os | Agitateur | +3 % de vitesse d'attaque par seconde de combat (max +45 %) | ✅ |
+| Plume + Plume | Balistique | +1 de portée | ✅ lot 1 |
+| Extrait + Extrait | Concentration | Énergie maximale −20 % | ✅ lot 1 |
+| Gemme + Membrane | Élément critique | Compétences critiques possibles ; multiplicateur critique +0,2 (×1,7) | ✅ lot 1 |
+| Carapace + Membrane | Héroïsme | +30 % de dégâts sous 50 % des PV | ✅ lot 1 |
+| Os + Gemme | Éveil élémentaire | Les attaques de base infligent en plus 40 % de la puissance élémentaire en dégâts élémentaires | ✅ lot 1 |
+| Os + Carapace | Soif de sang | Soigne l'unité de 15 % des dégâts qu'elle inflige (attaques, compétences, effets d'objets) | ✅ lot 1 |
+| Os + Croc | Briseur | Chaque attaque de base qui touche retire 4 armure à la cible, pour tout le combat (max −24) | ✅ lot 1 |
+| Membrane + Corne | Œil de l'esprit | Les attaques de base ignorent 50 % de l'armure de la cible | ✅ lot 1 |
+| Membrane + Croc | Faiblesse exploitée | +25 % de chance de critique contre les cibles sous 50 % de leurs PV | ✅ lot 1 |
+| Membrane + Plume | Furie | Chaque coup critique : +6 % de vitesse d'attaque (max +36 %) | ✅ lot 1 |
+| Os + Extrait | Pouvoir latent | Après 10 s de combat : +30 % de chance de critique et +20 % de vitesse d'attaque | ✅ lot 1 |
+| Gemme + Plume | Attaque explosion | Toutes les 4 attaques de base qui touchent : explosion de 60 + 60 % de la puissance élémentaire sur la cible et ses voisins | ✅ lot 1 |
+| Corne + Corne | Garde | Les attaques de base subies ne sont jamais critiques et infligent −20 % de dégâts | ✅ lot 2 |
+| Os + Corne | Contre-attaque | Renvoie 30 % des dégâts des attaques de base subies à l'attaquant | ✅ lot 2 |
+| Carapace + Corne | Bénédiction divine | 25 % de chances de réduire de moitié les dégâts d'un coup subi | ✅ lot 2 |
+| Carapace + Croc | Récupération | Régénère 1,5 % des PV max par seconde | ✅ lot 2 |
+| Carapace + Plume | Ressentiment | Chaque coup subi : +2 % de vitesse d'attaque (max +40 %) | ✅ lot 2 |
+| Carapace + Extrait | Garde offensive | +4 énergie à chaque coup subi, quel que soit le rôle (pas à travers un bouclier) | ✅ lot 2 |
+| Corne + Extrait | Garde renforcée | Après chaque compétence : +30 armure et +30 résistance élémentaire pendant 4 s | ✅ lot 2 |
+| Gemme + Carapace | Bonus soin | Soins et boucliers de la compétence +30 % | ✅ lot 2 |
+| Gemme + Corne | Coalescence | Chaque compétence lancée : +10 % de dégâts des compétences pour le reste du combat (max +50 %) | ✅ lot 2 |
+| Croc + Croc | Anti-fléaux | Immunité à la brûlure, aux ralentissements et aux statuts (poison, paralysie) | ✅ lot 3 |
+| Gemme + Croc | Attaque poison | Les compétences empoisonnent : 20 + 20 % de la puissance élémentaire par seconde pendant 4 s, et la cible reçoit −40 % de soins | ✅ lot 3 |
+| Corne + Plume | Attaque paralysie | Les attaques de base ont 10 % de chances de paralyser la cible 1,5 s (elle n'agit plus) | ✅ lot 3 |
+| Croc + Plume | Intimidateur | Les attaques de base retirent 5 énergie à la cible | ✅ lot 3 |
+| Croc + Extrait | Grand rayon | Quand l'unité lance sa compétence, les alliés à 2 cases ou moins gagnent 10 énergie | ✅ lot 3 |
+| Membrane + Extrait | Coups en chaîne | Chaque coup critique rend 5 énergie | ✅ lot 3 |
+| Plume + Extrait | Récupération d'endurance | Les attaques de base donnent 3 énergie de plus | ✅ lot 3 |
 
 ---
 
