@@ -3,7 +3,13 @@ import { copiesForRank, interest, levelUpCost, roundIncome, sellValue } from './
 
 describe('économie', () => {
   it('verse 1 zenny d’intérêts par tranche de 10, 5 au maximum', () => {
-    expect([0, 9, 10, 29, 50, 120].map(interest)).toEqual([0, 0, 1, 2, 5, 5]);
+    expect([0, 9, 10, 29, 50, 120].map((zennys) => interest(zennys))).toEqual([0, 0, 1, 2, 5, 5]);
+  });
+
+  it('le plafond des intérêts peut être relevé (Banquier félyne)', () => {
+    expect(interest(120, 8)).toBe(8);
+    expect(interest(60, 8)).toBe(6);
+    expect(roundIncome(100, false, 8)).toBe(5 + 8);
   });
 
   it('ajoute le bonus de victoire au revenu de base et aux intérêts', () => {

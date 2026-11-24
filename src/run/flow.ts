@@ -1,29 +1,36 @@
-import { simulateCombat, type CombatResult, type CombatSetup, type Winner } from '../combat/index.ts';
+import { simulateCombat, type CombatResult, type CombatSetup, type Placement, type Winner } from '../combat/index.ts';
 import { randomInt } from '../core/random.ts';
 import { createRng } from '../core/rng.ts';
 import { ECONOMY, FORGE, REWARDS, RUN_STRUCTURE, URGENT_QUEST } from '../data/run-balance.ts';
 import { roundIncome } from './economy.ts';
 import { currentNode, generateStageMap, huntNumber, isCombatNode, reachableNodes } from './map.ts';
 import { drawMerchantStock } from './merchant.ts';
+import { canContinueInfinite } from './infinite.ts';
+import { freeRerollsPerRound, maxInterest, talentCombatBonuses, talentIncome, talentTraitBonus } from './talent-effects.ts';
+import { openTalentChoice, talentChoiceDue } from './talents.ts';
 import { createPool } from './pool.ts';
 import { applyReward, canTakeReward, drawRewards } from './rewards.ts';
+import { sumBonuses } from '../rules/stats.ts';
 import { boardPlacements, boardUnits } from './roster.ts';
 import { refreshShop } from './shop.ts';
 import { OK, fail, type ActionResult, type RunState } from './state.ts';
 import { huntInfo } from './structure.ts';
 
 /**
- * Déroulement d'une run (game-design §2) : choix d'une case sur la carte → préparation → combat
+ * Déroulement d'une run (game-design §2) : choix d'un talent de chasseur au début des stages 1 à 3 →
+ * choix d'une case sur la carte → préparation → combat
  * (ou forge, marchand) → résultat (récompense) → case suivante, jusqu'à la victoire contre le boss
- * de l'étape 30 ou à la 3e défaite.
+ * de l'étape 30 ou à la 3e défaite. Une run gagnée peut continuer en mode infini (voir infinite.ts),
+ * jusqu'à la 3e défaite.
  */
 
 export function createRun(seed: number): RunState {
   const rng = createRng(seed);
-  return {
+  const state: RunState = {
     seed,
     rng,
     hunt: 1,
+    infinite: false,
     map: generateStageMap(1, rng),
     path: [],
     defeats: 0,
@@ -34,6 +41,9 @@ export function createRun(seed: number): RunState {
     pool: createPool(),
     inventory: [],
     itemRemovers: 0,
+    talents: [],
+    talentChoice: null,
+    freeRerolls: 0,
     phase: 'map',
     enemy: [],
     merchant: null,
@@ -45,6 +55,9 @@ export function createRun(seed: number): RunState {
     outcome: null,
     nextUid: 1,
   };
+  // La carte du stage 1 est tirée avant le talent : elle ne dépend pas de ce choix.
+  openTalentChoice(state);
+  return state;
 }
 
 /** Choisit la prochaine case parmi celles reliées à la case actuelle (toute l'étape 1 au début d'un stage). */
@@ -60,8 +73,9 @@ export function chooseNode(state: RunState, index: number): ActionResult {
 
 /** Début d'un tour sur la case choisie : revenus, boutique relancée gratuitement, escouade, forge ou marchand. */
 export function startRound(state: RunState): void {
-  state.zennys += roundIncome(state.zennys, state.wonLastCombat);
+  state.zennys += roundIncome(state.zennys, state.wonLastCombat, maxInterest(state)) + talentIncome(state);
   state.wonLastCombat = false;
+  state.freeRerolls = freeRerollsPerRound(state);
   refreshShop(state);
   const node = currentNode(state);
   // Un boss perdu se réaffronte à l'identique : l'escouade est celle de la case, générée avec la carte.
@@ -73,10 +87,14 @@ export function startRound(state: RunState): void {
   state.phase = 'prep';
 }
 
-/** Retour à la carte pour choisir l'étape suivante ; après un boss, la carte du stage suivant. */
+/**
+ * Retour à la carte pour choisir l'étape suivante ; après un boss, la carte du stage suivant,
+ * précédée d'un choix de talent de chasseur pendant la run (stages 2 et 3).
+ */
 function goToMap(state: RunState): void {
   const stage = huntInfo(state.hunt).stage;
-  if (stage !== state.map.stage) {
+  const newStage = stage !== state.map.stage;
+  if (newStage) {
     state.map = generateStageMap(stage, state.rng);
     state.path = [];
   }
@@ -85,10 +103,21 @@ function goToMap(state: RunState): void {
   state.reforgesLeft = 0;
   state.rewards = null;
   state.phase = 'map';
+  if (newStage && talentChoiceDue(stage)) openTalentChoice(state);
+}
+
+/** Bonus de combat des talents ajoutés au placement d'une unité du joueur. */
+function withTalents(state: RunState, placement: Placement): Placement {
+  const bonuses = talentCombatBonuses(state, placement.unit);
+  return bonuses.length === 0 ? placement : { ...placement, bonus: sumBonuses(bonuses) };
 }
 
 export function combatSetup(state: RunState): CombatSetup {
-  return { player: boardPlacements(state), enemy: state.enemy };
+  return {
+    player: boardPlacements(state).map((placement) => withTalents(state, placement)),
+    enemy: state.enemy,
+    traitBonus: { player: talentTraitBonus(state) },
+  };
 }
 
 /** Lance le combat de la case en cours et applique son résultat. */
@@ -116,11 +145,7 @@ export function applyCombatResult(state: RunState, winner: Winner): void {
       state.phase = 'over';
       return;
     }
-    if (info.isBoss) state.itemRemovers += REWARDS.bossItemRemovers;
-    const multiplier = info.isBoss ? REWARDS.bossMultiplier : urgent ? URGENT_QUEST.rewardMultiplier : 1;
-    state.rewards = drawRewards(state, multiplier);
-    state.hunt += 1;
-    state.phase = 'reward';
+    openRewards(state, info.isBoss, urgent);
     return;
   }
 
@@ -137,6 +162,27 @@ export function applyCombatResult(state: RunState, winner: Winner): void {
   }
   state.hunt += 1;
   goToMap(state);
+}
+
+/** Récompenses d'une victoire (×2 et un retire-objet après un boss, ×2 après une quête urgente), puis étape suivante. */
+function openRewards(state: RunState, boss: boolean, urgent: boolean): void {
+  if (boss) state.itemRemovers += REWARDS.bossItemRemovers;
+  const multiplier = boss ? REWARDS.bossMultiplier : urgent ? URGENT_QUEST.rewardMultiplier : 1;
+  state.rewards = drawRewards(state, multiplier);
+  state.hunt += 1;
+  state.phase = 'reward';
+}
+
+/**
+ * Passe en mode infini après la victoire contre le boss de l'étape 30 : les récompenses de ce boss,
+ * puis la carte du stage 4. Les défaites de la run restent comptées.
+ */
+export function continueInfinite(state: RunState): ActionResult {
+  if (!canContinueInfinite(state)) return fail('Le mode infini s’ouvre à la fin d’une run gagnée.');
+  state.infinite = true;
+  state.outcome = null;
+  openRewards(state, true, false);
+  return OK;
 }
 
 /** Choisit une des récompenses proposées, puis retourne à la carte. */

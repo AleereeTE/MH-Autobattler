@@ -8,6 +8,7 @@ import { copiesForRank, sellValue } from './economy.ts';
 import { resolveMerges } from './merge.ts';
 import { returnCopies } from './pool.ts';
 import { OK, fail, type ActionResult, type Location, type RunState, type RunUnit } from './state.ts';
+import { boardCapacity } from './talent-effects.ts';
 
 /**
  * Unités du joueur : réserve (10 places), plateau (autant d'unités que le niveau de boutique), vente.
@@ -104,8 +105,9 @@ export function moveUnit(state: RunState, uid: number, to: Location): ActionResu
     unit.location = to;
     return OK;
   }
-  if (to.area === 'board' && unit.location.area === 'bench' && boardUnits(state).length >= state.level) {
-    return fail(`Plateau complet : ${state.level} unités au niveau ${state.level}. Améliore la boutique pour en poser plus.`);
+  const capacity = boardCapacity(state);
+  if (to.area === 'board' && unit.location.area === 'bench' && boardUnits(state).length >= capacity) {
+    return fail(`Plateau complet : ${capacity} unités au plus. Améliore la boutique pour en poser plus.`);
   }
   unit.location = to;
   return OK;

@@ -1,5 +1,17 @@
 import { RUN_STRUCTURE } from '../../data/run-balance.ts';
-import { TOTAL_HUNTS, boardUnits, currentNode, huntInfo, interest, isCombatNode, type MapNodeKind } from '../../run/index.ts';
+import {
+  TOTAL_HUNTS,
+  boardCapacity,
+  boardUnits,
+  currentNode,
+  huntInfo,
+  infiniteGrowth,
+  interest,
+  isCombatNode,
+  isInfiniteHunt,
+  maxInterest,
+  type MapNodeKind,
+} from '../../run/index.ts';
 import { button, el } from '../dom.ts';
 import type { RunController } from './controller.ts';
 import { NODE_INFO } from './map-view.ts';
@@ -11,6 +23,11 @@ function defeatDots(defeats: number): string {
 
 /** Action principale : choisir sur la carte, lancer le combat de la case, ou reprendre la route. */
 function mainAction(controller: RunController, kind: MapNodeKind | null, onBoard: number): HTMLElement {
+  if (controller.state.phase === 'talent') {
+    const waiting = button('Choisis un talent de chasseur', () => undefined, 'button primary');
+    waiting.disabled = true;
+    return waiting;
+  }
   if (controller.state.phase === 'map') {
     const waiting = button('Choisis une case sur la carte', () => undefined, 'button primary');
     waiting.disabled = true;
@@ -40,26 +57,34 @@ export function renderHud(
   replayFinished: boolean,
 ): HTMLElement {
   const { state, watching } = controller;
-  const hunt = watching?.hunt ?? Math.min(state.hunt, TOTAL_HUNTS);
+  const hunt = watching?.hunt ?? (state.infinite ? state.hunt : Math.min(state.hunt, TOTAL_HUNTS));
+  const growth = infiniteGrowth(hunt);
   const info = huntInfo(hunt);
   const onBoard = boardUnits(state).length;
   // Pendant le replay, on montre les valeurs d'avant le combat pour ne pas dévoiler l'issue.
   const shown = watching !== null && !replayFinished ? watching.before : state;
-  const gain = interest(shown.zennys);
+  const gain = interest(shown.zennys, maxInterest(state));
 
   // Type de la case en cours (pendant le choix sur la carte, aucune case n'est encore choisie).
   const kind = watching?.kind ?? (state.phase === 'map' ? null : (currentNode(state)?.kind ?? null));
   const stats = el('div', { className: 'hud-stats' }, [
     el('div', { className: 'hud-hunt' }, [
-      el('strong', { text: `Stage ${info.stage} · Étape ${hunt} / ${TOTAL_HUNTS}` }),
+      el('strong', { text: isInfiniteHunt(hunt) ? `Stage ${info.stage} · Étape ${hunt} · Mode infini` : `Stage ${info.stage} · Étape ${hunt} / ${TOTAL_HUNTS}` }),
       kind !== null && kind !== 'hunt' ? el('span', { className: `badge kind-${kind}`, text: NODE_INFO[kind].name }) : null,
+      growth > 0
+        ? el('span', {
+            className: 'badge infinite',
+            text: `Ennemis +${Math.round(growth * 100)} %`,
+            attrs: { title: 'Mode infini : PV, attaque brute et puissance élémentaire des ennemis' },
+          })
+        : null,
     ]),
     el('div', { attrs: { title: 'Défaites (3 = fin de la run)' } }, [el('span', { className: 'muted', text: 'Défaites ' }), el('span', { className: 'defeats', text: defeatDots(shown.defeats) })]),
     el('div', {}, [
       el('strong', { text: `${shown.zennys} zennys` }),
       el('span', { className: 'muted small', text: gain > 0 ? ` (+${gain} d’intérêts au prochain tour)` : '' }),
     ]),
-    el('div', {}, [el('span', { className: 'muted', text: 'Plateau ' }), el('strong', { text: `${onBoard} / ${state.level}` })]),
+    el('div', {}, [el('span', { className: 'muted', text: 'Plateau ' }), el('strong', { text: `${onBoard} / ${boardCapacity(state)}` })]),
     el('div', { attrs: { title: 'Un retire-objet permet de retirer un objet d’une unité' } }, [
       el('span', { className: 'muted', text: 'Retire-objets ' }),
       el('strong', { text: String(shown.itemRemovers) }),

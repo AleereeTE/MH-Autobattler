@@ -122,7 +122,7 @@ function mapDrawing(controller: RunController): SVGSVGElement {
       if (target !== null) {
         group.addEventListener('contextmenu', (event) => {
           event.preventDefault();
-          showPopover(unitCard(target.unit, target.equipment ?? [], target.rank ?? 1), event.clientX, event.clientY);
+          showPopover(unitCard(target.unit, target.equipment ?? [], target.rank ?? 1, target.bonus), event.clientX, event.clientY);
         });
       }
       return group;
@@ -152,7 +152,7 @@ function choiceCard(controller: RunController, node: MapNode, portraits: Portrai
       el('span', { className: 'small muted', text: nodeReward(node.kind) }),
     ],
   );
-  return target === null ? card : onRightClick(card, () => unitCard(target.unit, target.equipment ?? [], target.rank ?? 1));
+  return target === null ? card : onRightClick(card, () => unitCard(target.unit, target.equipment ?? [], target.rank ?? 1, target.bonus));
 }
 
 export function renderMap(controller: RunController, portraits: PortraitStore): HTMLElement {

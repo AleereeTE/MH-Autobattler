@@ -1,4 +1,4 @@
-import type { StarRank, UnitDefinition } from '../../data/definitions.ts';
+import type { StarRank, StatBonus, UnitDefinition } from '../../data/definitions.ts';
 import type { Equipment } from '../../data/items.ts';
 import { equipmentBonuses } from '../../rules/equipment.ts';
 import { rankStars, rankedStats } from '../../rules/ranks.ts';
@@ -66,11 +66,19 @@ export function unitHeader(unit: UnitDefinition, rank: StarRank): HTMLElement[] 
 }
 
 /** Fiche d'une unité : nom, rang, coût, traits, compétence et statistiques (au rang, avec l'équipement). */
-export function unitCard(unit: UnitDefinition, equipment: Equipment, rank: StarRank): HTMLElement {
+/** Fiche d'une unité ; `bonus` : renforcement d'un ennemi du mode infini, compté dans les statistiques. */
+export function unitCard(unit: UnitDefinition, equipment: Equipment, rank: StarRank, bonus?: StatBonus): HTMLElement {
+  const extra = bonus === undefined ? [] : [bonus];
   return el('div', { className: 'unit-card' }, [
     ...unitHeader(unit, rank),
     ...skillBlock(unit),
-    statsTable(computeCombatStats(rankedStats(unit.stats, rank), equipmentBonuses(equipment))),
-    el('p', { className: 'muted small', text: 'Statistiques au rang choisi, avec l’équipement, hors bonus de traits.' }),
+    statsTable(computeCombatStats(rankedStats(unit.stats, rank), [...equipmentBonuses(equipment), ...extra])),
+    el('p', {
+      className: 'muted small',
+      text:
+        bonus === undefined
+          ? 'Statistiques au rang choisi, avec l’équipement, hors bonus de traits.'
+          : 'Statistiques au rang choisi, avec l’équipement et le renforcement du mode infini, hors bonus de traits.',
+    }),
   ]);
 }

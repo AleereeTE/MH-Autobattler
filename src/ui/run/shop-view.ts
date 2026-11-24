@@ -52,7 +52,8 @@ export function renderShop(controller: RunController, portraits: PortraitStore, 
     .map((odd, index) => `${index + 1} : ${odd} %`)
     .join(' · ');
   const nextCost = levelUpCost(state.level);
-  const reroll = button(`Relancer (${ECONOMY.rerollCost} z)`, () => controller.reroll(), 'button small');
+  const freeRerolls = state.freeRerolls;
+  const reroll = button(freeRerolls > 0 ? `Relancer (gratuit${freeRerolls > 1 ? ` ×${freeRerolls}` : ''})` : `Relancer (${ECONOMY.rerollCost} z)`, () => controller.reroll(), 'button small');
   const level = button(
     nextCost === null ? 'Niveau maximum' : `Niveau ${state.level + 1} (${nextCost} z)`,
     () => controller.levelUp(),

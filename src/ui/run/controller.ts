@@ -7,6 +7,8 @@ import {
   buyMaterial,
   chooseNode,
   chooseReward,
+  chooseTalent,
+  continueInfinite,
   createRun,
   currentNode,
   equipFromInventory,
@@ -19,6 +21,7 @@ import {
   moveUnit,
   reforge,
   reroll,
+  rerollTalent,
   sellUnit,
   unequip,
   unitAt,
@@ -27,6 +30,7 @@ import {
   type RunState,
   type RunUnit,
 } from '../../run/index.ts';
+import { browserRecordStore, type RecordStore } from './infinite-record.ts';
 
 /**
  * État de la page « Mode run » : la run, ce qui est sélectionné, le combat regardé.
@@ -55,10 +59,17 @@ export class RunController {
   watching: WatchedFight | null = null;
   /** À la forge : matériau de l'inventaire choisi pour être reforgé (sa position), ou null. */
   reforgeIndex: number | null = null;
+  /** Record du mode infini : la plus haute étape atteinte (0 = aucun). */
+  infiniteRecord: number;
+  /** Le mode infini qui vient de se terminer a battu le record. */
+  newRecord = false;
   private readonly listeners = new Set<() => void>();
+  private readonly records: RecordStore;
 
-  constructor(seed: number) {
+  constructor(seed: number, records: RecordStore = browserRecordStore) {
     this.state = createRun(seed);
+    this.records = records;
+    this.infiniteRecord = records.load();
   }
 
   subscribe(listener: () => void): () => void {
@@ -95,7 +106,23 @@ export class RunController {
     this.watching = null;
     this.notice = null;
     this.reforgeIndex = null;
+    this.newRecord = false;
     this.changed();
+  }
+
+  /** Début de stage : prend un des talents de chasseur proposés. */
+  chooseTalent(index: number): void {
+    this.apply(chooseTalent(this.state, index));
+  }
+
+  /** Début de stage : relance une des propositions de talent (une fois chacune). */
+  rerollTalent(index: number): void {
+    this.apply(rerollTalent(this.state, index));
+  }
+
+  /** Fin d'une run gagnée : continue en mode infini (récompenses du boss, puis carte du stage 4). */
+  continueInfinite(): void {
+    this.apply(continueInfinite(this.state));
   }
 
   /** Choisit la prochaine case de la carte (sa position dans l'étape suivante). */
@@ -228,7 +255,17 @@ export class RunController {
     this.selection = null;
     this.notice = null;
     this.watching = { result: outcome.result, hunt, boss, kind, before: { zennys, defeats, itemRemovers } };
+    if (this.state.phase === 'over' && this.state.infinite) this.recordInfiniteEnd();
     this.changed();
+  }
+
+  /** Fin du mode infini : l'étape atteinte devient le record si elle le bat. */
+  private recordInfiniteEnd(): void {
+    const reached = this.state.hunt;
+    this.newRecord = reached > this.infiniteRecord;
+    if (!this.newRecord) return;
+    this.infiniteRecord = reached;
+    this.records.save(reached);
   }
 
   /** Après une défaite (ou une fois la récompense choisie) : retour à la préparation. */

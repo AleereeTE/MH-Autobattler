@@ -1,21 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { board, bench, findNode, giveUnit, makeRun, placeOnNode } from '../test-utils/run.ts';
+import { board, bench, findNode, giveUnit, makeRun, placeOnNode, skipTalentChoice } from '../test-utils/run.ts';
 import { applyCombatResult, chooseNode, chooseReward, createRun, fight, leaveNode } from './flow.ts';
 import { currentNode, reachableNodes } from './map.ts';
 import { buy } from './shop.ts';
 import { moveUnit } from './roster.ts';
 
 describe('déroulement d’une run', () => {
-  it('commence sur la carte du stage 1, au niveau 2 avec 5 zennys, sans boutique ni escouade', () => {
+  it('commence par un choix de talent, puis la carte du stage 1, au niveau 2 avec 5 zennys, sans boutique ni escouade', () => {
     const state = createRun(7);
-    expect(state).toMatchObject({ hunt: 1, defeats: 0, level: 2, zennys: 5, phase: 'map', outcome: null, path: [] });
+    expect(state).toMatchObject({ hunt: 1, defeats: 0, level: 2, zennys: 5, phase: 'talent', outcome: null, path: [], talents: [] });
+    expect(state.talentChoice?.offers).toHaveLength(3);
+    skipTalentChoice(state);
     expect(state.map.stage).toBe(1);
     expect(state.shop).toEqual([]);
     expect(reachableNodes(state).map((node) => node.kind).every((kind) => kind === 'hunt')).toBe(true);
   });
 
   it('choisir une case de l’étape 1 lance la préparation : revenu du 1er tour, boutique et escouade de la case', () => {
-    const state = createRun(7);
+    const state = skipTalentChoice(createRun(7));
     expect(chooseNode(state, 0).ok).toBe(true);
     expect(state).toMatchObject({ phase: 'prep', zennys: 10, path: [0], hunt: 1 });
     expect(state.shop.filter((id) => id !== null)).toHaveLength(5);
@@ -77,8 +79,11 @@ describe('déroulement d’une run', () => {
     expect(materials?.kind === 'materials' ? materials.materials : []).toHaveLength(2);
 
     chooseReward(state, state.rewards?.findIndex((option) => option.kind === 'zennys') ?? 0);
-    expect(state).toMatchObject({ phase: 'map', hunt: 11, path: [] });
+    // Le stage 2 s'ouvre sur un choix de talent de chasseur, puis sur sa carte.
+    expect(state).toMatchObject({ phase: 'talent', hunt: 11, path: [] });
     expect(state.map.stage).toBe(2);
+    skipTalentChoice(state);
+    expect(chooseNode(state, 0).ok).toBe(true);
   });
 
   it('une quête urgente gagnée double les récompenses (sans retire-objet)', () => {
@@ -124,7 +129,7 @@ describe('déroulement d’une run', () => {
 
   it('enchaîne choix de case, achat, placement et vrai combat, de façon reproductible', () => {
     const play = () => {
-      const state = createRun(21);
+      const state = skipTalentChoice(createRun(21));
       chooseNode(state, 0);
       buy(state, 0);
       buy(state, 1);

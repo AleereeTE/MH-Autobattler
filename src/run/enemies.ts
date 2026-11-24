@@ -2,10 +2,11 @@ import type { Placement } from '../combat/index.ts';
 import { BOARD_COLS, hexKey, type Hex } from '../core/hex.ts';
 import { pickOne } from '../core/random.ts';
 import type { Rng } from '../core/rng.ts';
-import type { StarRank, UnitDefinition } from '../data/definitions.ts';
+import type { StarRank, StatBonus, UnitDefinition } from '../data/definitions.ts';
 import { BOSSES_BY_STAGE, ENEMY_BUDGET } from '../data/run-balance.ts';
 import { UNITS } from '../data/units/index.ts';
 import { copiesForRank } from './economy.ts';
+import { infiniteEnemyBonus } from './infinite.ts';
 import { huntInfo } from './structure.ts';
 
 /**
@@ -33,8 +34,13 @@ function upgradeCost(member: Member): number {
   return member.unit.cost * (copiesForRank((member.rank + 1) as StarRank) - copiesForRank(member.rank));
 }
 
+/** Règle du stage (coût, rang, boss) ; au-delà du stage 3 (mode infini), celle du stage 3. */
+function stageRule<T>(rules: readonly T[], stageIndex: number): T | undefined {
+  return rules[Math.min(stageIndex, rules.length - 1)];
+}
+
 /** Les tanks et bruisers se placent devant (rangée 3, puis 2), les DPS et supports derrière (0, puis 1). */
-function placeMembers(members: readonly Member[], rng: Rng): Placement[] {
+function placeMembers(members: readonly Member[], rng: Rng, bonus: StatBonus | null): Placement[] {
   const taken = new Set<string>();
   return members.map((member) => {
     const front = member.unit.role === 'tank' || member.unit.role === 'bruiser';
@@ -49,24 +55,26 @@ function placeMembers(members: readonly Member[], rng: Rng): Placement[] {
       }
     }
     taken.add(hexKey(position));
-    return { unit: member.unit, position, equipment: [], rank: member.rank };
+    const placement: Placement = { unit: member.unit, position, equipment: [], rank: member.rank };
+    return bonus === null ? placement : { ...placement, bonus };
   });
 }
 
 /**
  * Escouade de la chasse `hunt`. `extraHunts` (quête urgente) : budget et nombre de monstres de quelques chasses
  * plus loin, mais toujours avec les limites de coût et de rang du stage en cours.
+ * En mode infini, les ennemis sont renforcés comme à l'étape `hunt + extraHunts`.
  */
 export function generateSquad(hunt: number, rng: Rng, extraHunts = 0): Placement[] {
   const info = huntInfo(hunt);
   const stageIndex = info.stage - 1;
-  const maxCost = ENEMY_BUDGET.maxCostByStage[stageIndex] ?? 3;
-  const maxRank = ENEMY_BUDGET.maxRankByStage[stageIndex] ?? 3;
+  const maxCost = stageRule(ENEMY_BUDGET.maxCostByStage, stageIndex) ?? 3;
+  const maxRank = stageRule(ENEMY_BUDGET.maxRankByStage, stageIndex) ?? 3;
   let budget = huntBudget(hunt + extraHunts);
   let slots = maxEnemyUnits(hunt + extraHunts);
 
   const members: Member[] = [];
-  const usualBoss = info.isBoss ? BOSSES_BY_STAGE[stageIndex] : undefined;
+  const usualBoss = info.isBoss ? stageRule(BOSSES_BY_STAGE, stageIndex) : undefined;
   const bossRule = usualBoss?.rare !== undefined && rng.chance(usualBoss.rare.chance) ? usualBoss.rare : usualBoss;
   if (bossRule !== undefined) {
     const candidates = MONSTERS.filter(
@@ -98,5 +106,5 @@ export function generateSquad(hunt: number, rng: Rng, extraHunts = 0): Placement
     member.rank = (member.rank + 1) as StarRank;
   }
 
-  return placeMembers([...members, ...escort], rng);
+  return placeMembers([...members, ...escort], rng, infiniteEnemyBonus(hunt + extraHunts));
 }

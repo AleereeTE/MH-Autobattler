@@ -8,17 +8,25 @@ export function unitTraitIds(unit: UnitDefinition): TraitId[] {
   return [elementTraitId(unit.element), ...unit.traits];
 }
 
+/** Unités en plus pour certains traits (talents de chasseur Insigne, Blason, Couronne). */
+export type TraitCountBonus = Readonly<Record<TraitId, number>>;
+
 /**
  * Compte les unités de chaque trait dans une équipe.
  * ⚠️ Comme dans TFT, deux exemplaires de la même unité ne comptent qu'une fois.
+ * ✅ `bonus` (talents) s'ajoute aux traits qui ont au moins une unité dans l'équipe.
  */
-export function countTraits(units: readonly UnitDefinition[]): Map<TraitId, number> {
+export function countTraits(units: readonly UnitDefinition[], bonus: TraitCountBonus = {}): Map<TraitId, number> {
   const seen = new Set<string>();
   const counts = new Map<TraitId, number>();
   for (const unit of units) {
     if (seen.has(unit.id)) continue;
     seen.add(unit.id);
     for (const id of unitTraitIds(unit)) counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  for (const [id, extra] of Object.entries(bonus)) {
+    const count = counts.get(id);
+    if (count !== undefined && extra > 0) counts.set(id, count + extra);
   }
   return counts;
 }
@@ -53,9 +61,9 @@ export interface TraitStatus {
 }
 
 /** État de tous les traits présents dans une équipe : actifs d'abord, puis par nombre d'unités. */
-export function traitStatuses(units: readonly UnitDefinition[]): TraitStatus[] {
+export function traitStatuses(units: readonly UnitDefinition[], bonus: TraitCountBonus = {}): TraitStatus[] {
   const statuses: TraitStatus[] = [];
-  for (const [id, count] of countTraits(units)) {
+  for (const [id, count] of countTraits(units, bonus)) {
     const trait = findTrait(id);
     if (trait !== undefined) statuses.push({ trait, count, tier: activeTier(trait, count) });
   }

@@ -1,5 +1,5 @@
 import type { UnitDefinition } from '../../data/definitions.ts';
-import { traitStatuses, type TraitStatus } from '../../rules/traits.ts';
+import { traitStatuses, type TraitCountBonus, type TraitStatus } from '../../rules/traits.ts';
 import { el } from '../dom.ts';
 import { onRightClick } from './popover.ts';
 import { traitPreview } from './trait-preview.ts';
@@ -26,8 +26,9 @@ function tierSteps({ trait, count, tier }: TraitStatus, medalClass: string): HTM
  * nom, nombre d'unités, paliers, puis l'effet actif ou le prochain palier à atteindre.
  * Clic droit : aperçu de tous les paliers, avec les unités du trait (celles de l'équipe cochées).
  */
-function traitItem(status: TraitStatus, team: readonly UnitDefinition[]): HTMLElement {
+function traitItem(status: TraitStatus, team: readonly UnitDefinition[], bonus: TraitCountBonus): HTMLElement {
   const { trait, count, tier } = status;
+  const extra = bonus[trait.id] ?? 0;
   const medal = traitMedal(trait, tier);
   const medalClass = medal === null ? 'medal-none' : `medal-${medal}`;
   const next = trait.tiers.find((candidate) => candidate.count > count);
@@ -46,6 +47,7 @@ function traitItem(status: TraitStatus, team: readonly UnitDefinition[]): HTMLEl
       el('div', { className: 'trait-line' }, [
         el('strong', { text: trait.name }),
         el('span', { className: 'trait-count', text: String(count) }),
+        extra > 0 ? el('span', { className: 'trait-talent-bonus small', text: `(+${extra} talent)`, attrs: { title: 'Talent de chasseur' } }) : null,
         tierSteps(status, medalClass),
       ]),
       el('div', {
@@ -54,23 +56,26 @@ function traitItem(status: TraitStatus, team: readonly UnitDefinition[]): HTMLEl
       }),
     ]),
   ]);
-  return onRightClick(item, () => traitPreview(trait.id, team));
+  return onRightClick(item, () => traitPreview(trait.id, team, bonus));
 }
 
-/** Liste des synergies d'une équipe, actives en premier (aussi utilisée par le planificateur). */
-export function traitList(units: readonly UnitDefinition[], empty = 'Aucune unité.'): HTMLElement {
-  const statuses = traitStatuses(units);
+/**
+ * Liste des synergies d'une équipe, actives en premier (aussi utilisée par le planificateur).
+ * `bonus` : unités en plus données par les talents de chasseur, comptées pour les traits présents.
+ */
+export function traitList(units: readonly UnitDefinition[], empty = 'Aucune unité.', bonus: TraitCountBonus = {}): HTMLElement {
+  const statuses = traitStatuses(units, bonus);
   return statuses.length > 0
-    ? el('ul', { className: 'traits' }, statuses.map((status) => traitItem(status, units)))
+    ? el('ul', { className: 'traits' }, statuses.map((status) => traitItem(status, units, bonus)))
     : el('p', { className: 'muted', text: empty });
 }
 
-/** Traits de chaque camp, actifs en premier, avec le prochain palier à atteindre. */
-export function renderTraits(player: readonly UnitDefinition[], enemy: readonly UnitDefinition[]): HTMLElement {
+/** Traits de chaque camp, actifs en premier, avec le prochain palier à atteindre (`playerBonus` : talents). */
+export function renderTraits(player: readonly UnitDefinition[], enemy: readonly UnitDefinition[], playerBonus: TraitCountBonus = {}): HTMLElement {
   return el('section', { className: 'panel' }, [
     el('h2', { text: 'Synergies' }),
     el('div', { className: 'two-columns' }, [
-      el('div', {}, [el('h3', { text: 'Joueur' }), traitList(player)]),
+      el('div', {}, [el('h3', { text: 'Joueur' }), traitList(player, 'Aucune unité.', playerBonus)]),
       el('div', {}, [el('h3', { text: 'Ennemi' }), traitList(enemy)]),
     ]),
   ]);

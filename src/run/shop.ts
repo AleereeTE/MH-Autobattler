@@ -24,6 +24,12 @@ export function refreshShop(state: RunState): void {
 /** Relance payante. */
 export function reroll(state: RunState): ActionResult {
   if (state.phase !== 'prep') return fail('La boutique est fermée pendant cette phase.');
+  // Commerce félyne : les relances gratuites du tour passent en premier.
+  if (state.freeRerolls > 0) {
+    state.freeRerolls -= 1;
+    refreshShop(state);
+    return OK;
+  }
   if (state.zennys < ECONOMY.rerollCost) return fail(`Il faut ${ECONOMY.rerollCost} zennys pour relancer.`);
   state.zennys -= ECONOMY.rerollCost;
   refreshShop(state);

@@ -4,12 +4,19 @@ import { chooseNode, createRun, startRound } from '../run/flow.ts';
 import type { MapNodeKind } from '../run/map.ts';
 import type { Location, RunState, RunUnit } from '../run/state.ts';
 
+/** Écarte le choix de talent du début de stage, pour tester la run sans talent. */
+export function skipTalentChoice(state: RunState): RunState {
+  state.talentChoice = null;
+  state.phase = 'map';
+  return state;
+}
+
 /**
- * Run de test : graine fixe, sans unités, avec beaucoup de zennys et le niveau maximum,
+ * Run de test : graine fixe, sans unités ni talent, avec beaucoup de zennys et le niveau maximum,
  * déjà en préparation sur la première case de la carte (une chasse normale).
  */
 export function makeRun(overrides: Partial<Pick<RunState, 'zennys' | 'level'>> = {}): RunState {
-  const state = createRun(1);
+  const state = skipTalentChoice(createRun(1));
   chooseNode(state, 0);
   state.zennys = overrides.zennys ?? 100;
   state.level = overrides.level ?? 9;

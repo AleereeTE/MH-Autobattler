@@ -1,13 +1,13 @@
 import { ROWS_PER_SIDE, hexKey, isOnBoard, type Hex } from '../core/hex.ts';
 import { createRng } from '../core/rng.ts';
-import type { StarRank, TraitId, UnitDefinition } from '../data/definitions.ts';
+import type { StarRank, StatBonus, TraitId, UnitDefinition } from '../data/definitions.ts';
 import type { Equipment } from '../data/items.ts';
 import type { TraitTier } from '../data/traits.ts';
 import { SLOT_CAPACITY, equipmentBonuses } from '../rules/equipment.ts';
 import { BLACK_DRAGON_LIMIT_MESSAGE, exceedsBlackDragonLimit } from '../rules/board-limits.ts';
 import { isStarRank, rankedStats } from '../rules/ranks.ts';
 import { computeCombatStats } from '../rules/stats.ts';
-import { objectsWornByTrait, traitStatuses, type TraitStatus } from '../rules/traits.ts';
+import { objectsWornByTrait, traitStatuses, type TraitCountBonus, type TraitStatus } from '../rules/traits.ts';
 import type { TraitSummary, UnitSnapshot } from './events.ts';
 import { SIDES, type CombatState, type CombatUnit, type LightningState, type Side } from './state.ts';
 import { lightningFor, terrorFor, traitLoadout } from './traits/loadout.ts';
@@ -18,12 +18,16 @@ export interface Placement {
   readonly equipment?: Equipment;
   /** Rang ★ de l'unité (★1 par défaut). */
   readonly rank?: StarRank;
+  /** Bonus de statistiques en plus des objets et des traits (renforcement des ennemis du mode infini). */
+  readonly bonus?: StatBonus;
 }
 
 /** Composition, placement et équipement des deux camps au début d'un combat. */
 export interface CombatSetup {
   readonly player: readonly Placement[];
   readonly enemy: readonly Placement[];
+  /** Unités en plus pour certains traits d'un camp (talents de chasseur), comptées si le trait est présent. */
+  readonly traitBonus?: Partial<Record<Side, TraitCountBonus>>;
 }
 
 /** Le camp ennemi occupe les rangées 0 à 3 (en haut), le joueur les rangées 4 à 7 (en bas). */
@@ -41,7 +45,10 @@ export function createCombatState(setup: CombatSetup, seed: number): CombatState
 
   for (const side of SIDES) {
     const placements = setup[side];
-    const statuses = traitStatuses(placements.map((placement) => placement.unit));
+    const statuses = traitStatuses(
+      placements.map((placement) => placement.unit),
+      setup.traitBonus?.[side],
+    );
     const active = new Map<TraitId, TraitTier>();
     for (const status of statuses) if (status.tier !== null) active.set(status.trait.id, status.tier);
 
@@ -69,7 +76,8 @@ function createUnit(
   const rank = placement.rank ?? 1;
   const loadout = traitLoadout(unit, active, traitObjects);
   // Le rang s'applique aux statistiques de la fiche, avant les bonus des objets et des traits.
-  const stats = computeCombatStats(rankedStats(unit.stats, rank), [...equipmentBonuses(equipment), ...loadout.bonuses]);
+  const extra = placement.bonus === undefined ? [] : [placement.bonus];
+  const stats = computeCombatStats(rankedStats(unit.stats, rank), [...equipmentBonuses(equipment), ...loadout.bonuses, ...extra]);
 
   return {
     uid,

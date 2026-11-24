@@ -1,7 +1,8 @@
 import { RUN_STRUCTURE } from '../../data/run-balance.ts';
 import { findUnit } from '../../data/units/index.ts';
 import { MATERIALS } from '../../data/items.ts';
-import { TOTAL_HUNTS, canTakeReward, type RewardOption } from '../../run/index.ts';
+import { TOTAL_HUNTS, canContinueInfinite, canTakeReward, infiniteGrowth, type RewardOption } from '../../run/index.ts';
+import { INFINITE_MODE } from '../../data/run-balance.ts';
 import { button, el } from '../dom.ts';
 import type { PortraitStore } from '../shared/portraits.ts';
 import type { RunController } from './controller.ts';
@@ -44,6 +45,46 @@ function rewardCard(controller: RunController, option: RewardOption, index: numb
   return card;
 }
 
+const percent = (ratio: number): string => `${Math.round(ratio * 100)} %`;
+
+/** Fin de la run (gagnée ou perdue) ou du mode infini, avec le record du mode infini. */
+function endPanel(controller: RunController, onNewRun: () => void): HTMLElement {
+  const { state, infiniteRecord, newRecord } = controller;
+  const record = infiniteRecord > 0 ? el('p', { className: 'small', text: `Record du mode infini : étape ${infiniteRecord}.` }) : null;
+
+  if (state.infinite) {
+    return el('section', { className: 'panel outcome-panel lost' }, [
+      el('h2', { text: 'Mode infini terminé' }),
+      el('p', { text: `${RUN_STRUCTURE.maxDefeats} défaites : tu t’arrêtes à l’étape ${state.hunt} (ennemis +${percent(infiniteGrowth(state.hunt))}).` }),
+      newRecord ? el('p', { className: 'new-record', text: 'Nouveau record !' }) : record,
+      button('Nouvelle run', onNewRun, 'button primary'),
+    ]);
+  }
+
+  if (state.outcome === 'victory') {
+    const defeats = `${state.defeats} défaite${state.defeats > 1 ? 's' : ''}`;
+    return el('section', { className: 'panel outcome-panel won' }, [
+      el('h2', { text: 'Run gagnée !' }),
+      el('p', { text: `Les ${TOTAL_HUNTS} étapes sont terminées, avec ${defeats}.` }),
+      el('p', {
+        className: 'small muted',
+        text: `Mode infini : les stages continuent, et les ennemis gagnent +${percent(INFINITE_MODE.statGrowthPerHunt)} de PV, d’attaque brute et de puissance élémentaire à chaque étape. Tes défaites restent comptées (${state.defeats} / ${RUN_STRUCTURE.maxDefeats}).`,
+      }),
+      record,
+      el('div', { className: 'outcome-actions' }, [
+        canContinueInfinite(state) ? button('Continuer en mode infini', () => controller.continueInfinite(), 'button primary') : null,
+        button('Nouvelle run', onNewRun, 'button'),
+      ]),
+    ]);
+  }
+
+  return el('section', { className: 'panel outcome-panel lost' }, [
+    el('h2', { text: 'Run perdue' }),
+    el('p', { text: `${RUN_STRUCTURE.maxDefeats} défaites : la run s’arrête à l’étape ${state.hunt} / ${TOTAL_HUNTS}.` }),
+    button('Nouvelle run', onNewRun, 'button primary'),
+  ]);
+}
+
 /**
  * Panneau de fin de combat : récompense à choisir, défaite (on continue), ou fin de la run.
  * Il n'apparaît qu'une fois le replay terminé, pour ne pas dévoiler l'issue.
@@ -62,18 +103,7 @@ export function renderOutcome(
     ]);
   }
 
-  if (state.phase === 'over') {
-    const won = state.outcome === 'victory';
-    return el('section', { className: `panel outcome-panel ${won ? 'won' : 'lost'}` }, [
-      el('h2', { text: won ? 'Run gagnée !' : 'Run perdue' }),
-      el('p', {
-        text: won
-          ? `Les ${TOTAL_HUNTS} étapes sont terminées, avec ${state.defeats} défaite${state.defeats > 1 ? 's' : ''}.`
-          : `${RUN_STRUCTURE.maxDefeats} défaites : la run s’arrête à l’étape ${state.hunt} / ${TOTAL_HUNTS}.`,
-      }),
-      button('Nouvelle run', onNewRun, 'button primary'),
-    ]);
-  }
+  if (state.phase === 'over') return endPanel(controller, onNewRun);
 
   if (watching === null) return null;
 

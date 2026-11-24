@@ -23,6 +23,16 @@ describe('countTraits', () => {
   });
 });
 
+describe('countTraits — bonus des talents', () => {
+  it('ajoute les unités en plus aux traits présents, et seulement à eux', () => {
+    const anjanath = makeUnit({ id: 'anjanath', element: 'fire', traits: ['berserker'] });
+    const counts = countTraits([anjanath], { berserker: 1, guild: 2 });
+    expect(counts.get('berserker')).toBe(2);
+    expect(counts.get('fire')).toBe(1);
+    expect(counts.has('guild')).toBe(false);
+  });
+});
+
 describe('objectsWornByTrait', () => {
   it('additionne les objets complets portés par les unités de chaque trait, exemplaires compris', () => {
     const object = { kind: 'object' as const, materials: ['horn', 'fang'] as const };

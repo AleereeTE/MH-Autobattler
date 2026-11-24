@@ -6,14 +6,14 @@ export function copiesForRank(rank: StarRank): number {
   return 3 ** (rank - 1);
 }
 
-/** ✅ +1 zenny par tranche de 10 zennys épargnés, 5 au maximum. */
-export function interest(zennys: number): number {
-  return Math.min(ECONOMY.maxInterest, Math.floor(Math.max(0, zennys) / ECONOMY.interestStep));
+/** ✅ +1 zenny par tranche de 10 zennys épargnés, 5 au maximum (`cap` : plafond relevé par un talent). */
+export function interest(zennys: number, cap: number = ECONOMY.maxInterest): number {
+  return Math.min(cap, Math.floor(Math.max(0, zennys) / ECONOMY.interestStep));
 }
 
-/** Revenu du début de tour : base (même en défaite) + bonus de victoire + intérêts. */
-export function roundIncome(zennys: number, wonLastCombat: boolean): number {
-  return ECONOMY.baseIncome + (wonLastCombat ? ECONOMY.winBonus : 0) + interest(zennys);
+/** Revenu du début de tour : base (même en défaite) + bonus de victoire + intérêts (plafonnés à `interestCap`). */
+export function roundIncome(zennys: number, wonLastCombat: boolean, interestCap: number = ECONOMY.maxInterest): number {
+  return ECONOMY.baseIncome + (wonLastCombat ? ECONOMY.winBonus : 0) + interest(zennys, interestCap);
 }
 
 /** Prix de revente : coût × exemplaires représentés. */

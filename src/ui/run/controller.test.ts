@@ -1,11 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { currentNode, reachableNodes } from '../../run/index.ts';
-import { findNode, placeOnNode } from '../../test-utils/run.ts';
+import { board, findNode, giveUnit, placeOnNode, skipTalentChoice } from '../../test-utils/run.ts';
 import { RunController } from './controller.ts';
+import { memoryRecordStore, type RecordStore } from './infinite-record.ts';
+
+/** Contrôleur en début de run, choix de talent écarté (sur la carte du stage 1). */
+function newController(): RunController {
+  const controller = new RunController(21, memoryRecordStore());
+  skipTalentChoice(controller.state);
+  return controller;
+}
 
 /** Contrôleur sur la première case de la carte, avec deux unités achetées en réserve. */
 function controllerWithUnits(): RunController {
-  const controller = new RunController(21);
+  const controller = newController();
   controller.chooseNode(0);
   controller.buy(0);
   controller.buy(1);
@@ -14,7 +22,7 @@ function controllerWithUnits(): RunController {
 
 describe('RunController', () => {
   it('commence sur la carte : on choisit sa case avant de préparer', () => {
-    const controller = new RunController(21);
+    const controller = newController();
     expect(controller.canChooseNode).toBe(true);
     expect(controller.canPrepare).toBe(false);
     controller.chooseNode(1);
@@ -36,7 +44,7 @@ describe('RunController', () => {
   });
 
   it('affiche la raison d’une action refusée', () => {
-    const controller = new RunController(21);
+    const controller = newController();
     controller.chooseNode(0);
     controller.equip(0);
     expect(controller.notice).toMatch(/Sélectionne/);
@@ -45,7 +53,7 @@ describe('RunController', () => {
   });
 
   it('inspecte un monstre ennemi en cliquant dans son camp', () => {
-    const controller = new RunController(21);
+    const controller = newController();
     controller.chooseNode(0);
     const enemy = controller.state.enemy[0];
     if (enemy === undefined) throw new Error('escouade vide');
@@ -75,7 +83,7 @@ describe('RunController', () => {
   });
 
   it('à la forge : choisit un matériau à reforger, le transforme, puis reprend la route', () => {
-    const controller = new RunController(21);
+    const controller = newController();
     const { state } = controller;
     const forge = findNode(state, 'forge');
     if (forge === null) throw new Error('pas de forge sur la carte');
@@ -94,10 +102,55 @@ describe('RunController', () => {
     expect(state.hunt).toBe(forge.step + 1);
   });
 
-  it('recommence une run de zéro, sur la carte', () => {
+  /** Run gagnée, mode infini lancé, puis 3e défaite à l'étape 31 avec un seul Fugen ★1 sur le plateau. */
+  function loseInInfinite(store: RecordStore): RunController {
+    const controller = new RunController(21, store);
+    const { state } = controller;
+    Object.assign(state, { phase: 'over', outcome: 'victory', hunt: 30, defeats: 2 });
+    controller.continueInfinite();
+    expect(state).toMatchObject({ phase: 'reward', infinite: true, hunt: 31 });
+    controller.chooseReward(state.rewards?.findIndex((option) => option.kind === 'zennys') ?? 0);
+    expect(state.map.stage).toBe(4);
+    controller.chooseNode(0);
+    giveUnit(state, 'fugen', board(3, 5));
+    controller.launchFight();
+    expect(state).toMatchObject({ phase: 'over', outcome: 'defeat', infinite: true, hunt: 31 });
+    return controller;
+  }
+
+  it('mode infini : continue après une run gagnée et enregistre un nouveau record à la 3e défaite', () => {
+    const store = memoryRecordStore();
+    const controller = loseInInfinite(store);
+    expect(controller.newRecord).toBe(true);
+    expect(controller.infiniteRecord).toBe(31);
+    expect(store.load()).toBe(31);
+  });
+
+  it('mode infini : un record plus haut est gardé', () => {
+    const store = memoryRecordStore(50);
+    const controller = loseInInfinite(store);
+    expect(controller.newRecord).toBe(false);
+    expect(controller.infiniteRecord).toBe(50);
+    expect(store.load()).toBe(50);
+  });
+
+  it('talents : relance une proposition, puis en prend une et passe à la carte', () => {
+    const controller = new RunController(21, memoryRecordStore());
+    expect(controller.state.phase).toBe('talent');
+    expect(controller.canChooseNode).toBe(false);
+    controller.rerollTalent(2);
+    expect(controller.state.talentChoice?.offers[2]?.rerolled).toBe(true);
+    controller.rerollTalent(2);
+    expect(controller.notice).not.toBeNull();
+    controller.chooseTalent(0);
+    expect(controller.state.talents).toHaveLength(1);
+    expect(controller.canChooseNode).toBe(true);
+  });
+
+  it('recommence une run de zéro, sur le choix de talent du stage 1', () => {
     const controller = controllerWithUnits();
     controller.newRun(5);
     expect(controller.state.units).toEqual([]);
-    expect(controller.state).toMatchObject({ hunt: 1, zennys: 5, seed: 5, phase: 'map' });
+    expect(controller.state).toMatchObject({ hunt: 1, zennys: 5, seed: 5, phase: 'talent', talents: [] });
   });
 });

@@ -124,6 +124,15 @@ export const FORGE = {
   reforges: 2,
 } as const;
 
+/**
+ * Mode infini (game-design §2.2), proposé après avoir gagné la run.
+ * ✅ +5 % de PV, d'attaque brute et de puissance élémentaire pour les ennemis à chaque étape après la 30e
+ * (validé le 2026-11-24, à ajuster en jouant) : +50 % à l'étape 40, +150 % à l'étape 60.
+ */
+export const INFINITE_MODE = {
+  statGrowthPerHunt: 0.05,
+} as const;
+
 /** ⚠️ Marchand : 4 matériaux tirés au hasard à 3 zennys pièce, un retire-objet à 4 zennys. */
 export const MERCHANT = {
   materialsOffered: 4,

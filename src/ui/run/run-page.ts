@@ -3,7 +3,7 @@ import { findUnit } from '../../data/units/index.ts';
 import type { BoardScene } from '../../render/board-canvas.ts';
 import { createReplay } from '../../render/replay.ts';
 import { hexKey } from '../../core/hex.ts';
-import { boardUnits, unitAt } from '../../run/index.ts';
+import { boardUnits, talentTraitBonus, unitAt } from '../../run/index.ts';
 import { button, el, select } from '../dom.ts';
 import { BoardView } from '../shared/board-view.ts';
 import { PortraitStore } from '../shared/portraits.ts';
@@ -21,6 +21,7 @@ import { renderBench } from './bench-view.ts';
 import { RunController } from './controller.ts';
 import { renderHud } from './hud-view.ts';
 import { renderOutcome } from './outcome-view.ts';
+import { renderOwnedTalents, renderTalentChoice } from './talent-view.ts';
 import { renderShop } from './shop-view.ts';
 import { renderMap } from './map-view.ts';
 import { renderInventory, renderSelection } from './side-panels.ts';
@@ -64,7 +65,7 @@ export function mountRun(root: HTMLElement): () => void {
         return;
       }
       const enemy = run.state.enemy.find((placement) => hexKey(placement.position) === hexKey(hex));
-      if (enemy !== undefined) showPopover(unitCard(enemy.unit, enemy.equipment ?? [], enemy.rank ?? 1), x, y);
+      if (enemy !== undefined) showPopover(unitCard(enemy.unit, enemy.equipment ?? [], enemy.rank ?? 1, enemy.bonus), x, y);
     },
   );
   const results = new ResultsView();
@@ -88,6 +89,7 @@ export function mountRun(root: HTMLElement): () => void {
   const planSlot = el('div');
   const mapSlot = el('div');
   const stopSlot = el('div');
+  const talentsSlot = el('div');
 
   /** Plateau pendant la préparation : tes unités posées et l'escouade de la chasse. */
   function prepScene(): BoardScene {
@@ -163,8 +165,10 @@ export function mountRun(root: HTMLElement): () => void {
     noticeSlot.replaceChildren(...(run.notice === null ? [] : [el('p', { className: 'notice', text: run.notice })]));
     benchSlot.replaceChildren(renderBench(run, portraits));
     shopSlot.replaceChildren(renderShop(run, portraits, plan));
-    const outcome = renderOutcome(run, run.watching === null || player.isFinished, portraits, startNewRun);
+    const outcome = renderTalentChoice(run, portraits) ?? renderOutcome(run, run.watching === null || player.isFinished, portraits, startNewRun);
     outcomeSlot.replaceChildren(...(outcome === null ? [] : [outcome]));
+    const owned = renderOwnedTalents(run);
+    talentsSlot.replaceChildren(...(owned === null ? [] : [owned]));
     mapSlot.replaceChildren(...(run.state.phase === 'over' ? [] : [renderMap(run, portraits)]));
     const stop = renderStop(run);
     stopSlot.replaceChildren(...(stop === null ? [] : [stop]));
@@ -173,7 +177,7 @@ export function mountRun(root: HTMLElement): () => void {
     const ownedIds = new Set(run.state.units.map((unit) => unit.unitId));
     planSlot.replaceChildren(renderPlanPanel(plan, ownedIds, portraits, () => openPlanner(plan, portraits)));
     const playerUnits = boardUnits(run.state).flatMap((unit) => findUnit(unit.unitId) ?? []);
-    traitsSlot.replaceChildren(renderTraits(playerUnits, run.state.enemy.map((placement) => placement.unit)));
+    traitsSlot.replaceChildren(renderTraits(playerUnits, run.state.enemy.map((placement) => placement.unit), talentTraitBonus(run.state)));
   }
 
   function render(): void {
@@ -209,7 +213,7 @@ export function mountRun(root: HTMLElement): () => void {
     noticeSlot,
     el('div', { className: 'run' }, [
       el('section', { className: 'board-column' }, [mapSlot, board.element, benchSlot, shopSlot, results.element]),
-      el('aside', { className: 'details-column' }, [outcomeSlot, stopSlot, selectionSlot, inventorySlot, planSlot, traitsSlot]),
+      el('aside', { className: 'details-column' }, [outcomeSlot, stopSlot, selectionSlot, inventorySlot, talentsSlot, planSlot, traitsSlot]),
     ]),
   );
   results.show(lastFight, null, null);

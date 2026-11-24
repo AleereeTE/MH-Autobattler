@@ -758,6 +758,12 @@ details {
   color: #1a1410;
 }
 
+/* Mode infini : renforcement des ennemis */
+.badge.infinite {
+  background: var(--accent);
+  color: #1a1410;
+}
+
 .defeats {
   color: var(--danger);
   letter-spacing: 2px;
@@ -989,6 +995,17 @@ details {
   border-color: var(--danger);
 }
 
+.outcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.new-record {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .reward-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -1017,6 +1034,98 @@ details {
 .reward-card:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------
+   Talents de chasseur (argent, or, prismatique)
+   ------------------------------------------------------------------ */
+.tier-silver {
+  --talent-color: var(--medal-silver);
+}
+
+.tier-gold {
+  --talent-color: var(--medal-gold);
+}
+
+.tier-prismatic {
+  --talent-color: #b48cff;
+}
+
+.talent-panel {
+  border: 2px solid var(--talent-color);
+}
+
+.talent-panel.tier-prismatic,
+.talent-item.tier-prismatic {
+  border-color: transparent;
+  background:
+    linear-gradient(var(--panel), var(--panel)) padding-box,
+    linear-gradient(135deg, var(--prismatic)) border-box;
+}
+
+.talent-offers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.talent-offer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.talent-card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 10px;
+  border: 2px solid var(--talent-color);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.talent-card:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.talent-card:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.talent-family {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--talent-color);
+  color: #1a1410;
+  font-weight: 700;
+}
+
+.talent-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.talent-item {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--talent-color);
+  border-radius: 6px;
+}
+
+.trait-talent-bonus {
+  color: var(--accent);
+  font-weight: 700;
 }
 
 /* ------------------------------------------------------------------

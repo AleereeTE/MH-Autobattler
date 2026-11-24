@@ -30,7 +30,7 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 | Carte | Une **carte visible par stage**, façon Slay the Spire : 9 étapes de 2 à 3 cases reliées par des chemins, puis le boss. On choisit sa route case par case (section 2.1) |
 | Durée visée | 45 à 60 minutes |
 | Défaite de la run | 3 combats perdus (chasses classiques et boss confondus) |
-| Mode infini | **Principe validé** : après les 30 étapes, on peut continuer dans un mode infini où les statistiques des ennemis augmentent à chaque combat, pour voir jusqu'où on tient. Détails à définir (section 14) |
+| Mode infini | ✅ Après une run gagnée, on peut continuer dans un **mode infini** où les ennemis se renforcent à chaque étape, pour voir jusqu'où on tient (section 2.2) |
 
 ### 2.1 Carte d'un stage
 
@@ -46,7 +46,18 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 | Marchand (sans combat) | ⚠️ 4 matériaux tirés au hasard à 3 zennys pièce, et un retire-objet à 4 zennys |
 | Boutique | Disponible à chaque étape, y compris à la forge et chez le marchand |
 | Fréquence | ⚠️ Par stage, environ 1 à 2 forges, 1 à 2 marchands et 2 à 3 quêtes urgentes. L'étape 1 n'a que des chasses ; l'étape 9 (avant le boss) propose toujours une forge ou un marchand ; chaque étape garde au moins une chasse normale |
-| Plus tard | Cases « Événement » (une petite situation avec un choix), talents de chasseur, récompenses variées |
+| Plus tard | Cases « Événement » (une petite situation avec un choix), récompenses variées |
+
+### 2.2 Mode infini
+
+| Élément | Décision |
+|---|---|
+| Accès | ✅ Proposé à la fin d'une **run gagnée** (bouton « Continuer en mode infini »), à la place de « Nouvelle run » |
+| Déroulement | ✅ Les **stages continuent** (stage 4, 5…) avec la même carte : chasses, quêtes urgentes, forges, marchands, et un boss toutes les 10 étapes. On commence par les récompenses du boss de l'étape 30 (doublées, +1 retire-objet) |
+| Ennemis | ✅ Escouades générées comme au stage 3 (coût 4 et rang ★3 au plus, boss Dragon ancien ou parfois Dragon noir), avec un budget qui continue de grandir. ✅ **+5 % de PV, d'attaque brute et de puissance élémentaire à chaque étape** après la 30e (+50 % à l'étape 40, +150 % à l'étape 60), valeur à ajuster en jouant. Une quête urgente est renforcée comme 3 étapes plus loin |
+| Fin | ✅ Le **compteur de défaites de la run est conservé** : la 3e défaite (run et mode infini confondus) termine le mode infini |
+| Économie | ✅ Tout continue comme pendant la run : revenus, intérêts, boutique, niveaux, récompenses 1 parmi 3 |
+| Record | La **plus haute étape atteinte** est gardée dans le navigateur et affichée en fin de run |
 
 ### Déroulement d'un tour
 
@@ -355,6 +366,20 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **Après une défaite** : aucune récompense (les zennys de base et les intérêts restent gagnés).
 - **Première version (1 parmi 3 simplifié)** : un matériau au hasard, des zennys, ou une unité ★1 tirée comme en boutique ; pas encore d'objet fusionné, de retire-objet ni de capture parmi les choix. Après un boss, les quantités sont doublées, en plus du retire-objet garanti. Une unité ne peut être choisie que s'il y a de la place en réserve (ou si elle déclenche une fusion).
 
+### 11.1 Talents de chasseur
+
+L'équivalent des augments de TFT (validé le 2026-11-24).
+
+| Élément | Décision |
+|---|---|
+| Moment | ✅ Au **début des stages 1, 2 et 3**, avant de choisir la première case : **3 talents au plus par run**. Pas de talent en mode infini |
+| Rareté | ✅ Tirée à chaque choix : **argent, or ou prismatique, 1 chance sur 3 chacune**. Les 3 propositions ont la même rareté |
+| Propositions | ✅ **3 propositions**, chacune **relançable une fois** (comme dans TFT) ; un talent déjà pris n'est plus proposé |
+| Familles | ✅ Combat (bonus en combat), économie (zennys, intérêts, relances, niveau, places sur le plateau), objets, unités, traits |
+| Traits | ✅ Les talents de trait (Insigne, Blason, Couronne) tirent un trait (sauf Dragon ancien et Dragon noir), visible sur la proposition. Les unités en plus ne comptent que si **au moins une unité du trait est sur le plateau**, et s'affichent dans la boîte des synergies |
+| Unités | Les talents qui donnent une unité la tirent dans le stock commun (pas une unité déjà obtenue au ★3) et l'affichent sur la proposition ; il faut de la place en réserve pour les prendre |
+| Contenu | ✅ 24 talents, 8 par rareté (liste dans prototype-content.md) ; ⚠️ valeurs provisoires |
+
 ---
 
 ## 12. Hors périmètre
@@ -406,7 +431,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 5. Formule des ratios de compétence : valeur de base + ratio × statistique, ou pourcentage d'amplification comme la puissance magique de TFT ?
 6. Contenu de la version boss d'un monstre (PV, plusieurs compétences, état enragé ?).
 7. ~~Informations visibles sur chaque chasse proposée par la carte.~~ Tranché : monstre cible et type de récompense.
-12. Mode infini : de combien les statistiques des ennemis augmentent-elles à chaque combat ? Y a-t-il encore une carte, des récompenses, une limite de défaites ? Comment afficher le record ?
+12. ~~Mode infini : renforcement, carte, récompenses, défaites, record.~~ Tranché le 2026-11-24 (section 2.2).
 13. Écart de puissance entre les coûts : une unité de coût 2 ne bat une unité de coût 1 que dans 55 % des cas, et une de coût 3 une de coût 2 dans 55 % des cas aussi (mesure du 2026-11-24). Faut-il renforcer les coûts 2 et 3 (piste testée : PV et attaque +8 % et +12 %) ? Et un Dragon noir bat une unité de coût 5 dans 96 % des cas : est-ce voulu ?
 
 
@@ -444,3 +469,5 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-23** : les 36 objets sont validés — les 8 existants sont gardés, 28 nouveaux s'y ajoutent, nommés d'après des talents de Monster Hunter, avec de nouvelles mécaniques (vol de vie, explosion, poison, paralysie, renvoi de dégâts, effets d'énergie…). Codage en 3 lots : effets au coup porté, effets quand l'unité est touchée, statuts et énergie.
 - **2026-11-23** : les 36 objets sont codés (lots 1 à 3). Deux nouveaux statuts arrivent avec les objets : poison (dégâts par seconde, soins reçus −40 %) et paralysie (l'unité n'agit plus) ; Anti-fléaux en protège, comme de la brûlure et des ralentissements.
 - **2026-11-24** : équilibrage des unités d'après une mesure sur environ 120 000 combats simulés — 7 unités trop fortes affaiblies (Dire Miralis, Tigrex, Rathalos, Barroth, Teostra, Namielle, Fabius), 9 trop faibles renforcées (Galleus, Safi'jiiva, Luchika, Alatreon, Fiorayne, Fugen, Olivia, Rondine, Fatalis) ; Safi'jiiva et Luchika visent désormais leur cible actuelle et non plus l'ennemi le plus éloigné (détail dans prototype-content.md). Nouvelle Guilde : chaque objet porté par une unité Guilde renforce toutes les unités Guilde (+3 / 4 / 5 % par objet, 9 objets au plus) au lieu du seul porteur (+6 / 12 / 20 %).
+- **2026-11-24** : mode infini — proposé après une run gagnée ; les stages continuent avec la carte (boss toutes les 10 étapes), escouades du stage 3 et ennemis +5 % de PV, d'attaque brute et de puissance élémentaire à chaque étape après la 30e ; le compteur de défaites de la run est conservé ; économie et récompenses continuent ; record de la plus haute étape atteinte gardé dans le navigateur.
+- **2026-11-24** : talents de chasseur (équivalent des augments de TFT) — un choix au début des stages 1, 2 et 3 (rien en mode infini), rareté argent, or ou prismatique à 1 chance sur 3, 3 propositions de la même rareté relançables une fois chacune ; 24 talents validés (combat, économie, objets, unités, traits), un talent pris n'est plus proposé ; les talents de trait ne comptent que si le trait a au moins une unité sur le plateau.

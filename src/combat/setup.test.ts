@@ -19,6 +19,16 @@ describe('createCombatState', () => {
     expect(start.units.map((unit) => unit.cost)).toEqual([4, 1]);
   });
 
+  it('ajoute le bonus du placement (renforcement du mode infini) aux statistiques', () => {
+    const boosted = { ...place(makeUnit({ id: 'renforce' }), 3, 3), bonus: { hpPercent: 0.5, attackPercent: 0.5, elementalPowerPercent: 0.5 } };
+    const state = createCombatState({ player: [place(makeUnit(), 3, 4)], enemy: [boosted] }, 1);
+    const [player, enemy] = state.units;
+    expect(player?.stats.hp).toBe(500);
+    expect(enemy?.stats.hp).toBeCloseTo(750);
+    expect(enemy?.stats.attack).toBeCloseTo(75);
+    expect(enemy?.hp).toBeCloseTo(750);
+  });
+
   it('applique le rang ★ : PV et attaque brute ×1,8 au ★2, ×3,24 au ★3, avant les bonus', () => {
     const unit = makeUnit({ stats: { hp: 500, attack: 50, armor: 20 } });
     const state = createCombatState(

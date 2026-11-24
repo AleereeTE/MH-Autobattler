@@ -260,6 +260,37 @@ Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. �
 | Unité ★1 tirée comme en boutique | 1 exemplaire | 2 exemplaires de la même unité |
 | Retire-objet | — | Boss seulement : +1 garanti, en plus du choix |
 
+### Talents de chasseur (game-design §11.1)
+
+Validés le 2026-11-24. ⚠️ Toutes les valeurs sont provisoires. « Toute l'équipe » : les unités du joueur sur le plateau, en combat.
+
+| Rareté | Talent | Famille | Effet |
+|---|---|---|---|
+| Argent | Repas de cantine | Combat | Toute l'équipe : +10 % PV |
+| Argent | Graine de puissance | Combat | Toute l'équipe : +8 % attaque brute et puissance élémentaire |
+| Argent | Réflexes de chasseur | Combat | Toute l'équipe : +8 % vitesse d'attaque |
+| Argent | Bourse de la Guilde | Économie | +10 zennys tout de suite |
+| Argent | Commerce félyne | Économie | Une relance gratuite de la boutique à chaque tour |
+| Argent | Kit de récolte | Objets | 3 matériaux au hasard |
+| Argent | Nouvelle recrue | Unités | 2 exemplaires d'une unité de coût 3 tirée au hasard |
+| Argent | Insigne de trait | Traits | +1 au compteur d'un trait tiré au hasard |
+| Or | Poudre démoniaque | Combat | Toute l'équipe : +15 % attaque brute et puissance élémentaire |
+| Or | Poudre de carapace | Combat | Toute l'équipe : +25 armure et +25 résistance élémentaire |
+| Or | Chasseurs d'élite | Combat | Les chasseurs : +20 % PV, attaque brute et puissance élémentaire |
+| Or | Banquier félyne | Économie | Intérêts plafonnés à 8 zennys au lieu de 5, et +5 zennys tout de suite |
+| Or | Rang supérieur | Économie | +1 niveau de boutique tout de suite, gratuit (9 au plus) |
+| Or | Commande au forgeron | Objets | Un objet complet tiré au hasard et un retire-objet |
+| Or | Renfort de la Guilde | Unités | Une unité de coût 4 tirée au hasard |
+| Or | Blason de trait | Traits | +1 au compteur d'un trait tiré au hasard, et ses unités gagnent +10 % PV |
+| Prismatique | Sang de l'Ancien | Combat | Toute l'équipe : +20 % PV, attaque brute et puissance élémentaire |
+| Prismatique | Éveil draconique | Combat | Toute l'équipe commence le combat avec 40 % de son énergie |
+| Prismatique | Instinct du prédateur | Combat | Toute l'équipe : +20 % vitesse d'attaque et +15 % de chance de critique |
+| Prismatique | Fortune du Commandant | Économie | +4 zennys à chaque tour |
+| Prismatique | Grand chasseur | Économie | +1 place sur le plateau, sans changer le niveau |
+| Prismatique | Arsenal de la Guilde | Objets | 2 objets complets tirés au hasard et 2 retire-objets |
+| Prismatique | Appel de l'Ancien | Unités | Un Dragon ancien ★1 tiré au hasard |
+| Prismatique | Couronne de trait | Traits | +2 au compteur d'un trait tiré au hasard |
+
 ### Carte (game-design §2.1)
 
 | Élément | Valeur |
@@ -272,6 +303,14 @@ Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. �
 | Forge | Objets retirés gratuitement pendant l'étape · 2 matériaux de l'inventaire reforgés au choix |
 | Marchand | ⚠️ 4 matériaux tirés au hasard à 3 zennys · 1 retire-objet à 4 zennys |
 | Monstre cible affiché | Le plus fort de l'escouade : coût × exemplaires (★1 = 1, ★2 = 3, ★3 = 9), puis le coût |
+
+### Mode infini (game-design §2.2)
+
+| Élément | Valeur |
+|---|---|
+| Renforcement des ennemis | ✅ +5 % de PV, d'attaque brute et de puissance élémentaire par étape après la 30e (étape 40 : +50 %, étape 60 : +150 %) ; quête urgente : comme 3 étapes plus loin |
+| Escouades | Règles du stage 3 : coût 4 et rang ★3 au plus, boss Dragon ancien ★2 (⚠️ 15 % de chances d'un Dragon noir ★1) ; budget et nombre de monstres selon la formule habituelle |
+| Défaites | Compteur de la run conservé (3 au total) |
 
 ---
 
