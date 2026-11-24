@@ -3,7 +3,7 @@ import { TRAITS, findTrait } from '../data/traits.ts';
 import { UNITS } from '../data/units/index.ts';
 import { makeUnit } from '../test-utils/factories.ts';
 import { isBlackDragon } from './board-limits.ts';
-import { activeTier, countTraits, traitStatuses, unitTraitIds } from './traits.ts';
+import { activeTier, countTraits, objectsWornByTrait, traitStatuses, unitTraitIds } from './traits.ts';
 
 describe('unitTraitIds', () => {
   it('commence par le trait d’élément, puis les traits secondaires', () => {
@@ -20,6 +20,25 @@ describe('countTraits', () => {
     const anjanath = makeUnit({ id: 'anjanath', element: 'fire' });
     const rathalos = makeUnit({ id: 'rathalos', element: 'fire' });
     expect(countTraits([anjanath, anjanath, rathalos]).get('fire')).toBe(2);
+  });
+});
+
+describe('objectsWornByTrait', () => {
+  it('additionne les objets complets portés par les unités de chaque trait, exemplaires compris', () => {
+    const object = { kind: 'object' as const, materials: ['horn', 'fang'] as const };
+    const material = { kind: 'material' as const, material: 'bone' as const };
+    const hunter = makeUnit({ id: 'chasseur', element: 'water', traits: ['guild'] });
+    const other = makeUnit({ id: 'autre', element: 'fire', traits: ['guild'] });
+    const monster = makeUnit({ id: 'monstre', element: 'fire' });
+    const objects = objectsWornByTrait([
+      { unit: hunter, equipment: [object, object, material] },
+      { unit: hunter, equipment: [object] },
+      { unit: other },
+      { unit: monster, equipment: [object] },
+    ]);
+    expect(objects.get('guild')).toBe(3);
+    expect(objects.get('water')).toBe(3);
+    expect(objects.get('fire')).toBe(1);
   });
 });
 

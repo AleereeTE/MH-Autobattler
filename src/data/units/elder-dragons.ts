@@ -15,14 +15,14 @@ export const TEOSTRA: UnitDefinition = {
   element: 'fire',
   cost: 5,
   traits: ['elder-dragon'],
-  stats: { hp: 1250, attack: 78, elementalPower: 65, critChance: 0.1, armor: 45, elementalResist: 45, attackSpeed: 0.75, range: 1, maxEnergy: 90, energyRegenBonus: 0 },
+  stats: { hp: 1100, attack: 78, elementalPower: 65, critChance: 0.1, armor: 45, elementalResist: 45, attackSpeed: 0.75, range: 1, maxEnergy: 90, energyRegenBonus: 0 },
   skill: {
     id: 'supernova',
     name: 'Supernova',
-    description: 'Incantation de 1,5 s, puis 250/375/565 + 350/438/525 % de la puissance élémentaire aux ennemis à 2 cases ou moins.',
+    description: 'Incantation de 1,5 s, puis 250/375/565 + 290/363/435 % de la puissance élémentaire aux ennemis à 2 cases ou moins.',
     castTime: 1.5,
     effects: [
-      { kind: 'damage', target: 'self', damageType: 'elemental', base: [250, 375, 565], ratios: [{ stat: 'elementalPower', ratio: 3.5 }], radius: 2 },
+      { kind: 'damage', target: 'self', damageType: 'elemental', base: [250, 375, 565], ratios: [{ stat: 'elementalPower', ratio: 2.9 }], radius: 2 },
     ],
   },
 };
@@ -35,16 +35,16 @@ export const NAMIELLE: UnitDefinition = {
   element: 'water',
   cost: 5,
   traits: ['elder-dragon', 'catalyst'],
-  stats: { hp: 1100, attack: 55, elementalPower: 70, critChance: 0.05, armor: 35, elementalResist: 50, attackSpeed: 0.7, range: 3, maxEnergy: 90, energyRegenBonus: 0 },
+  stats: { hp: 1000, attack: 55, elementalPower: 70, critChance: 0.05, armor: 35, elementalResist: 50, attackSpeed: 0.7, range: 3, maxEnergy: 90, energyRegenBonus: 0 },
   skill: {
     id: 'maree-luminescente',
     name: 'Marée luminescente',
     description:
-      '75/115/170 + 125/156/188 % de la puissance élémentaire sur la cible et les ennemis à 2 cases d’elle, et soigne les alliés à 2 cases de 100/150/225 + 150/188/225 % de la puissance élémentaire.',
+      '75/115/170 + 110/138/165 % de la puissance élémentaire sur la cible et les ennemis à 2 cases d’elle, et soigne les alliés à 2 cases de 100/150/225 + 110/138/165 % de la puissance élémentaire.',
     castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [75, 115, 170], ratios: [{ stat: 'elementalPower', ratio: 1.25 }], radius: 2 },
-      { kind: 'heal', base: [100, 150, 225], ratios: [{ stat: 'elementalPower', ratio: 1.5 }], radius: 2 },
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [75, 115, 170], ratios: [{ stat: 'elementalPower', ratio: 1.1 }], radius: 2 },
+      { kind: 'heal', base: [100, 150, 225], ratios: [{ stat: 'elementalPower', ratio: 1.1 }], radius: 2 },
     ],
   },
 };
@@ -61,10 +61,10 @@ export const SAFI_JIIVA: UnitDefinition = {
   skill: {
     id: 'rayon-draconique',
     name: 'Rayon draconique',
-    description: '220/330/495 + 300/375/450 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
+    description: '220/330/495 + 300/375/450 % de la puissance élémentaire sur sa cible et ses voisins.',
     castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'farthestEnemy', damageType: 'elemental', base: [220, 330, 495], ratios: [{ stat: 'elementalPower', ratio: 3 }], radius: 1 },
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [220, 330, 495], ratios: [{ stat: 'elementalPower', ratio: 3 }], radius: 1 },
     ],
   },
 };

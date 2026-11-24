@@ -14,13 +14,13 @@ export const BARROTH: UnitDefinition = {
   element: null,
   cost: 1,
   traits: ['bastion', 'brute-wyvern'],
-  stats: { hp: 850, attack: 45, elementalPower: 0, critChance: 0.05, armor: 45, elementalResist: 30, attackSpeed: 0.6, range: 1, maxEnergy: 70, energyRegenBonus: 0 },
+  stats: { hp: 780, attack: 45, elementalPower: 0, critChance: 0.05, armor: 40, elementalResist: 30, attackSpeed: 0.6, range: 1, maxEnergy: 90, energyRegenBonus: 0 },
   skill: {
     id: 'carapace-de-boue',
     name: 'Carapace de boue',
-    description: 'Bouclier de 150/225/340 + 15/19/23 % des PV max pendant 4 s.',
+    description: 'Bouclier de 150/225/340 + 12/15/18 % des PV max pendant 4 s.',
     castTime: 0.25,
-    effects: [{ kind: 'shield', base: [150, 225, 340], ratios: [{ stat: 'hp', ratio: 0.15 }], duration: 4 }],
+    effects: [{ kind: 'shield', base: [150, 225, 340], ratios: [{ stat: 'hp', ratio: 0.12 }], duration: 4 }],
   },
 };
 
@@ -92,14 +92,14 @@ export const RATHALOS: UnitDefinition = {
   element: 'fire',
   cost: 3,
   traits: ['flying-wyvern', 'catalyst'],
-  stats: { hp: 850, attack: 65, elementalPower: 50, critChance: 0.1, armor: 35, elementalResist: 35, attackSpeed: 0.75, range: 3, maxEnergy: 80, energyRegenBonus: 0 },
+  stats: { hp: 750, attack: 55, elementalPower: 50, critChance: 0.1, armor: 35, elementalResist: 35, attackSpeed: 0.75, range: 3, maxEnergy: 80, energyRegenBonus: 0 },
   skill: {
     id: 'boule-de-feu',
     name: 'Boule de feu',
-    description: '120/180/270 + 250/313/375 % de la puissance élémentaire sur la cible et ses voisins.',
+    description: '120/180/270 + 200/250/300 % de la puissance élémentaire sur la cible et ses voisins.',
     castTime: 0.75,
     effects: [
-      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [120, 180, 270], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 1 },
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [120, 180, 270], ratios: [{ stat: 'elementalPower', ratio: 2 }], radius: 1 },
     ],
   },
 };
@@ -318,14 +318,14 @@ export const TIGREX: UnitDefinition = {
   element: null,
   cost: 4,
   traits: ['flying-wyvern', 'berserker'],
-  stats: { hp: 1100, attack: 80, elementalPower: 0, critChance: 0.15, armor: 40, elementalResist: 30, attackSpeed: 0.8, range: 1, maxEnergy: 70, energyRegenBonus: 0 },
+  stats: { hp: 1000, attack: 68, elementalPower: 0, critChance: 0.15, armor: 40, elementalResist: 30, attackSpeed: 0.8, range: 1, maxEnergy: 70, energyRegenBonus: 0 },
   skill: {
     id: 'rugissement',
     name: 'Rugissement',
-    description: '110/165/250 + 230/288/345 % de l’attaque brute en dégâts physiques aux ennemis adjacents.',
+    description: '110/165/250 + 180/225/270 % de l’attaque brute en dégâts physiques aux ennemis adjacents.',
     castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'self', damageType: 'physical', base: [110, 165, 250], ratios: [{ stat: 'attack', ratio: 2.3 }], radius: 1 },
+      { kind: 'damage', target: 'self', damageType: 'physical', base: [110, 165, 250], ratios: [{ stat: 'attack', ratio: 1.8 }], radius: 1 },
     ],
   },
 };

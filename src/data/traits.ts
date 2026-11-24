@@ -10,8 +10,11 @@ import type { Element, StatBonus, TraitId, UnitKind } from './definitions.ts';
 export type TraitEffect =
   /** Bonus de statistiques pour les unités du trait. */
   | { readonly kind: 'statBonus'; readonly bonus: StatBonus }
-  /** Bonus multiplié par le nombre d'objets portés (Guilde). */
-  | { readonly kind: 'perObjectBonus'; readonly bonus: StatBonus }
+  /**
+   * Bonus multiplié par le nombre d'objets portés par l'ensemble des unités du trait, donné à chacune d'elles,
+   * même sans objet (Guilde). Au plus `maxObjects` objets sont comptés.
+   */
+  | { readonly kind: 'sharedObjectBonus'; readonly bonus: StatBonus; readonly maxObjects: number }
   /** Les coups des unités du trait brûlent la cible (Feu). */
   | { readonly kind: 'burn'; readonly damagePerSecond: number; readonly duration: number }
   /** Les coups des unités du trait ralentissent la cible (Glace). */
@@ -20,6 +23,12 @@ export type TraitEffect =
   | { readonly kind: 'lightning'; readonly damage: number; readonly interval: number }
   /** Tant qu'une unité du trait est en vie, les ennemis infligent moins de dégâts (Dragon noir : 0,15 = −15 %). */
   | { readonly kind: 'terror'; readonly enemyDamageReduction: number };
+
+/**
+ * ✅ Guilde (2026-11-24) : chaque objet porté par une unité Guilde renforce toutes les unités Guilde,
+ * avec 9 objets comptés au plus.
+ */
+export const GUILD_MAX_OBJECTS = 9;
 
 export interface TraitTier {
   /** Nombre d'unités différentes nécessaire. */
@@ -132,20 +141,21 @@ export const TRAITS: readonly TraitDefinition[] = [
     category: 'secondary',
     restrictedTo: 'hunter',
     tiers: [
+      // ✅ 3 / 4 / 5 % par objet porté dans la Guilde, pour toutes les unités Guilde (validé le 2026-11-24).
       {
         count: 2,
-        effect: { kind: 'perObjectBonus', bonus: { hpPercent: 0.06, attackPercent: 0.06, elementalPowerPercent: 0.06 } },
-        description: '+6 % PV, attaque brute et puissance élémentaire par objet porté',
+        effect: { kind: 'sharedObjectBonus', bonus: { hpPercent: 0.03, attackPercent: 0.03, elementalPowerPercent: 0.03 }, maxObjects: GUILD_MAX_OBJECTS },
+        description: `Toutes les unités Guilde : +3 % PV, attaque brute et puissance élémentaire par objet porté par une unité Guilde (${GUILD_MAX_OBJECTS} objets au plus)`,
       },
       {
         count: 4,
-        effect: { kind: 'perObjectBonus', bonus: { hpPercent: 0.12, attackPercent: 0.12, elementalPowerPercent: 0.12 } },
-        description: '+12 % PV, attaque brute et puissance élémentaire par objet porté',
+        effect: { kind: 'sharedObjectBonus', bonus: { hpPercent: 0.04, attackPercent: 0.04, elementalPowerPercent: 0.04 }, maxObjects: GUILD_MAX_OBJECTS },
+        description: `Toutes les unités Guilde : +4 % PV, attaque brute et puissance élémentaire par objet porté par une unité Guilde (${GUILD_MAX_OBJECTS} objets au plus)`,
       },
       {
         count: 6,
-        effect: { kind: 'perObjectBonus', bonus: { hpPercent: 0.2, attackPercent: 0.2, elementalPowerPercent: 0.2 } },
-        description: '+20 % PV, attaque brute et puissance élémentaire par objet porté',
+        effect: { kind: 'sharedObjectBonus', bonus: { hpPercent: 0.05, attackPercent: 0.05, elementalPowerPercent: 0.05 }, maxObjects: GUILD_MAX_OBJECTS },
+        description: `Toutes les unités Guilde : +5 % PV, attaque brute et puissance élémentaire par objet porté par une unité Guilde (${GUILD_MAX_OBJECTS} objets au plus)`,
       },
     ],
   },

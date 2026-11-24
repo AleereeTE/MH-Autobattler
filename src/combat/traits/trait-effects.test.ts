@@ -71,7 +71,7 @@ describe('traits d’élément', () => {
 });
 
 describe('traits secondaires', () => {
-  it('Guilde : bonus par objet porté', () => {
+  it('Guilde : chaque objet porté par une unité Guilde renforce toutes les unités Guilde', () => {
     const setup = duoSetup({ element: 'water', traits: ['guild'] });
     const [first, second] = setup.player;
     if (first === undefined || second === undefined) throw new Error('placements manquants');
@@ -79,7 +79,24 @@ describe('traits secondaires', () => {
       { ...setup, player: [{ ...first, equipment: [{ kind: 'object', materials: ['horn', 'fang'] }] }, second] },
       1,
     );
-    expect(state.units[0]?.stats.hp).toBeCloseTo(500 * 1.06);
+    // Palier 2 : +3 % par objet, y compris pour l'unité qui ne porte rien.
+    expect(state.units[0]?.stats.hp).toBeCloseTo(500 * 1.03);
+    expect(state.units[1]?.stats.hp).toBeCloseTo(500 * 1.03);
+  });
+
+  it('Guilde : 9 objets comptés au plus', () => {
+    const fullKit = Array.from({ length: 3 }, () => ({ kind: 'object' as const, materials: ['horn', 'fang'] as const }));
+    const hunters = [0, 1, 2, 3].map((col) => place(makeUnit({ id: `guilde-${col}`, element: 'water', traits: ['guild'] }), col, 7, fullKit));
+    const state = createCombatState({ player: hunters, enemy: [place(makeUnit({ id: 'dummy' }), 3, 0)] }, 1);
+    // Palier 4 : 4 % par objet ; 12 objets portés, mais seuls 9 comptent → +36 %.
+    for (const unit of state.units.filter((u) => u.side === 'player')) expect(unit.stats.hp).toBeCloseTo(500 * 1.36);
+  });
+
+  it('Guilde : les objets portés par les autres unités ne comptent pas', () => {
+    const setup = duoSetup({ element: 'water', traits: ['guild'] });
+    const outsider = place(makeUnit({ id: 'hors-guilde', element: 'water' }), 5, 7, [{ kind: 'object', materials: ['horn', 'fang'] }]);
+    const state = createCombatState({ ...setup, player: [...setup.player, outsider] }, 1);
+    expect(state.units[0]?.stats.hp).toBe(500);
     expect(state.units[1]?.stats.hp).toBe(500);
   });
 

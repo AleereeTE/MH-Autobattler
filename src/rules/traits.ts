@@ -1,5 +1,7 @@
 import type { TraitId, UnitDefinition } from '../data/definitions.ts';
+import type { Equipment } from '../data/items.ts';
 import { elementTraitId, findTrait, type TraitDefinition, type TraitTier } from '../data/traits.ts';
+import { countObjects } from './equipment.ts';
 
 /** Traits d'une unité : son élément (trait principal) puis ses traits secondaires. */
 export function unitTraitIds(unit: UnitDefinition): TraitId[] {
@@ -19,6 +21,20 @@ export function countTraits(units: readonly UnitDefinition[]): Map<TraitId, numb
     for (const id of unitTraitIds(unit)) counts.set(id, (counts.get(id) ?? 0) + 1);
   }
   return counts;
+}
+
+/**
+ * Nombre d'objets complets portés par les unités de chaque trait d'une équipe (Guilde).
+ * Contrairement au décompte des unités, chaque exemplaire compte : ce sont les objets qu'on additionne.
+ */
+export function objectsWornByTrait(members: readonly { readonly unit: UnitDefinition; readonly equipment?: Equipment }[]): Map<TraitId, number> {
+  const objects = new Map<TraitId, number>();
+  for (const { unit, equipment = [] } of members) {
+    const count = countObjects(equipment);
+    if (count === 0) continue;
+    for (const id of unitTraitIds(unit)) objects.set(id, (objects.get(id) ?? 0) + count);
+  }
+  return objects;
 }
 
 /** Palier atteint pour un nombre d'unités donné (le plus haut), ou null. */

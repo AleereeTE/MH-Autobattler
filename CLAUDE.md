@@ -19,7 +19,7 @@ Projet personnel, jamais publié : les noms et monstres officiels de la série s
 2. **Architecture** : faite ([docs/architecture.md](docs/architecture.md)).
 3. **Moteur de combat** : en place, avec tests automatisés.
 4. **Prototype jouable** : bac à sable fait ([docs/prototype-content.md](docs/prototype-content.md)).
-5. **Extension du gameplay** : en cours. Fait : rangs ★, zones d'effet animées, jetons illustrés, bilan en direct, première version du mode run (30 chasses, boutique, réserve, fusion automatique, économie, récompenses simplifiées), unités de coût 4 à 6 (Dragons anciens, Dragons noirs), éléments Eau et Dragon, paliers 2 / 4 / 6, planificateur d'équipe, carte des stages (chasses, quêtes urgentes, forges, marchands), les 36 objets. À venir : talents de chasseur, cases Événement, mode infini, récompenses complètes et capture, vraie version boss.
+5. **Extension du gameplay** : en cours. Fait : rangs ★, zones d'effet animées, jetons illustrés, bilan en direct, première version du mode run (30 chasses, boutique, réserve, fusion automatique, économie, récompenses simplifiées), unités de coût 4 à 6 (Dragons anciens, Dragons noirs), éléments Eau et Dragon, paliers 2 / 4 / 6, planificateur d'équipe, carte des stages (chasses, quêtes urgentes, forges, marchands), les 36 objets, premier équilibrage des unités et Guilde partagée. À venir : talents de chasseur, cases Événement, mode infini, récompenses complètes et capture, vraie version boss.
 6. **Intégration graphique** : plus tard.
 
 Les questions de game design encore ouvertes sont dans la section 14 de `docs/game-design.md`. Les choix techniques provisoires sont dans la section 8 de `docs/architecture.md`.

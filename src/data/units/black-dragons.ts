@@ -18,7 +18,7 @@ export const FATALIS: UnitDefinition = {
   element: 'dragon',
   cost: 6,
   traits: ['black-dragon'],
-  stats: { hp: 1800, attack: 95, elementalPower: 85, critChance: 0.15, armor: 55, elementalResist: 55, attackSpeed: 0.75, range: 1, maxEnergy: 100, energyRegenBonus: 0 },
+  stats: { hp: 1900, attack: 95, elementalPower: 85, critChance: 0.15, armor: 55, elementalResist: 55, attackSpeed: 0.75, range: 1, maxEnergy: 100, energyRegenBonus: 0 },
   skill: {
     id: 'souffle-du-fatalis',
     name: 'Souffle du Fatalis',
@@ -38,19 +38,19 @@ export const ALATREON: UnitDefinition = {
   element: 'ice',
   cost: 6,
   traits: ['black-dragon'],
-  stats: { hp: 1500, attack: 80, elementalPower: 95, critChance: 0.1, armor: 45, elementalResist: 60, attackSpeed: 0.7, range: 3, maxEnergy: 100, energyRegenBonus: 0 },
+  stats: { hp: 1900, attack: 80, elementalPower: 95, critChance: 0.1, armor: 45, elementalResist: 60, attackSpeed: 0.7, range: 3, maxEnergy: 100, energyRegenBonus: 0 },
   skill: {
     id: 'jugement-d-escaton',
     name: 'Jugement d’Escaton',
-    description: 'Incantation de 2 s, puis 220/330/495 + 280/350/420 % de la puissance élémentaire à tous les ennemis, et −30 % de vitesse d’attaque pendant 3 s.',
-    castTime: 2,
+    description: 'Incantation de 1,5 s, puis 220/330/495 + 340/425/510 % de la puissance élémentaire à tous les ennemis, et −30 % de vitesse d’attaque pendant 3 s.',
+    castTime: 1.5,
     effects: [
       {
         kind: 'damage',
         target: 'self',
         damageType: 'elemental',
         base: [220, 330, 495],
-        ratios: [{ stat: 'elementalPower', ratio: 2.8 }],
+        ratios: [{ stat: 'elementalPower', ratio: 3.4 }],
         radius: WHOLE_BOARD,
         slow: { attackSpeedPercent: -0.3, duration: 3 },
       },
@@ -66,15 +66,15 @@ export const DIRE_MIRALIS: UnitDefinition = {
   element: 'fire',
   cost: 6,
   traits: ['black-dragon'],
-  stats: { hp: 2100, attack: 75, elementalPower: 70, critChance: 0.05, armor: 70, elementalResist: 65, attackSpeed: 0.6, range: 1, maxEnergy: 100, energyRegenBonus: 0 },
+  stats: { hp: 1900, attack: 75, elementalPower: 70, critChance: 0.05, armor: 70, elementalResist: 65, attackSpeed: 0.6, range: 1, maxEnergy: 120, energyRegenBonus: 0 },
   skill: {
     id: 'eruption',
     name: 'Éruption',
-    description: '200/300/450 + 250/313/375 % de la puissance élémentaire aux ennemis à 2 cases ou moins, puis bouclier de 400/600/900 + 20/25/30 % des PV max pendant 5 s.',
+    description: '200/300/450 + 250/313/375 % de la puissance élémentaire aux ennemis à 2 cases ou moins, puis bouclier de 250/375/565 + 10/13/15 % des PV max pendant 5 s.',
     castTime: 0.5,
     effects: [
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [200, 300, 450], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 2 },
-      { kind: 'shield', base: [400, 600, 900], ratios: [{ stat: 'hp', ratio: 0.2 }], duration: 5 },
+      { kind: 'shield', base: [250, 375, 565], ratios: [{ stat: 'hp', ratio: 0.1 }], duration: 5 },
     ],
   },
 };

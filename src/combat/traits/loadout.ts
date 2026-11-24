@@ -1,7 +1,5 @@
 import type { StatBonus, TraitId, UnitDefinition } from '../../data/definitions.ts';
-import type { Equipment } from '../../data/items.ts';
 import type { TraitTier } from '../../data/traits.ts';
-import { countObjects } from '../../rules/equipment.ts';
 import { scaleBonus } from '../../rules/stats.ts';
 import { unitTraitIds } from '../../rules/traits.ts';
 import { secondsToTicks } from '../constants.ts';
@@ -14,11 +12,14 @@ export interface TraitLoadout {
   readonly onHit: OnHitEffects;
 }
 
-/** Ce que les traits actifs de son camp apportent à une unité membre de ces traits. */
+/**
+ * Ce que les traits actifs de son camp apportent à une unité membre de ces traits.
+ * `traitObjects` : objets portés par les unités de chaque trait de son camp (voir objectsWornByTrait).
+ */
 export function traitLoadout(
   unit: UnitDefinition,
-  equipment: Equipment,
   active: ReadonlyMap<TraitId, TraitTier>,
+  traitObjects: ReadonlyMap<TraitId, number>,
 ): TraitLoadout {
   const bonuses: StatBonus[] = [];
   let onHit: OnHitEffects = {};
@@ -30,8 +31,8 @@ export function traitLoadout(
       case 'statBonus':
         bonuses.push(effect.bonus);
         break;
-      case 'perObjectBonus':
-        bonuses.push(scaleBonus(effect.bonus, countObjects(equipment)));
+      case 'sharedObjectBonus':
+        bonuses.push(scaleBonus(effect.bonus, Math.min(effect.maxObjects, traitObjects.get(id) ?? 0)));
         break;
       case 'burn':
         onHit = { ...onHit, burn: { damagePerSecond: effect.damagePerSecond, durationTicks: secondsToTicks(effect.duration) } };

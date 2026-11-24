@@ -190,7 +190,7 @@ L'Extrait ajoute **+1 énergie par seconde** au gain passif de l'unité qui le p
 - Chaque unité possède **1 trait principal** et **1 trait secondaire** ; certaines unités ont **2 traits secondaires** (2 ou 3 traits au total).
 - **Trait principal = élément** : Feu, Eau, Foudre, Glace, Dragon ou Sans élément. C'est ce trait qui relie chasseurs et monstres (exemple : un chasseur à l'arme Foudre + Tobi-Kadachi activent ensemble la synergie Foudre).
 - **Traits secondaires** : liés à un effet de jeu. Certains sont réservés à un type d'unité :
-  - **Guilde** : chasseurs uniquement.
+  - **Guilde** : chasseurs uniquement. ✅ Chaque objet porté par une unité Guilde renforce **toutes** les unités Guilde, même celles qui ne portent rien (+3 / 4 / 5 % de PV, attaque brute et puissance élémentaire par objet selon le palier, 9 objets comptés au plus).
   - **Dragon ancien** : monstres uniquement.
 - Exemples de traits secondaires (illustratifs) :
   - **Berserker** : les compétences des unités Berserker peuvent faire des coups critiques ; les Berserker gagnent des chances de critique et des dégâts critiques.
@@ -407,6 +407,7 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 6. Contenu de la version boss d'un monstre (PV, plusieurs compétences, état enragé ?).
 7. ~~Informations visibles sur chaque chasse proposée par la carte.~~ Tranché : monstre cible et type de récompense.
 12. Mode infini : de combien les statistiques des ennemis augmentent-elles à chaque combat ? Y a-t-il encore une carte, des récompenses, une limite de défaites ? Comment afficher le record ?
+13. Écart de puissance entre les coûts : une unité de coût 2 ne bat une unité de coût 1 que dans 55 % des cas, et une de coût 3 une de coût 2 dans 55 % des cas aussi (mesure du 2026-11-24). Faut-il renforcer les coûts 2 et 3 (piste testée : PV et attaque +8 % et +12 %) ? Et un Dragon noir bat une unité de coût 5 dans 96 % des cas : est-ce voulu ?
 
 
 ### Confort de jeu
@@ -442,3 +443,4 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 - **2026-11-23** : les chasseurs prennent des noms officiels de la série, avec une arme qu'ils utilisent dans les jeux : Garrick → Fabius (Lance), Helga → Olivia (Marteau), Akira → Fiorayne (Grande épée), Lysa → Fugen (Doubles lames), Sylvain → Hinoa (Arc), Odette → Minoto (Corne de chasse), Kaede → Rondine (Épée longue), Dorian → Luchika (Fusarbalète lourd), Mira → Aiden (Épée et bouclier), Brann → Arlow (Lancecanon), Ondine → Galleus (Morpho-hache). Nadia (Wilds, Fusarbalète léger) est gardée pour le futur Fusarbalète léger. Les anciens noms restent dans les entrées précédentes de l'historique.
 - **2026-11-23** : les 36 objets sont validés — les 8 existants sont gardés, 28 nouveaux s'y ajoutent, nommés d'après des talents de Monster Hunter, avec de nouvelles mécaniques (vol de vie, explosion, poison, paralysie, renvoi de dégâts, effets d'énergie…). Codage en 3 lots : effets au coup porté, effets quand l'unité est touchée, statuts et énergie.
 - **2026-11-23** : les 36 objets sont codés (lots 1 à 3). Deux nouveaux statuts arrivent avec les objets : poison (dégâts par seconde, soins reçus −40 %) et paralysie (l'unité n'agit plus) ; Anti-fléaux en protège, comme de la brûlure et des ralentissements.
+- **2026-11-24** : équilibrage des unités d'après une mesure sur environ 120 000 combats simulés — 7 unités trop fortes affaiblies (Dire Miralis, Tigrex, Rathalos, Barroth, Teostra, Namielle, Fabius), 9 trop faibles renforcées (Galleus, Safi'jiiva, Luchika, Alatreon, Fiorayne, Fugen, Olivia, Rondine, Fatalis) ; Safi'jiiva et Luchika visent désormais leur cible actuelle et non plus l'ennemi le plus éloigné (détail dans prototype-content.md). Nouvelle Guilde : chaque objet porté par une unité Guilde renforce toutes les unités Guilde (+3 / 4 / 5 % par objet, 9 objets au plus) au lieu du seul porteur (+6 / 12 / 20 %).

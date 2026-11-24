@@ -7,7 +7,7 @@ import { SLOT_CAPACITY, equipmentBonuses } from '../rules/equipment.ts';
 import { BLACK_DRAGON_LIMIT_MESSAGE, exceedsBlackDragonLimit } from '../rules/board-limits.ts';
 import { isStarRank, rankedStats } from '../rules/ranks.ts';
 import { computeCombatStats } from '../rules/stats.ts';
-import { traitStatuses, type TraitStatus } from '../rules/traits.ts';
+import { objectsWornByTrait, traitStatuses, type TraitStatus } from '../rules/traits.ts';
 import type { TraitSummary, UnitSnapshot } from './events.ts';
 import { SIDES, type CombatState, type CombatUnit, type LightningState, type Side } from './state.ts';
 import { lightningFor, terrorFor, traitLoadout } from './traits/loadout.ts';
@@ -48,7 +48,8 @@ export function createCombatState(setup: CombatSetup, seed: number): CombatState
     traits[side] = statuses.map(summarizeTrait);
     lightning[side] = lightningFor(active);
     terror[side] = terrorFor(active);
-    for (const placement of placements) units.push(createUnit(units.length + 1, side, placement, active));
+    const traitObjects = objectsWornByTrait(placements);
+    for (const placement of placements) units.push(createUnit(units.length + 1, side, placement, active, traitObjects));
   }
 
   const state: CombatState = { tick: 0, units, rng: createRng(seed), events: [], lightning, terror };
@@ -56,11 +57,17 @@ export function createCombatState(setup: CombatSetup, seed: number): CombatState
   return state;
 }
 
-function createUnit(uid: number, side: Side, placement: Placement, active: ReadonlyMap<TraitId, TraitTier>): CombatUnit {
+function createUnit(
+  uid: number,
+  side: Side,
+  placement: Placement,
+  active: ReadonlyMap<TraitId, TraitTier>,
+  traitObjects: ReadonlyMap<TraitId, number>,
+): CombatUnit {
   const { unit, position } = placement;
   const equipment = placement.equipment ?? [];
   const rank = placement.rank ?? 1;
-  const loadout = traitLoadout(unit, equipment, active);
+  const loadout = traitLoadout(unit, active, traitObjects);
   // Le rang s'applique aux statistiques de la fiche, avant les bonus des objets et des traits.
   const stats = computeCombatStats(rankedStats(unit.stats, rank), [...equipmentBonuses(equipment), ...loadout.bonuses]);
 

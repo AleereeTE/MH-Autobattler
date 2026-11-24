@@ -19,9 +19,9 @@ export const GARRICK: UnitDefinition = {
   skill: {
     id: 'garde',
     name: 'Garde',
-    description: 'Bouclier de 200/300/450 + 20/25/30 % des PV max pendant 4 s.',
+    description: 'Bouclier de 160/240/360 + 14/18/21 % des PV max pendant 4 s.',
     castTime: 0.25,
-    effects: [{ kind: 'shield', base: [200, 300, 450], ratios: [{ stat: 'hp', ratio: 0.2 }], duration: 4 }],
+    effects: [{ kind: 'shield', base: [160, 240, 360], ratios: [{ stat: 'hp', ratio: 0.14 }], duration: 4 }],
   },
 };
 
@@ -34,7 +34,7 @@ export const HELGA: UnitDefinition = {
   element: null,
   cost: 1,
   traits: ['guild'],
-  stats: { hp: 650, attack: 55, elementalPower: 0, critChance: 0.1, armor: 30, elementalResist: 25, attackSpeed: 0.7, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
+  stats: { hp: 760, attack: 58, elementalPower: 0, critChance: 0.1, armor: 35, elementalResist: 25, attackSpeed: 0.7, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
   skill: {
     id: 'big-bang',
     name: 'Big Bang',
@@ -53,12 +53,12 @@ export const AKIRA: UnitDefinition = {
   element: null,
   cost: 3,
   traits: ['guild', 'berserker'],
-  stats: { hp: 700, attack: 75, elementalPower: 0, critChance: 0.15, armor: 30, elementalResist: 25, attackSpeed: 0.55, range: 1, maxEnergy: 70, energyRegenBonus: 0 },
+  stats: { hp: 850, attack: 75, elementalPower: 0, critChance: 0.15, armor: 35, elementalResist: 25, attackSpeed: 0.55, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
   skill: {
     id: 'coup-charge',
     name: 'Coup chargé',
-    description: 'Charge pendant 1,5 s, puis inflige 150/225/340 + 300/375/450 % de l’attaque brute en dégâts physiques.',
-    castTime: 1.5,
+    description: 'Charge pendant 1 s, puis inflige 150/225/340 + 300/375/450 % de l’attaque brute en dégâts physiques.',
+    castTime: 1,
     effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'physical', base: [150, 225, 340], ratios: [{ stat: 'attack', ratio: 3 }] }],
   },
 };
@@ -72,7 +72,7 @@ export const LYSA: UnitDefinition = {
   element: 'thunder',
   cost: 1,
   traits: ['guild'],
-  stats: { hp: 550, attack: 45, elementalPower: 25, critChance: 0.15, armor: 20, elementalResist: 20, attackSpeed: 0.9, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
+  stats: { hp: 680, attack: 48, elementalPower: 25, critChance: 0.15, armor: 35, elementalResist: 20, attackSpeed: 0.9, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
   skill: {
     id: 'mode-demon',
     name: 'Mode démon',
@@ -161,13 +161,13 @@ export const ONDINE: UnitDefinition = {
   element: 'water',
   cost: 4,
   traits: ['guild'],
-  stats: { hp: 800, attack: 62, elementalPower: 45, critChance: 0.1, armor: 35, elementalResist: 30, attackSpeed: 0.75, range: 1, maxEnergy: 70, energyRegenBonus: 0 },
+  stats: { hp: 1100, attack: 75, elementalPower: 55, critChance: 0.1, armor: 40, elementalResist: 30, attackSpeed: 0.75, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
   skill: {
     id: 'decharge-elementaire',
     name: 'Décharge élémentaire',
-    description: 'Incantation de 1 s, puis 150/225/340 + 250/313/375 % de la puissance élémentaire sur la cible.',
-    castTime: 1,
-    effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [150, 225, 340], ratios: [{ stat: 'elementalPower', ratio: 2.5 }] }],
+    description: '150/225/340 + 340/425/510 % de la puissance élémentaire sur la cible.',
+    castTime: 0.5,
+    effects: [{ kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [150, 225, 340], ratios: [{ stat: 'elementalPower', ratio: 3.4 }] }],
   },
 };
 
@@ -201,7 +201,7 @@ export const KAEDE: UnitDefinition = {
   element: 'water',
   cost: 2,
   traits: ['guild', 'berserker'],
-  stats: { hp: 580, attack: 58, elementalPower: 35, critChance: 0.15, armor: 20, elementalResist: 20, attackSpeed: 0.85, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
+  stats: { hp: 700, attack: 58, elementalPower: 35, critChance: 0.15, armor: 30, elementalResist: 20, attackSpeed: 0.85, range: 1, maxEnergy: 60, energyRegenBonus: 0 },
   skill: {
     id: 'coup-spirituel',
     name: 'Coup spirituel',
@@ -222,14 +222,14 @@ export const DORIAN: UnitDefinition = {
   element: 'dragon',
   cost: 3,
   traits: ['guild', 'catalyst'],
-  stats: { hp: 550, attack: 50, elementalPower: 45, critChance: 0.1, armor: 15, elementalResist: 20, attackSpeed: 0.6, range: 4, maxEnergy: 70, energyRegenBonus: 0 },
+  stats: { hp: 750, attack: 50, elementalPower: 45, critChance: 0.1, armor: 15, elementalResist: 20, attackSpeed: 0.6, range: 4, maxEnergy: 70, energyRegenBonus: 0 },
   skill: {
     id: 'tir-draconique',
     name: 'Tir draconique',
-    description: 'Incantation de 1 s, puis 130/195/295 + 250/313/375 % de la puissance élémentaire sur l’ennemi le plus éloigné et ses voisins.',
-    castTime: 1,
+    description: '130/195/295 + 320/400/480 % de la puissance élémentaire sur sa cible et ses voisins.',
+    castTime: 0.5,
     effects: [
-      { kind: 'damage', target: 'farthestEnemy', damageType: 'elemental', base: [130, 195, 295], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 1 },
+      { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [130, 195, 295], ratios: [{ stat: 'elementalPower', ratio: 3.2 }], radius: 1 },
     ],
   },
 };

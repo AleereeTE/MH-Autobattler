@@ -21,29 +21,29 @@ Les chasseurs portent des noms officiels de la série, avec une arme qu'ils util
 
 | Unité | Type | Rôle | Élément | Traits secondaires | Coût | Portée | Compétence |
 |---|---|---|---|---|---|---|---|
-| Barroth | Monstre | Tank | — | Bastion, Wyverne brute | 1 | 1 | **Carapace de boue** : bouclier de 150/225/340 + 15/19/23 % des PV max pendant 4 s |
+| Barroth | Monstre | Tank | — | Bastion, Wyverne brute | 1 | 1 | **Carapace de boue** : bouclier de 150/225/340 + 12/15/18 % des PV max pendant 4 s |
 | Khezu | Monstre | Tank | Foudre | Wyverne volante, Bastion | 1 | 1 | **Décharge** : 30/45/70 + 75/94/113 % puiss. élém. aux ennemis adjacents |
-| Fabius (Lance) | Chasseur | Tank | Glace | Bastion | 2 | 1 | **Garde** : bouclier de 200/300/450 + 20/25/30 % des PV max pendant 4 s |
+| Fabius (Lance) | Chasseur | Tank | Glace | Bastion | 2 | 1 | **Garde** : bouclier de 160/240/360 + 14/18/21 % des PV max pendant 4 s |
 | Olivia (Marteau) | Chasseur | Bruiser | — | Guilde | 1 | 1 | **Big Bang** : 80/120/180 + 160/200/240 % attaque brute (physique) |
 | Anjanath | Monstre | Bruiser | Feu | Berserker, Wyverne brute | 2 | 1 | **Souffle ardent** : 70/105/160 + 180/225/270 % puiss. élém. sur la cible et ses voisins |
 | Tobi-Kadachi | Monstre | Bruiser | Foudre | Berserker | 2 | 1 | **Charge électrique** : bondit sur l'ennemi le plus faible, 60/90/135 + 180/225/270 % puiss. élém. |
-| Fiorayne (Grande épée) | Chasseur | DPS | — | Guilde, Berserker | 3 | 1 | **Coup chargé** : incantation de 1,5 s, puis 150/225/340 + 300/375/450 % attaque brute |
+| Fiorayne (Grande épée) | Chasseur | DPS | — | Guilde, Berserker | 3 | 1 | **Coup chargé** : incantation de 1 s, puis 150/225/340 + 300/375/450 % attaque brute |
 | Fugen (Doubles lames) | Chasseur | DPS | Foudre | Guilde | 1 | 1 | **Mode démon** : +60 % de vitesse d'attaque pendant 4 s |
 | Hinoa (Arc) | Chasseur | DPS | Glace | Catalyseur | 1 | 4 | **Pluie de flèches** : 50/75/115 + 160/200/240 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
-| Rathalos | Monstre | DPS | Feu | Wyverne volante, Catalyseur | 3 | 3 | **Boule de feu** : 120/180/270 + 250/313/375 % puiss. élém. sur la cible et ses voisins |
+| Rathalos | Monstre | DPS | Feu | Wyverne volante, Catalyseur | 3 | 3 | **Boule de feu** : 120/180/270 + 200/250/300 % puiss. élém. sur la cible et ses voisins |
 | Minoto (Corne de chasse) | Chasseur | Support | Feu | Guilde | 2 | 2 | **Mélodie de soin** : soigne de 80/120/180 + 200/250/300 % puiss. élém. les alliés à 2 cases ou moins |
 | Legiana | Monstre | Support | Glace | Wyverne volante, Catalyseur | 3 | 3 | **Vent glacial** : 35/55/80 + 80/100/120 % puiss. élém. sur la cible et ses voisins, −30 % de vitesse d'attaque pendant 3 s |
 | Zinogre | Monstre | Bruiser | Foudre | Berserker | 4 | 1 | **Supercharge** : bondit sur la cible, 100/150/225 + 220/275/330 % puiss. élém. sur elle et ses voisins |
 | Deviljho | Monstre | Bruiser | Dragon | Berserker, Wyverne brute | 4 | 1 | **Souffle draconique** : 110/165/250 + 200/250/300 % puiss. élém. sur la cible et ses voisins |
 | Mizutsune | Monstre | Support | Eau | Catalyseur, Léviathan | 4 | 3 | **Danse des bulles** : soigne de 120/180/270 + 220/275/330 % puiss. élém. les alliés à 2 cases ou moins |
 | Arlow (Lancecanon) | Chasseur | Tank | Dragon | Guilde, Bastion | 4 | 1 | **Canon de wyverne** : 50/75/115 + 75/94/113 % puiss. élém. aux ennemis adjacents, puis bouclier de 150/225/340 + 15/19/23 % des PV max pendant 4 s |
-| Galleus (Morpho-hache) | Chasseur | Bruiser | Eau | Guilde | 4 | 1 | **Décharge élémentaire** : incantation de 1 s, puis 150/225/340 + 250/313/375 % puiss. élém. sur la cible |
-| Teostra | Monstre | Bruiser | Feu | Dragon ancien | 5 | 1 | **Supernova** : incantation de 1,5 s, puis 250/375/565 + 350/438/525 % puiss. élém. aux ennemis à 2 cases ou moins |
-| Namielle | Monstre | Support | Eau | Dragon ancien, Catalyseur | 5 | 3 | **Marée luminescente** : 75/115/170 + 125/156/188 % puiss. élém. sur la cible et les ennemis à 2 cases d'elle, et soigne les alliés à 2 cases de 100/150/225 + 150/188/225 % puiss. élém. |
-| Safi'jiiva | Monstre | DPS | Dragon | Dragon ancien | 5 | 3 | **Rayon draconique** : 220/330/495 + 300/375/450 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
+| Galleus (Morpho-hache) | Chasseur | Bruiser | Eau | Guilde | 4 | 1 | **Décharge élémentaire** : 150/225/340 + 340/425/510 % puiss. élém. sur la cible |
+| Teostra | Monstre | Bruiser | Feu | Dragon ancien | 5 | 1 | **Supernova** : incantation de 1,5 s, puis 250/375/565 + 290/363/435 % puiss. élém. aux ennemis à 2 cases ou moins |
+| Namielle | Monstre | Support | Eau | Dragon ancien, Catalyseur | 5 | 3 | **Marée luminescente** : 75/115/170 + 110/138/165 % puiss. élém. sur la cible et les ennemis à 2 cases d'elle, et soigne les alliés à 2 cases de 100/150/225 + 110/138/165 % puiss. élém. |
+| Safi'jiiva | Monstre | DPS | Dragon | Dragon ancien | 5 | 3 | **Rayon draconique** : 220/330/495 + 300/375/450 % puiss. élém. sur sa cible et ses voisins |
 | Fatalis | Monstre | Bruiser | Dragon | Dragon noir | 6 | 1 | **Souffle du Fatalis** : incantation de 1,5 s, puis 300/450/675 + 400/500/600 % puiss. élém. sur la cible et les ennemis à 2 cases d'elle |
-| Alatreon | Monstre | DPS | Glace | Dragon noir | 6 | 3 | **Jugement d'Escaton** : incantation de 2 s, puis 220/330/495 + 280/350/420 % puiss. élém. à tous les ennemis, et −30 % de vitesse d'attaque pendant 3 s |
-| Dire Miralis | Monstre | Tank | Feu | Dragon noir | 6 | 1 | **Éruption** : 200/300/450 + 250/313/375 % puiss. élém. aux ennemis à 2 cases ou moins, puis bouclier de 400/600/900 + 20/25/30 % des PV max pendant 5 s |
+| Alatreon | Monstre | DPS | Glace | Dragon noir | 6 | 3 | **Jugement d'Escaton** : incantation de 1,5 s, puis 220/330/495 + 340/425/510 % puiss. élém. à tous les ennemis, et −30 % de vitesse d'attaque pendant 3 s |
+| Dire Miralis | Monstre | Tank | Feu | Dragon noir | 6 | 1 | **Éruption** : 200/300/450 + 250/313/375 % puiss. élém. aux ennemis à 2 cases ou moins, puis bouclier de 250/375/565 + 10/13/15 % des PV max pendant 5 s |
 | Royal Ludroth | Monstre | Support | Eau | Catalyseur, Léviathan | 1 | 2 | **Crinière spongieuse** : soigne de 50/75/115 + 150/188/225 % puiss. élém. les alliés à 2 cases ou moins |
 | Kulu-Ya-Ku | Monstre | Bruiser | — | Berserker | 1 | 1 | **Coup de rocher** : 70/105/160 + 150/188/225 % attaque brute (physique) sur la cible |
 | Aiden (Épée et bouclier) | Chasseur | Bruiser | Dragon | Guilde, Bastion | 1 | 1 | **Frappe tournoyante** : 50/75/115 + 150/188/225 % puiss. élém. sur la cible et ses voisins |
@@ -52,8 +52,8 @@ Les chasseurs portent des noms officiels de la série, avec une arme qu'ils util
 | Rondine (Épée longue) | Chasseur | DPS | Eau | Guilde, Berserker | 2 | 1 | **Coup spirituel** : 70/105/160 + 200/250/300 % puiss. élém. sur la cible |
 | Nargacuga | Monstre | DPS | — | Wyverne volante | 3 | 1 | **Queue tranchante** : bondit sur l'ennemi le plus faible, 110/165/250 + 220/275/330 % attaque brute (physique) |
 | Lagiacrus | Monstre | Tank | Foudre | Bastion, Léviathan | 3 | 1 | **Décharge abyssale** : 45/70/100 + 80/100/120 % puiss. élém. aux ennemis à 2 cases ou moins |
-| Luchika (Fusarbalète lourd) | Chasseur | DPS | Dragon | Guilde, Catalyseur | 3 | 4 | **Tir draconique** : incantation de 1 s, puis 130/195/295 + 250/313/375 % puiss. élém. sur l'ennemi le plus éloigné et ses voisins |
-| Tigrex | Monstre | Bruiser | — | Wyverne volante, Berserker | 4 | 1 | **Rugissement** : 110/165/250 + 230/288/345 % attaque brute (physique) aux ennemis adjacents |
+| Luchika (Fusarbalète lourd) | Chasseur | DPS | Dragon | Guilde, Catalyseur | 3 | 4 | **Tir draconique** : 130/195/295 + 320/400/480 % puiss. élém. sur sa cible et ses voisins |
+| Tigrex | Monstre | Bruiser | — | Wyverne volante, Berserker | 4 | 1 | **Rugissement** : 110/165/250 + 180/225/270 % attaque brute (physique) aux ennemis adjacents |
 | Kirin | Monstre | DPS | Foudre | Dragon ancien | 5 | 3 | **Foudre divine** : 200/300/450 + 280/350/420 % puiss. élém. sur l'ennemi le plus faible et ses voisins |
 
 ### Rangs ★
@@ -61,6 +61,33 @@ Les chasseurs portent des noms officiels de la série, avec une arme qu'ils util
 Règle validée (voir [game-design.md](game-design.md), section 3.4) : PV et attaque brute ×1,8 à chaque rang, une valeur de base de compétence par rang, durées et pourcentages inchangés.
 
 Équilibrage du 2026-11-21 : les dégâts des compétences des tanks et des supports ont été divisés par deux (base et ratio), sauf Dire Miralis ; leurs boucliers, soins et ralentissements n'ont pas changé.
+
+### Équilibrage du 2026-11-24
+
+Mesure sur environ 120 000 combats simulés : chaque unité (★1, sans objet) affronte chaque unité de son coût, entourées des mêmes coéquipiers et adversaires de 6 unités tirés au hasard, des deux côtés du plateau. 16 unités qui s'écartaient trop de 50 % de victoires ont été retouchées ; après retouche, toutes sont entre 44 et 62 %. Les compétences du tableau ci-dessus sont déjà à jour.
+
+| Unité | Retouche | Victoires contre son coût, avant → après |
+|---|---|---|
+| Dire Miralis | PV 2 100 → 1 900, énergie max 100 → 120, bouclier 400 + 20 % → 250 + 10 % des PV max | 73 → 57 % |
+| Tigrex | PV 1 100 → 1 000, attaque 80 → 68, Rugissement 230 → 180 % | 73 → 56 % |
+| Rathalos | PV 850 → 750, attaque 65 → 55, Boule de feu 250 → 200 % | 71 → 60 % |
+| Barroth | PV 850 → 780, armure 45 → 40, énergie max 70 → 90, bouclier 15 → 12 % des PV max | 65 → 62 % |
+| Teostra | PV 1 250 → 1 100, Supernova 350 → 290 % | 63 → 53 % |
+| Namielle | PV 1 100 → 1 000, dégâts 125 → 110 %, soin 150 → 110 % | 62 → 55 % |
+| Fabius | bouclier 200 + 20 % → 160 + 14 % des PV max | 61 → 60 % |
+| Galleus | PV 800 → 1 100, attaque 62 → 75, puiss. élém. 45 → 55, armure 35 → 40, énergie max 70 → 60, incantation 1 → 0,5 s, 250 → 340 % | 23 → 43 % |
+| Safi'jiiva | vise sa cible actuelle au lieu de l'ennemi le plus éloigné | 30 → 54 % |
+| Luchika | vise sa cible actuelle, PV 550 → 750, incantation 1 → 0,5 s, 250 → 320 % | 34 → 44 % |
+| Alatreon | PV 1 500 → 1 900, incantation 2 → 1,5 s, 280 → 340 % | 28 → 47 % |
+| Fiorayne | PV 700 → 850, armure 30 → 35, énergie max 70 → 60, charge 1,5 → 1 s | 40 → 44 % |
+| Fugen | PV 550 → 680, armure 20 → 35, attaque 45 → 48 | 39 → 45 % |
+| Olivia | PV 650 → 760, armure 30 → 35, attaque 55 → 58 | 41 → 46 % |
+| Rondine | PV 580 → 700, armure 20 → 30 | 43 → 47 % |
+| Fatalis | PV 1 800 → 1 900 | 44 → 45 % |
+
+⚠️ Ces valeurs restent provisoires : la mesure ne couvre ni les rangs ★2 et ★3, ni les compositions optimisées, et elle surestime sans doute un peu les tanks (une équipe tirée au hasard manque souvent de première ligne).
+
+⚠️ À surveiller en partie réelle : avec 2 objets par chasseur et 1 par monstre, les chasseurs Guilde passent à 55–72 % contre leur coût (Arlow 72 %, Galleus 66 %). La Guilde partagée ajoute 8 à 14 points, autant que l'ancienne Guilde dans ce cas précis (2 chasseurs à 2 objets : +12 % chacun avec les deux règles).
 
 ⚠️ Les valeurs de base ★2 et ★3 du tableau sont **provisoires**. Elles suivent une règle simple, à remplacer unité par unité pendant l'équilibrage : ★2 ≈ ★1 × 1,5 et ★3 ≈ ★1 × 2,25, arrondis à 5.
 
@@ -89,7 +116,7 @@ Dans les panneaux de synergies, un palier atteint est en **bronze** (premier), *
 
 | Trait | Réservé à | Palier 2 | Palier 4 | Palier 6 |
 |---|---|---|---|---|
-| Guilde | Chasseurs | +6 % PV, attaque brute et puiss. élém. par objet porté | +12 % par objet | +20 % par objet |
+| Guilde | Chasseurs | Toutes les unités Guilde : +3 % PV, attaque brute et puiss. élém. par objet porté par une unité Guilde (9 objets comptés au plus) | +4 % par objet | +5 % par objet |
 | Berserker | — | Compétences critiques possibles, +15 % de chance de critique, multiplicateur +0,2 (×1,7) | +30 %, multiplicateur +0,4 (×1,9) | +50 %, multiplicateur +0,6 (×2,1) |
 | Bastion | — | −15 % de dégâts subis | −30 % | −45 % |
 | Catalyseur | — | +20 puissance élémentaire | +45 | +70 |
