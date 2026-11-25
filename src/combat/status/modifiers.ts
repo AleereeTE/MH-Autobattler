@@ -3,9 +3,14 @@ import { itemAttackSpeedBonus } from '../items/item-stats.ts';
 import type { CombatUnit } from '../state.ts';
 
 /** Ajoute un bonus ou un ralentissement temporaire ; remplace celui de même clé (pas de cumul). */
-export function addModifier(unit: CombatUnit, key: string, attackSpeedPercent: number, durationTicks: number): void {
+export function addModifier(unit: CombatUnit, key: string, attackSpeedPercent: number, durationTicks: number, lifesteal = 0): void {
   unit.modifiers = unit.modifiers.filter((modifier) => modifier.key !== key);
-  unit.modifiers.push({ key, attackSpeedPercent, remainingTicks: durationTicks });
+  unit.modifiers.push({ key, attackSpeedPercent, remainingTicks: durationTicks, ...(lifesteal > 0 ? { lifesteal } : {}) });
+}
+
+/** Vol de vie actuel : celui des objets (Soif de sang) plus celui des bonus temporaires. */
+export function lifestealOf(unit: CombatUnit): number {
+  return unit.stats.lifesteal + unit.modifiers.reduce((total, modifier) => total + (modifier.lifesteal ?? 0), 0);
 }
 
 export function tickModifiers(unit: CombatUnit): void {

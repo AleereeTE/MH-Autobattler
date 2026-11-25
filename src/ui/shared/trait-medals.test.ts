@@ -22,8 +22,8 @@ describe('couleur des paliers de trait', () => {
   });
 
   it('trait à 2 paliers : bronze puis or (le dernier palier est toujours or)', () => {
-    expect(medalAt('fire', 2)).toBe('bronze');
-    expect(medalAt('fire', 4)).toBe('gold');
+    expect(medalAt('ice', 2)).toBe('bronze');
+    expect(medalAt('ice', 4)).toBe('gold');
     expect(medalAt('leviathan', 3)).toBe('gold');
   });
 

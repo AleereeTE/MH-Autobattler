@@ -4,7 +4,7 @@ import { UNITS, findUnit } from './index.ts';
 describe('chasseurs', () => {
   it('portent des noms officiels de la série', () => {
     const hunters = UNITS.filter((unit) => unit.kind === 'hunter').map((unit) => unit.name).sort();
-    expect(hunters).toEqual(['Aiden', 'Arlow', 'Fabius', 'Fiorayne', 'Fugen', 'Galleus', 'Hinoa', 'Luchika', 'Minoto', 'Olivia', 'Rondine']);
+    expect(hunters).toEqual(['Aiden', 'Arlow', 'Fabius', 'Fiorayne', 'Fugen', 'Galleus', 'Hinoa', 'Lea', 'Luchika', 'Minoto', 'Olivia', 'Rondine']);
   });
 
   it('retrouvent leur fiche avec leur ancien identifiant (compositions et plans enregistrés)', () => {

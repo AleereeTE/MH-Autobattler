@@ -5,8 +5,8 @@
 
 ## Périmètre
 
-- **34 unités** : 11 chasseurs, 23 monstres (dont 4 Dragons anciens au coût 5 et 3 Dragons noirs au coût 6), coûts 1 à 6.
-- **6 traits d'élément** : Feu et Glace (5 unités chacun), Foudre, Sans élément, Eau et Dragon (6 chacun).
+- **35 unités** : 12 chasseurs (dont Lea au coût 5), 23 monstres (dont 4 Dragons anciens au coût 5 et 3 Dragons noirs au coût 6), coûts 1 à 6.
+- **6 traits d'élément** : Glace (5 unités), Feu, Foudre, Sans élément, Eau et Dragon (6 chacun).
 - **9 traits secondaires** : Guilde, Berserker, Bastion, Catalyseur, Wyverne volante, Dragon ancien, Dragon noir, et les traits de famille Léviathan et Wyverne brute.
 - **8 matériaux**, **8 objets avec effet propre**, et une fusion générique pour les 28 autres combinaisons.
 - **Mode bac à sable** : composition libre des deux camps, escouades ennemies prédéfinies, replay du combat et statistiques par unité mises à jour en direct pendant le replay (le résultat n'est annoncé qu'à la fin).
@@ -17,7 +17,7 @@ Plus tard : autres unités (armes restantes, monstres, Dragons anciens), nouveau
 
 ## Unités
 
-Les chasseurs portent des noms officiels de la série, avec une arme qu'ils utilisent dans les jeux (Wilds : Fabius, Olivia · Rise/Sunbreak : Fiorayne, Fugen, Hinoa, Minoto, Rondine, Luchika, Arlow, Galleus · MH4U/World : Aiden). Les valeurs « a/b/c » des compétences sont celles des rangs ★1/★2/★3.
+Les chasseurs portent des noms officiels de la série, avec une arme qu'ils utilisent dans les jeux (Wilds : Fabius, Olivia · Rise/Sunbreak : Fiorayne, Fugen, Hinoa, Minoto, Rondine, Luchika, Arlow, Galleus · MH4U/World : Aiden · Frontier : Lea, une Legendary Rasta, polie hors des chasses et violente pendant). Les valeurs « a/b/c » des compétences sont celles des rangs ★1/★2/★3.
 
 | Unité | Type | Rôle | Élément | Traits secondaires | Coût | Portée | Compétence |
 |---|---|---|---|---|---|---|---|
@@ -55,6 +55,7 @@ Les chasseurs portent des noms officiels de la série, avec une arme qu'ils util
 | Luchika (Fusarbalète lourd) | Chasseur | DPS | Dragon | Guilde, Catalyseur | 3 | 4 | **Tir draconique** : 130/195/295 + 320/400/480 % puiss. élém. sur sa cible et ses voisins |
 | Tigrex | Monstre | Bruiser | — | Wyverne volante, Berserker | 4 | 1 | **Rugissement** : 110/165/250 + 180/225/270 % attaque brute (physique) aux ennemis adjacents |
 | Kirin | Monstre | DPS | Foudre | Dragon ancien | 5 | 3 | **Foudre divine** : 200/300/450 + 280/350/420 % puiss. élém. sur l'ennemi le plus faible et ses voisins |
+| Lea (Grande épée) | Chasseur | DPS | Feu | Guilde, Berserker | 5 | 1 | **Rage de la chasseuse** : charge 1 s, puis 200/300/450 + 350/438/525 % attaque brute (physique) sur sa cible et ses voisins ; puis furie 5 s : +40 % de vitesse d'attaque et 20 % de vol de vie |
 
 ### Compétences secrètes des Dragons noirs (★3)
 
@@ -97,6 +98,8 @@ Mesure sur environ 120 000 combats simulés : chaque unité (★1, sans objet) a
 | Rondine | PV 580 → 700, armure 20 → 30 | 43 → 47 % |
 | Fatalis | PV 1 800 → 1 900 | 44 → 45 % |
 
+Lea (ajoutée le 2026-11-25, statistiques ★1 : PV 1 100, attaque brute 95, puissance élémentaire 40, critique 20 %, armure 40, résistance 35, vitesse d'attaque 0,65, énergie max 70) : environ 48 % de victoires contre les autres unités de coût 5, sans objet. Son jeton est provisoire : l'icône de Grande épée de Fiorayne (`src/assets/portraits/lea.webp`), à remplacer par un portrait.
+
 ⚠️ Ces valeurs restent provisoires : la mesure ne couvre ni les rangs ★2 et ★3, ni les compositions optimisées, et elle surestime sans doute un peu les tanks (une équipe tirée au hasard manque souvent de première ligne).
 
 ⚠️ À surveiller en partie réelle : avec 2 objets par chasseur et 1 par monstre, les chasseurs Guilde passent à 55–72 % contre leur coût (Arlow 72 %, Galleus 66 %). La Guilde partagée ajoute 8 à 14 points, autant que l'ancienne Guilde dans ce cas précis (2 chasseurs à 2 objets : +12 % chacun avec les deux règles).
@@ -107,7 +110,7 @@ Mesure sur environ 120 000 combats simulés : chaque unité (★1, sans objet) a
 
 ## Traits
 
-Paliers (✅) : **2 / 4 / 6** pour les traits d'au moins 6 unités, **2 / 4** pour Feu et Glace (5 unités, en attendant une 6e), **2 / 3** pour Léviathan et Wyverne brute, 1 / 2 / 3 pour Dragon ancien et 1 seul palier pour Dragon noir (1 Dragon noir maximum par plateau). ⚠️ Comme dans TFT, deux exemplaires de la même unité ne comptent qu'une fois.
+Paliers (✅) : **2 / 4 / 6** pour les traits d'au moins 6 unités, **2 / 4** pour Glace (5 unités, en attendant une 6e), **2 / 3** pour Léviathan et Wyverne brute, 1 / 2 / 3 pour Dragon ancien et 1 seul palier pour Dragon noir (1 Dragon noir maximum par plateau). ⚠️ Comme dans TFT, deux exemplaires de la même unité ne comptent qu'une fois.
 
 ⚠️ Valeurs : le premier palier est inchangé, celui du milieu reprend l'ancien palier 3, et le nouveau palier du haut vaut environ ×1,6 celui du milieu. Exceptions arrondies vers le bas : Bastion 6 à −45 % (au lieu de −48 %) et Berserker 6 à ×2,1 (multiplicateur +0,6 au lieu de +0,64).
 
@@ -117,7 +120,7 @@ Dans les panneaux de synergies, un palier atteint est en **bronze** (premier), *
 
 | Trait | Palier 2 | Palier 4 | Palier 6 |
 |---|---|---|---|
-| Feu | Les coups des unités Feu brûlent : 20 dégâts élémentaires/s pendant 3 s | 40 dégâts/s | — |
+| Feu | Les coups des unités Feu brûlent : 20 dégâts élémentaires/s pendant 3 s | 40 dégâts/s | 65 dégâts/s (✅ depuis Lea) |
 | Foudre | Toutes les 4 s, un éclair frappe un ennemi au hasard (80 dégâts élémentaires) | Toutes les 3 s, 150 dégâts | Toutes les 2,5 s, 240 dégâts |
 | Glace | Les coups des unités Glace réduisent la vitesse d'attaque de la cible de 20 % pendant 2 s | −35 % | — |
 | Sans élément | +15 % d'attaque brute pour les unités sans élément | +30 % | +50 % |

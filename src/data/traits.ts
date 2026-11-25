@@ -2,7 +2,7 @@ import type { Element, StatBonus, TraitId, UnitKind } from './definitions.ts';
 
 /**
  * Traits et synergies du prototype (docs/prototype-content.md).
- * ✅ Paliers 2 / 4 / 6 pour les traits d'au moins 6 unités, 2 / 4 pour Feu et Glace (5 unités, en attendant une 6e),
+ * ✅ Paliers 2 / 4 / 6 pour les traits d'au moins 6 unités (Feu compris depuis Lea), 2 / 4 pour Glace (5 unités, en attendant une 6e),
  * 2 / 3 pour les petites familles (Léviathan, Wyverne brute).
  * ⚠️ Toutes les valeurs sont provisoires (palier du haut ≈ ×1,6 celui du milieu).
  */
@@ -60,6 +60,8 @@ export const TRAITS: readonly TraitDefinition[] = [
     tiers: [
       { count: 2, effect: { kind: 'burn', damagePerSecond: 20, duration: 3 }, description: 'Les coups des unités Feu brûlent : 20 dégâts/s pendant 3 s' },
       { count: 4, effect: { kind: 'burn', damagePerSecond: 40, duration: 3 }, description: 'Les coups des unités Feu brûlent : 40 dégâts/s pendant 3 s' },
+      // ✅ Palier 6 ajouté avec Lea, 6e unité Feu (2026-11-25).
+      { count: 6, effect: { kind: 'burn', damagePerSecond: 65, duration: 3 }, description: 'Les coups des unités Feu brûlent : 65 dégâts/s pendant 3 s' },
     ],
   },
   {

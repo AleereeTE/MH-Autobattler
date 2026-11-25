@@ -15,7 +15,7 @@ describe('aperçu d’un trait', () => {
       [4, 'silver'],
       [6, 'gold'],
     ]);
-    expect(tierRows(trait('fire'), null).map((row) => row.medal)).toEqual(['bronze', 'gold']);
+    expect(tierRows(trait('ice'), null).map((row) => row.medal)).toEqual(['bronze', 'gold']);
   });
 
   it('sans équipe, aucun palier n’est mis en avant', () => {

@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { findUnit } from '../../data/units/index.ts';
 import { makeUnit, place } from '../../test-utils/factories.ts';
+import { dealDamage } from '../actions/damage.ts';
+import { progressCast, startCast } from './cast.ts';
 import { TICKS_PER_SECOND } from '../constants.ts';
 import { createCombatState } from '../setup.ts';
 import type { CombatUnit } from '../state.ts';
 import { step } from '../step.ts';
-import { attackSpeedOf } from '../status/modifiers.ts';
+import { attackSpeedOf, lifestealOf } from '../status/modifiers.ts';
 import { applySkillEffect } from './effects.ts';
 
 function setupWithAllies() {
@@ -140,5 +143,39 @@ describe('objets à effet', () => {
     const [unit] = state.units as [CombatUnit];
     expect(attackSpeedOf(unit, 10)).toBeCloseTo(1.1 * 1.3);
     expect(attackSpeedOf(unit, 100)).toBeCloseTo(1.1 * 1.45);
+  });
+});
+
+describe('furie : bonus temporaire avec vol de vie', () => {
+  it('le bonus apporte un vol de vie qui soigne pendant sa durée, puis disparaît', () => {
+    const { state, caster } = setupWithAllies();
+    const enemy = state.units.find((unit) => unit.side === 'enemy') as CombatUnit;
+    applySkillEffect(state, caster, { kind: 'buff', attackSpeedPercent: 0.4, lifesteal: 0.2, duration: 1 });
+    expect(lifestealOf(caster)).toBeCloseTo(0.2);
+    caster.hp = 100;
+    const dealt = dealDamage(state, caster, enemy, { amount: 100, type: 'physical', isCrit: false, cause: 'attack' });
+    expect(caster.hp).toBeCloseTo(100 + dealt * 0.2);
+    for (let i = 0; i < TICKS_PER_SECOND; i++) step(state);
+    expect(lifestealOf(caster)).toBe(0);
+  });
+
+  it('Lea : Rage de la chasseuse frappe la cible et ses voisins, puis la met en furie 5 s', () => {
+    const lea = findUnit('lea');
+    if (lea === undefined) throw new Error('Lea manquante');
+    const state = createCombatState(
+      {
+        player: [place(lea, 3, 4)],
+        enemy: [place(makeUnit({ id: 'cible', stats: { hp: 100_000 } }), 3, 3), place(makeUnit({ id: 'voisin', stats: { hp: 100_000 } }), 4, 3), place(makeUnit({ id: 'loin', stats: { hp: 100_000 } }), 0, 0)],
+      },
+      1,
+    );
+    const [caster, target, neighbour, far] = state.units as [CombatUnit, CombatUnit, CombatUnit, CombatUnit];
+    caster.targetUid = target.uid;
+    startCast(state, caster);
+    while (caster.cast !== null) progressCast(state, caster);
+    expect(target.hp).toBeLessThan(100_000);
+    expect(neighbour.hp).toBeLessThan(100_000);
+    expect(far.hp).toBe(100_000);
+    expect(caster.modifiers).toEqual([{ key: 'skill:rage-de-la-chasseuse', attackSpeedPercent: 0.4, lifesteal: 0.2, remainingTicks: 5 * TICKS_PER_SECOND }]);
   });
 });

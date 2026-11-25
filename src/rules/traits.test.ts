@@ -76,11 +76,11 @@ describe('traitStatuses', () => {
 describe('paliers des traits', () => {
   const thresholds = (id: string) => findTrait(id)?.tiers.map((tier) => tier.count);
 
-  it('2 / 4 / 6 pour les traits d’au moins 6 unités, 2 / 4 pour Feu et Glace, 2 / 3 pour les petites familles', () => {
-    for (const id of ['thunder', 'water', 'dragon', 'neutral', 'guild', 'berserker', 'bastion', 'catalyst', 'flying-wyvern']) {
+  it('2 / 4 / 6 pour les traits d’au moins 6 unités, 2 / 4 pour Glace, 2 / 3 pour les petites familles', () => {
+    for (const id of ['fire', 'thunder', 'water', 'dragon', 'neutral', 'guild', 'berserker', 'bastion', 'catalyst', 'flying-wyvern']) {
       expect(thresholds(id), id).toEqual([2, 4, 6]);
     }
-    for (const id of ['fire', 'ice']) expect(thresholds(id), id).toEqual([2, 4]);
+    expect(thresholds('ice')).toEqual([2, 4]);
     for (const id of ['leviathan', 'brute-wyvern']) expect(thresholds(id), id).toEqual([2, 3]);
     expect(thresholds('elder-dragon')).toEqual([1, 2, 3]);
     expect(thresholds('black-dragon')).toEqual([1]);

@@ -190,10 +190,12 @@ export interface HealEffect {
   readonly radius: number;
 }
 
-/** Bonus temporaire de vitesse d'attaque sur le lanceur. */
+/** Bonus temporaire sur le lanceur : vitesse d'attaque, et vol de vie s'il y a lieu. */
 export interface BuffEffect {
   readonly kind: 'buff';
   readonly attackSpeedPercent: number;
+  /** Vol de vie pendant le bonus (0,2 = soigne de 20 % des dégâts infligés), en plus de celui des objets. */
+  readonly lifesteal?: number;
   readonly duration: number;
 }
 

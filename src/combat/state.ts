@@ -9,11 +9,13 @@ import type { CombatEvent } from './events.ts';
 export type Side = 'player' | 'enemy';
 export const SIDES: readonly Side[] = ['player', 'enemy'];
 
-/** Modification temporaire de la vitesse d'attaque (bonus ou ralentissement). */
+/** Modification temporaire de la vitesse d'attaque (bonus ou ralentissement), avec parfois du vol de vie. */
 export interface TimedModifier {
   /** Une nouvelle application avec la même clé remplace l'ancienne (pas de cumul). */
   readonly key: string;
   readonly attackSpeedPercent: number;
+  /** Vol de vie pendant la durée (compétence de Lea). */
+  readonly lifesteal?: number;
   remainingTicks: number;
 }
 

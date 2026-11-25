@@ -6,6 +6,7 @@ import { suddenDeathDamageMultiplier } from '../../rules/sudden-death.ts';
 import { energyProfileOf, gainEnergy } from '../energy.ts';
 import type { DamageCause } from '../events.ts';
 import { elapsedSeconds, isTargetable, type CombatState, type CombatUnit } from '../state.ts';
+import { lifestealOf } from '../status/modifiers.ts';
 import { absorbWithShields } from '../status/shields.ts';
 import { terrorMultiplier } from '../traits/terror.ts';
 import { healUnit } from './heal.ts';
@@ -75,9 +76,10 @@ export function dealDamage(state: CombatState, source: CombatUnit, target: Comba
   if (hit.cause === 'attack' && target.stats.thornsRatio > 0 && isTargetable(source)) {
     dealDamage(state, target, source, { amount: amount * target.stats.thornsRatio, type: 'physical', isCrit: false, cause: 'item' });
   }
-  // ✅ Soif de sang : l'unité se soigne d'une part des dégâts de ses attaques, compétences et effets d'objets.
-  if (!isDamageOverTime(hit) && hit.cause !== 'lightning' && source.stats.lifesteal > 0 && isTargetable(source) && source.hp < source.stats.hp) {
-    healUnit(state, source, source, amount * source.stats.lifesteal);
+  // ✅ Soif de sang (et furie de Lea) : l'unité se soigne d'une part des dégâts de ses attaques, compétences et effets d'objets.
+  const lifesteal = lifestealOf(source);
+  if (!isDamageOverTime(hit) && hit.cause !== 'lightning' && lifesteal > 0 && isTargetable(source) && source.hp < source.stats.hp) {
+    healUnit(state, source, source, amount * lifesteal);
   }
   return amount;
 }

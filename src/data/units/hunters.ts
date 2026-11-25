@@ -234,4 +234,32 @@ export const DORIAN: UnitDefinition = {
   },
 };
 
-export const HUNTERS: readonly UnitDefinition[] = [GARRICK, HELGA, AKIRA, LYSA, SYLVAIN, ODETTE, BRANN, ONDINE, MIRA, KAEDE, DORIAN];
+/**
+ * Lea (リア), Legendary Rasta de Monster Hunter Frontier : polie hors des chasses, violente pendant.
+ * ✅ Validée le 2026-11-25 (seule chasseuse de coût 5) · ⚠️ valeurs provisoires, mesurées à environ 48 % de victoires
+ * contre les autres unités de coût 5 sans objet.
+ */
+export const LEA: UnitDefinition = {
+  id: 'lea',
+  name: 'Lea',
+  kind: 'hunter',
+  weapon: 'Grande épée',
+  role: 'dps',
+  element: 'fire',
+  cost: 5,
+  traits: ['guild', 'berserker'],
+  stats: { hp: 1100, attack: 95, elementalPower: 40, critChance: 0.2, armor: 40, elementalResist: 35, attackSpeed: 0.65, range: 1, maxEnergy: 70, energyRegenBonus: 0 },
+  skill: {
+    id: 'rage-de-la-chasseuse',
+    name: 'Rage de la chasseuse',
+    description:
+      'Charge pendant 1 s, puis inflige 200/300/450 + 350/438/525 % de l’attaque brute en dégâts physiques à sa cible et à ses voisins, puis entre en furie pendant 5 s : +40 % de vitesse d’attaque et 20 % de vol de vie.',
+    castTime: 1,
+    effects: [
+      { kind: 'damage', target: 'currentTarget', damageType: 'physical', base: [200, 300, 450], ratios: [{ stat: 'attack', ratio: 3.5 }], radius: 1 },
+      { kind: 'buff', attackSpeedPercent: 0.4, lifesteal: 0.2, duration: 5 },
+    ],
+  },
+};
+
+export const HUNTERS: readonly UnitDefinition[] = [GARRICK, HELGA, AKIRA, LYSA, SYLVAIN, ODETTE, BRANN, ONDINE, MIRA, KAEDE, DORIAN, LEA];
