@@ -143,7 +143,9 @@ La vitesse de déplacement est identique pour toutes les unités.
 
 ### 3.4 Coût, exemplaires et rangs
 
-- Chaque unité coûte de **1 à 5 zennys**, sauf les **Dragons noirs** (Fatalis, Alatreon, Dire Miralis) qui coûtent **6 zennys** : très difficiles à obtenir (boutique au niveau 9 seulement, 3 exemplaires chacun), mais très puissants. Leur jeton a un fond prismatique.
+- Chaque unité coûte de **1 à 5 zennys**, sauf les **Dragons noirs** (Fatalis, Alatreon, Dire Miralis) qui coûtent **6 zennys** : très difficiles à obtenir (boutique aux niveaux 9 et 10 seulement), mais très puissants. Leur jeton a un fond prismatique.
+- ✅ **Coûts 5 et 6 : 9 exemplaires** de chaque unité (2026-11-25), juste assez pour un ★3 à condition de tous les obtenir.
+- ✅ **Easter egg des Dragons noirs ★3** : au ★3, une **compétence secrète** remplace la leur (Fatalis « Fin des temps », Alatreon « Jugement absolu », Dire Miralis « Cataclysme »). Elle se charge normalement, puis frappe **tous les ennemis avec 5 fois les dégâts** de leur compétence ★3 : très forte, sans gagner à tous les coups. Elle reste cachée tant qu'on n'a pas l'unité ★3. Au lancement, un **bandeau** avec le portrait du monstre et le nom du sort traverse le plateau, avec le cri du monstre si son fichier son est fourni.
 - Le nombre d'exemplaires de chaque unité est **limité selon son coût** (valeurs de départ dans [prototype-content.md](prototype-content.md), section « Mode run »).
 - 3 exemplaires identiques du même rang donnent un exemplaire du rang supérieur :
 
@@ -324,9 +326,9 @@ Les **36 objets sont définis** (validés le 2026-11-23, liste dans [prototype-c
 |---|---|
 | Unités proposées | 5 par relance |
 | Actions | Acheter, vendre, relancer (payant), améliorer la boutique (coût croissant) |
-| Niveau de boutique | De 1 à 9 ; le niveau donne le nombre d'unités sur la grille |
+| Niveau de boutique | De 1 à 10 (✅ niveau 10 ajouté le 2026-11-25) ; le niveau donne le nombre d'unités sur la grille |
 | Apparition des unités chères | Par probabilités selon le niveau (comme TFT) |
-| Dragons noirs (coût 6) | **1 seul sur le plateau** (on peut en garder d'autres en réserve). Seulement au niveau 9 de la boutique, 3 exemplaires de chacun : le ★2 est un exploit, le ★3 est impossible |
+| Dragons noirs (coût 6) | **1 seul sur le plateau** (on peut en garder d'autres en réserve). Seulement aux niveaux 9 et 10 de la boutique, 9 exemplaires de chacun : le ★3 est possible mais rarissime, et débloque leur compétence secrète |
 | Unités obtenues au ★3 | **Plus proposées** par la boutique ni par les récompenses (les offres déjà affichées disparaissent dès que le ★3 se forme). Si le ★3 est revendu, l'unité peut de nouveau apparaître |
 | Réserve | 10 places pour les unités achetées mais non placées |
 | Planificateur d'équipe | Comme dans TFT : on choisit jusqu'à **9 unités** (la taille maximale du plateau, 1 Dragon noir au plus) dans la liste complète, et on voit les synergies de ce plan. En run, les unités du plan sont **signalées dans la boutique** (« 📌 Plan ») et un encadré coche celles déjà possédées. Le plan est **gardé d'une run à l'autre** |
@@ -471,3 +473,4 @@ L'équivalent des augments de TFT (validé le 2026-11-24).
 - **2026-11-24** : équilibrage des unités d'après une mesure sur environ 120 000 combats simulés — 7 unités trop fortes affaiblies (Dire Miralis, Tigrex, Rathalos, Barroth, Teostra, Namielle, Fabius), 9 trop faibles renforcées (Galleus, Safi'jiiva, Luchika, Alatreon, Fiorayne, Fugen, Olivia, Rondine, Fatalis) ; Safi'jiiva et Luchika visent désormais leur cible actuelle et non plus l'ennemi le plus éloigné (détail dans prototype-content.md). Nouvelle Guilde : chaque objet porté par une unité Guilde renforce toutes les unités Guilde (+3 / 4 / 5 % par objet, 9 objets au plus) au lieu du seul porteur (+6 / 12 / 20 %).
 - **2026-11-24** : mode infini — proposé après une run gagnée ; les stages continuent avec la carte (boss toutes les 10 étapes), escouades du stage 3 et ennemis +5 % de PV, d'attaque brute et de puissance élémentaire à chaque étape après la 30e ; le compteur de défaites de la run est conservé ; économie et récompenses continuent ; record de la plus haute étape atteinte gardé dans le navigateur.
 - **2026-11-24** : talents de chasseur (équivalent des augments de TFT) — un choix au début des stages 1, 2 et 3 (rien en mode infini), rareté argent, or ou prismatique à 1 chance sur 3, 3 propositions de la même rareté relançables une fois chacune ; 24 talents validés (combat, économie, objets, unités, traits), un talent pris n'est plus proposé ; les talents de trait ne comptent que si le trait a au moins une unité sur le plateau.
+- **2026-11-25** : 9 exemplaires pour les unités de coût 5 et 6 (le ★3 devient possible) ; niveau 10 de la boutique (passage 9 → 10 à 64 zennys, chances 5 / 15 / 25 / 35 / 15 / 5 %, 10 unités sur le plateau) ; easter egg des Dragons noirs ★3 : compétence secrète (Fin des temps, Jugement absolu, Cataclysme) sur tout le plateau avec 5 fois les dégâts, cachée jusqu'au ★3, annoncée par un bandeau avec le portrait et le cri du monstre.

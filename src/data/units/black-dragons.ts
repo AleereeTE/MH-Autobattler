@@ -1,10 +1,12 @@
 import type { UnitDefinition } from '../definitions.ts';
 
 /**
- * Dragons noirs (coût 6, monstres uniquement) : très difficiles à obtenir (boutique au niveau 9 seulement,
- * 3 exemplaires chacun), mais très puissants. Ils ne sont pas Dragons anciens dans le jeu.
+ * Dragons noirs (coût 6, monstres uniquement) : très difficiles à obtenir (boutique aux niveaux 9 et 10 seulement,
+ * 9 exemplaires chacun), mais très puissants. Ils ne sont pas Dragons anciens dans le jeu.
  * ⚠️ Statistiques provisoires.
- * ⚠️ Valeurs de base des compétences par rang [★1, ★2, ★3] provisoires (le ★3 est inatteignable avec 3 exemplaires).
+ * ⚠️ Valeurs de base des compétences par rang [★1, ★2, ★3] provisoires.
+ * ✅ Easter egg (2026-11-25) : au ★3, une compétence secrète remplace la leur. Elle vise tout le plateau
+ * avec 5 fois les dégâts de leur compétence ★3 ; un bandeau à son nom traverse le plateau au lancement.
  */
 
 /** Rayon qui couvre tout le plateau (la plus grande distance possible est de 10 cases). */
@@ -26,6 +28,15 @@ export const FATALIS: UnitDefinition = {
     castTime: 1.5,
     effects: [
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [300, 450, 675], ratios: [{ stat: 'elementalPower', ratio: 4 }], radius: 2 },
+    ],
+  },
+  masterSkill: {
+    id: 'fin-des-temps',
+    name: 'Fin des temps',
+    description: 'Compétence secrète du ★3 : incantation de 1,5 s, puis 3375 + 3000 % de la puissance élémentaire à tous les ennemis.',
+    castTime: 1.5,
+    effects: [
+      { kind: 'damage', target: 'self', damageType: 'elemental', base: [3375, 3375, 3375], ratios: [{ stat: 'elementalPower', ratio: 20 }], radius: WHOLE_BOARD },
     ],
   },
 };
@@ -55,6 +66,23 @@ export const ALATREON: UnitDefinition = {
         slow: { attackSpeedPercent: -0.3, duration: 3 },
       },
     ],
+  },  masterSkill: {
+    id: 'jugement-absolu',
+    name: 'Jugement absolu',
+    description:
+      'Compétence secrète du ★3 : incantation de 1,5 s, puis 2475 + 2550 % de la puissance élémentaire à tous les ennemis, et −30 % de vitesse d’attaque pendant 3 s.',
+    castTime: 1.5,
+    effects: [
+      {
+        kind: 'damage',
+        target: 'self',
+        damageType: 'elemental',
+        base: [2475, 2475, 2475],
+        ratios: [{ stat: 'elementalPower', ratio: 17 }],
+        radius: WHOLE_BOARD,
+        slow: { attackSpeedPercent: -0.3, duration: 3 },
+      },
+    ],
   },
 };
 
@@ -75,6 +103,16 @@ export const DIRE_MIRALIS: UnitDefinition = {
     effects: [
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [200, 300, 450], ratios: [{ stat: 'elementalPower', ratio: 2.5 }], radius: 2 },
       { kind: 'shield', base: [250, 375, 565], ratios: [{ stat: 'hp', ratio: 0.1 }], duration: 5 },
+    ],
+  },
+  masterSkill: {
+    id: 'cataclysme',
+    name: 'Cataclysme',
+    description: 'Compétence secrète du ★3 : 2250 + 1875 % de la puissance élémentaire à tous les ennemis, puis bouclier de 565 + 15 % des PV max pendant 5 s.',
+    castTime: 0.5,
+    effects: [
+      { kind: 'damage', target: 'self', damageType: 'elemental', base: [2250, 2250, 2250], ratios: [{ stat: 'elementalPower', ratio: 12.5 }], radius: WHOLE_BOARD },
+      { kind: 'shield', base: [565, 565, 565], ratios: [{ stat: 'hp', ratio: 0.1 }], duration: 5 },
     ],
   },
 };

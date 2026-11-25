@@ -1,3 +1,4 @@
+import { skillForRank } from '../../rules/ranks.ts';
 import { hexDistance, type Hex } from '../../core/hex.ts';
 import type { DamageEffect } from '../../data/definitions.ts';
 import { applyCrit, scaledAmount } from '../../rules/damage.ts';
@@ -49,7 +50,7 @@ export function applyDamageEffect(state: CombatState, caster: CombatUnit, effect
 
     if (effect.slow !== undefined && !isImmuneToStatuses(victim)) {
       const durationTicks = secondsToTicks(effect.slow.duration);
-      addModifier(victim, `skill:${caster.def.skill.id}`, effect.slow.attackSpeedPercent, durationTicks);
+      addModifier(victim, `skill:${skillForRank(caster.def, caster.rank).id}`, effect.slow.attackSpeedPercent, durationTicks);
       state.events.push({ type: 'status', tick: state.tick, uid: victim.uid, status: 'chill', durationTicks });
     }
   }

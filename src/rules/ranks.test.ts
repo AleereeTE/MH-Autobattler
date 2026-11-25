@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { makeUnit } from '../test-utils/factories.ts';
-import { isStarRank, rankMultiplier, rankStars, rankedStats, ratioForRank, skillRatioMultiplier, valueForRank } from './ranks.ts';
+import { findUnit } from '../data/units/index.ts';
+import { isMasterSkill, isStarRank, rankMultiplier, rankStars, rankedStats, ratioForRank, skillForRank, skillRatioMultiplier, valueForRank } from './ranks.ts';
 
 describe('rangs ★', () => {
   it('multiplie PV et attaque brute par 1,8 à chaque rang', () => {
@@ -32,5 +33,22 @@ describe('rangs ★', () => {
     expect([1, 2, 3].every(isStarRank)).toBe(true);
     expect([0, 4, '2', null].some(isStarRank)).toBe(false);
     expect(rankStars(3)).toBe('★★★');
+  });
+});
+
+describe('compétence selon le rang', () => {
+  it('un Dragon noir utilise sa compétence secrète au ★3 seulement', () => {
+    const fatalis = findUnit('fatalis');
+    if (fatalis === undefined) throw new Error('Fatalis manquant');
+    expect(skillForRank(fatalis, 1).name).toBe('Souffle du Fatalis');
+    expect(skillForRank(fatalis, 2).name).toBe('Souffle du Fatalis');
+    expect(skillForRank(fatalis, 3).name).toBe('Fin des temps');
+    expect(isMasterSkill(fatalis, 'fin-des-temps')).toBe(true);
+    expect(isMasterSkill(fatalis, 'souffle-du-fatalis')).toBe(false);
+  });
+
+  it('les autres unités gardent leur compétence au ★3', () => {
+    const unit = makeUnit();
+    expect(skillForRank(unit, 3)).toBe(unit.skill);
   });
 });

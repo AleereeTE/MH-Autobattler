@@ -78,7 +78,7 @@ describe('talents — choix au début du stage', () => {
 });
 
 describe('talents — effets immédiats', () => {
-  it('zennys, niveau (9 au plus), matériaux, objets et retire-objets', () => {
+  it('zennys, niveau (10 au plus), matériaux, objets et retire-objets', () => {
     const state = makeRun({ zennys: 0, level: 4 });
     take(state, 'guild-purse');
     expect(state.zennys).toBe(10);
@@ -90,9 +90,9 @@ describe('talents — effets immédiats', () => {
     expect(state.inventory.filter((slot) => slot.kind === 'object')).toHaveLength(2);
     expect(state.itemRemovers).toBe(2);
 
-    const maxed = makeRun({ level: 9 });
+    const maxed = makeRun({ level: 10 });
     take(maxed, 'higher-rank');
-    expect(maxed.level).toBe(9);
+    expect(maxed.level).toBe(10);
   });
 
   it('une unité donnée rejoint la réserve en sortant du stock ; refusée si la réserve est pleine', () => {

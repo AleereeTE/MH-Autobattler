@@ -223,4 +223,6 @@ export interface UnitDefinition {
   /** Statistiques de base (rang ★1). */
   readonly stats: Stats;
   readonly skill: SkillDefinition;
+  /** Compétence secrète qui remplace `skill` au rang ★3 (Dragons noirs : easter egg). */
+  readonly masterSkill?: SkillDefinition;
 }

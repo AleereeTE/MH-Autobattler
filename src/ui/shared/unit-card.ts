@@ -1,7 +1,7 @@
 import type { StarRank, StatBonus, UnitDefinition } from '../../data/definitions.ts';
 import type { Equipment } from '../../data/items.ts';
 import { equipmentBonuses } from '../../rules/equipment.ts';
-import { rankStars, rankedStats } from '../../rules/ranks.ts';
+import { rankStars, rankedStats, skillForRank } from '../../rules/ranks.ts';
 import { computeCombatStats } from '../../rules/stats.ts';
 import { el } from '../dom.ts';
 import { traitBadges } from './trait-badges.ts';
@@ -43,16 +43,21 @@ export function statsTable(stats: DisplayedStats): HTMLElement {
 /** Rappel affiché sous la compétence des unités qui se protègent d'un bouclier. */
 export const SHIELD_ENERGY_NOTE = 'Tant que son bouclier tient (jusqu’à ce qu’il soit détruit ou expire), l’unité ne gagne pas d’énergie.';
 
-/** La compétence de l'unité lui donne-t-elle un bouclier ? */
-export function hasShieldSkill(unit: UnitDefinition): boolean {
-  return unit.skill.effects.some((effect) => effect.kind === 'shield');
+/** La compétence de l'unité (à ce rang) lui donne-t-elle un bouclier ? */
+export function hasShieldSkill(unit: UnitDefinition, rank: StarRank = 1): boolean {
+  return skillForRank(unit, rank).effects.some((effect) => effect.kind === 'shield');
 }
 
-/** Compétence d'une unité : nom, description, et le rappel du bouclier s'il y a lieu. */
-export function skillBlock(unit: UnitDefinition): HTMLElement[] {
+/**
+ * Compétence d'une unité à ce rang : nom, description, et le rappel du bouclier s'il y a lieu.
+ * La compétence secrète d'un Dragon noir n'apparaît qu'au ★3 (easter egg).
+ */
+export function skillBlock(unit: UnitDefinition, rank: StarRank = 1): HTMLElement[] {
+  const skill = skillForRank(unit, rank);
+  const secret = skill !== unit.skill;
   return [
-    el('p', {}, [el('strong', { text: `${unit.skill.name} : ` }), unit.skill.description]),
-    ...(hasShieldSkill(unit) ? [el('p', { className: 'muted small', text: SHIELD_ENERGY_NOTE })] : []),
+    el('p', { className: secret ? 'secret-skill' : '' }, [el('strong', { text: `${secret ? '✦ ' : ''}${skill.name} : ` }), skill.description]),
+    ...(hasShieldSkill(unit, rank) ? [el('p', { className: 'muted small', text: SHIELD_ENERGY_NOTE })] : []),
   ];
 }
 
@@ -65,13 +70,15 @@ export function unitHeader(unit: UnitDefinition, rank: StarRank): HTMLElement[] 
   ];
 }
 
-/** Fiche d'une unité : nom, rang, coût, traits, compétence et statistiques (au rang, avec l'équipement). */
-/** Fiche d'une unité ; `bonus` : renforcement d'un ennemi du mode infini, compté dans les statistiques. */
+/**
+ * Fiche d'une unité : nom, rang, coût, traits, compétence et statistiques (au rang, avec l'équipement).
+ * `bonus` : renforcement d'un ennemi du mode infini, compté dans les statistiques.
+ */
 export function unitCard(unit: UnitDefinition, equipment: Equipment, rank: StarRank, bonus?: StatBonus): HTMLElement {
   const extra = bonus === undefined ? [] : [bonus];
   return el('div', { className: 'unit-card' }, [
     ...unitHeader(unit, rank),
-    ...skillBlock(unit),
+    ...skillBlock(unit, rank),
     statsTable(computeCombatStats(rankedStats(unit.stats, rank), [...equipmentBonuses(equipment), ...extra])),
     el('p', {
       className: 'muted small',

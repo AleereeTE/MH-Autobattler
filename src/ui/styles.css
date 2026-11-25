@@ -1123,6 +1123,16 @@ details {
   border-radius: 6px;
 }
 
+/* Compétence secrète d'un Dragon noir ★3 */
+.secret-skill {
+  padding: 6px 8px;
+  border-radius: 6px;
+  background:
+    linear-gradient(var(--panel), var(--panel)) padding-box,
+    linear-gradient(135deg, var(--prismatic)) border-box;
+  border: 2px solid transparent;
+}
+
 .trait-talent-bonus {
   color: var(--accent);
   font-weight: 700;

@@ -9,6 +9,7 @@ import { SandboxModel, sideOf } from './model.ts';
 import type { CostFilter } from '../shared/palette-groups.ts';
 import { renderPalette } from './palette-view.ts';
 import { PortraitStore } from '../shared/portraits.ts';
+import { UltimateCue } from '../shared/roars.ts';
 import { ReplayPlayer } from '../shared/replay-player.ts';
 import { ResultsView, type BatchResult } from '../shared/results-view.ts';
 import { loadComposition, saveComposition } from './storage.ts';
@@ -51,10 +52,13 @@ export function mountSandbox(root: HTMLElement): () => void {
       if (unit !== undefined) showPopover(combatUnitPreview(unit), x, y);
     },
   );
+  /** Cri des Dragons noirs ★3 quand leur compétence secrète s'affiche. */
+  const ultimateCue = new UltimateCue();
   const player = new ReplayPlayer(
     (frame) => {
       board.render(frameScene(frame, portraits));
       results.showUntil(frame.tick);
+      ultimateCue.update(frame);
       status.textContent = `${ticksToSeconds(frame.tick).toFixed(1)} s${frame.suddenDeath ? ' · mort subite' : ''}`;
     },
     () => renderToolbar(),
@@ -155,6 +159,7 @@ export function mountSandbox(root: HTMLElement): () => void {
       result = simulateCombat(model.toSetup(), seed());
       error = null;
       mode = 'replay';
+      ultimateCue.reset();
       player.load(createReplay(result.events));
     } catch (caught) {
       error = caught instanceof Error ? caught.message : String(caught);

@@ -49,7 +49,7 @@ export function combatUnitPreview(unit: FrameUnit): HTMLElement {
     el('p', {}, [el('strong', { text: health })]),
     el('div', { className: 'energy' }, [el('span', { className: 'small', text: energyLine(unit) }), energyBar(unit)]),
     states.length > 0 ? el('p', { className: 'muted small', text: states.join(' · ') }) : null,
-    ...(definition === undefined ? [] : skillBlock(definition)),
+    ...(definition === undefined ? [] : skillBlock(definition, unit.rank)),
     unit.equipment.length > 0 ? el('p', { className: 'small', text: `Équipement : ${unit.equipment.map(slotName).join(', ')}` }) : null,
     statsTable(unit.stats),
     el('p', { className: 'muted small', text: 'Statistiques au début du combat : rang, objets et traits compris.' }),

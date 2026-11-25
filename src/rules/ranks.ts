@@ -1,5 +1,5 @@
 import { BALANCE } from '../data/balance.ts';
-import type { RankValues, StarRank, Stats } from '../data/definitions.ts';
+import type { RankValues, SkillDefinition, StarRank, Stats, UnitDefinition } from '../data/definitions.ts';
 
 /**
  * Rangs ★ (game-design §3.4) : 3 exemplaires identiques donnent le rang supérieur.
@@ -43,4 +43,14 @@ export function valueForRank(values: RankValues, rank: StarRank): number {
 /** « ★★ » pour le rang 2. */
 export function rankStars(rank: StarRank): string {
   return '★'.repeat(rank);
+}
+
+/** Compétence utilisée à ce rang : la compétence secrète au ★3 si l'unité en a une (Dragons noirs), sinon la sienne. */
+export function skillForRank(unit: UnitDefinition, rank: StarRank): SkillDefinition {
+  return rank === 3 && unit.masterSkill !== undefined ? unit.masterSkill : unit.skill;
+}
+
+/** Cette compétence est-elle la compétence secrète du ★3 de l'unité ? */
+export function isMasterSkill(unit: UnitDefinition, skillId: string): boolean {
+  return unit.masterSkill?.id === skillId;
 }

@@ -1,5 +1,6 @@
 import { hexDistance } from '../../core/hex.ts';
 import { POST_CAST_DEFENSE_SECONDS, WIDE_RANGE_RADIUS } from '../../data/items.ts';
+import { skillForRank } from '../../rules/ranks.ts';
 import { secondsToTicks } from '../constants.ts';
 import { gainEnergy } from '../energy.ts';
 import { isTargetable, type CombatState, type CombatUnit } from '../state.ts';
@@ -11,7 +12,7 @@ import { applySkillEffect } from './effects.ts';
  * s'applique à la fin du temps d'incantation.
  */
 export function startCast(state: CombatState, unit: CombatUnit): void {
-  const { skill } = unit.def;
+  const skill = skillForRank(unit.def, unit.rank);
   const castTicks = secondsToTicks(skill.castTime);
 
   unit.energy = 0;
@@ -23,6 +24,7 @@ export function startCast(state: CombatState, unit: CombatUnit): void {
     skillId: skill.id,
     skillName: skill.name,
     castTicks,
+    ...(skill === unit.def.masterSkill ? { master: true } : {}),
   });
 
   if (castTicks <= 0) finishCast(state, unit);
@@ -36,7 +38,7 @@ export function progressCast(state: CombatState, unit: CombatUnit): void {
 }
 
 function finishCast(state: CombatState, unit: CombatUnit): void {
-  const { skill } = unit.def;
+  const skill = skillForRank(unit.def, unit.rank);
   state.events.push({ type: 'skillResolve', tick: state.tick, uid: unit.uid, skillId: skill.id, skillName: skill.name });
   for (const effect of skill.effects) applySkillEffect(state, unit, effect);
   // ✅ Coalescence : la compétence suivante profitera d'une compétence lancée de plus.

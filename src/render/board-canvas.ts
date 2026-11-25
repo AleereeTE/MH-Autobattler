@@ -85,12 +85,23 @@ export interface SceneUnit {
   readonly paralyzed?: boolean;
 }
 
+/** Bandeau d'une compétence secrète (Dragon noir ★3) : portrait, nom de l'unité et nom du sort. */
+export interface SceneUltimate {
+  readonly skillName: string;
+  readonly unitName: string;
+  readonly portrait: Portrait | null;
+  readonly side: 'player' | 'enemy';
+  /** 0 = lancement, 1 = fin du bandeau. */
+  readonly age: number;
+}
+
 export interface BoardScene {
   readonly units: readonly SceneUnit[];
   readonly texts?: readonly FloatingText[];
   readonly areas?: readonly SceneArea[];
   readonly highlight?: Hex | null;
   readonly banner?: string | null;
+  readonly ultimate?: SceneUltimate | null;
 }
 
 function tracePath(ctx: CanvasRenderingContext2D, points: readonly Point[]): void {
@@ -314,6 +325,50 @@ function drawBanner(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: B
   ctx.fillText(banner, layout.width / 2, layout.height / 2);
 }
 
+/**
+ * Bandeau d'une compétence secrète : il glisse depuis la gauche, reste affiché, puis s'efface.
+ * Portrait du Dragon noir à gauche, nom du sort en grand.
+ */
+function drawUltimate(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: BoardTheme, ultimate: SceneUltimate): void {
+  const slide = Math.min(1, ultimate.age / 0.12);
+  const fade = ultimate.age > 0.8 ? Math.max(0, (1 - ultimate.age) / 0.2) : 1;
+  const height = layout.size * 1.9;
+  const top = layout.height / 2 - height / 2;
+  const offset = (1 - slide) * -layout.width;
+  const sideColor = ultimate.side === 'player' ? theme.player : theme.enemy;
+
+  ctx.save();
+  ctx.globalAlpha = fade;
+  ctx.translate(offset, 0);
+  ctx.fillStyle = 'rgba(12, 8, 6, 0.85)';
+  ctx.fillRect(0, top, layout.width, height);
+  ctx.fillStyle = sideColor;
+  ctx.fillRect(0, top, layout.width, 4);
+  ctx.fillRect(0, top + height - 4, layout.width, 4);
+
+  const radius = height * 0.4;
+  const center = { x: Math.max(radius + 12, layout.width * 0.16), y: layout.height / 2 };
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, radius + 3, 0, Math.PI * 2);
+  ctx.fillStyle = sideColor;
+  ctx.fill();
+  if (ultimate.portrait !== null) drawPortrait(ctx, ultimate.portrait, center, radius);
+
+  const textX = center.x + radius + 18;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#f2e6c9';
+  ctx.font = `600 ${Math.round(height * 0.16)}px system-ui, sans-serif`;
+  ctx.fillText(`${ultimate.unitName} ★★★`, textX, center.y - height * 0.22);
+  ctx.font = `800 ${Math.round(height * 0.32)}px system-ui, sans-serif`;
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = sideColor;
+  ctx.strokeText(ultimate.skillName.toUpperCase(), textX, center.y + height * 0.1);
+  ctx.fillStyle = theme.highlight;
+  ctx.fillText(ultimate.skillName.toUpperCase(), textX, center.y + height * 0.1);
+  ctx.restore();
+}
+
 export function drawBoard(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: BoardTheme, scene: BoardScene): void {
   ctx.clearRect(0, 0, layout.width, layout.height);
   drawCells(ctx, layout, theme, scene.highlight ?? null);
@@ -328,4 +383,5 @@ export function drawBoard(ctx: CanvasRenderingContext2D, layout: BoardLayout, th
   const centers = new Map(scene.units.map((unit) => [unit.key, unitCenter(layout, unit)]));
   drawTexts(ctx, layout, theme, scene, centers);
   if (scene.banner) drawBanner(ctx, layout, theme, scene.banner);
+  if (scene.ultimate) drawUltimate(ctx, layout, theme, scene.ultimate);
 }

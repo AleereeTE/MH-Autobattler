@@ -112,3 +112,34 @@ describe('descriptions des compétences', () => {
     }
   });
 });
+
+describe('compétences secrètes des Dragons noirs (★3)', () => {
+  const blackDragons = UNITS.filter((unit) => unit.cost === 6);
+
+  it('seuls les trois Dragons noirs en ont une', () => {
+    expect(UNITS.filter((unit) => unit.masterSkill !== undefined).map((unit) => unit.id).sort()).toEqual(['alatreon', 'dire-miralis', 'fatalis']);
+  });
+
+  it('visent tout le plateau avec 5 fois les dégâts de la compétence ★3', () => {
+    for (const unit of blackDragons) {
+      const normal = unit.skill.effects.find((effect) => effect.kind === 'damage');
+      const master = unit.masterSkill?.effects.find((effect) => effect.kind === 'damage');
+      if (normal?.kind !== 'damage' || master?.kind !== 'damage') throw new Error(`${unit.name} : effet de dégâts manquant`);
+      expect(master.base[2], unit.name).toBe(normal.base[2] * 5);
+      expect(master.ratios[0]?.ratio, unit.name).toBeCloseTo((normal.ratios[0]?.ratio ?? 0) * 5);
+      expect(master.radius, unit.name).toBe(10);
+    }
+  });
+
+  it('affichent leurs pourcentages au ★3 (×1,5)', () => {
+    for (const unit of blackDragons) {
+      for (const effect of unit.masterSkill?.effects ?? []) {
+        if (!('ratios' in effect)) continue;
+        for (const { ratio } of effect.ratios) {
+          const text = Math.floor(Math.round(ratio * 100) * 1.5 + 0.5);
+          expect(unit.masterSkill?.description, unit.name).toContain(`${text} %`);
+        }
+      }
+    }
+  });
+});

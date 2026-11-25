@@ -11,10 +11,10 @@ export const RUN_STRUCTURE = {
   huntsPerStage: 10,
   /** ✅ La run est perdue après 3 défaites. */
   maxDefeats: 3,
-  /** ✅ 5 unités par relance, 10 places en réserve, niveaux de boutique 1 à 9. */
+  /** ✅ 5 unités par relance, 10 places en réserve, niveaux de boutique 1 à 10 (niveau 10 ajouté le 2026-11-25). */
   shopSize: 5,
   benchSize: 10,
-  maxLevel: 9,
+  maxLevel: 10,
 } as const;
 
 export const ECONOMY = {
@@ -31,15 +31,19 @@ export const ECONOMY = {
   /** ⚠️ Prix d'une relance de la boutique. */
   rerollCost: 2,
   /** ⚠️ Prix pour passer du niveau indiqué au suivant. */
-  levelUpCosts: { 2: 4, 3: 8, 4: 12, 5: 20, 6: 28, 7: 36, 8: 48 } as Readonly<Partial<Record<number, number>>>,
+  levelUpCosts: { 2: 4, 3: 8, 4: 12, 5: 20, 6: 28, 7: 36, 8: 48, 9: 64 } as Readonly<Partial<Record<number, number>>>,
 } as const;
 
-/** ⚠️ Exemplaires de chaque unité dans le stock commun, selon son coût. */
-export const COPIES_BY_COST: Readonly<Partial<Record<UnitCost, number>>> = { 1: 18, 2: 15, 3: 12, 4: 10, 5: 8, 6: 3 };
+/**
+ * ⚠️ Exemplaires de chaque unité dans le stock commun, selon son coût.
+ * ✅ 9 exemplaires pour les coûts 5 et 6 (2026-11-25) : juste assez pour un ★3, à condition de tous les obtenir.
+ */
+export const COPIES_BY_COST: Readonly<Partial<Record<UnitCost, number>>> = { 1: 18, 2: 15, 3: 12, 4: 10, 5: 9, 6: 9 };
 
 /**
  * ⚠️ Probabilités (en %) de chaque coût dans la boutique, selon son niveau : [coût 1, 2, 3, 4, 5, 6].
- * ✅ Les Dragons noirs (coût 6) n'apparaissent qu'au niveau 9, à 3 %.
+ * ✅ Les Dragons noirs (coût 6) n'apparaissent qu'aux niveaux 9 (3 %) et 10 (5 %).
+ * ✅ Niveau 10 (2026-11-25) : 5 / 15 / 25 / 35 / 15 / 5 %, passage 9 → 10 à 64 zennys.
  */
 export const SHOP_ODDS: Readonly<Record<number, readonly number[]>> = {
   1: [100, 0, 0, 0, 0, 0],
@@ -51,6 +55,7 @@ export const SHOP_ODDS: Readonly<Record<number, readonly number[]>> = {
   7: [19, 30, 35, 15, 1, 0],
   8: [18, 25, 32, 22, 3, 0],
   9: [10, 20, 25, 33, 9, 3],
+  10: [5, 15, 25, 35, 15, 5],
 };
 
 /** ⚠️ Génération des escouades ennemies. */

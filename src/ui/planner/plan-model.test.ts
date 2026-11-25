@@ -7,8 +7,8 @@ import { parseSavedPlan } from './team-plan.ts';
 const regularIds = UNITS.filter((unit) => unit.cost < 6).map((unit) => unit.id);
 
 describe('plan d’équipe', () => {
-  it('peut contenir 9 unités, la taille maximale du plateau', () => {
-    expect(PLAN_CAPACITY).toBe(9);
+  it('peut contenir 10 unités, la taille maximale du plateau', () => {
+    expect(PLAN_CAPACITY).toBe(10);
   });
 
   it('ajoute une unité, puis la retire au second clic, en prévenant les vues', () => {

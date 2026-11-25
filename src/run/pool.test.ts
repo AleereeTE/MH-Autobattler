@@ -4,17 +4,18 @@ import { UNITS, findUnit } from '../data/units/index.ts';
 import { createPool, drawUnitId, returnCopies, takeCopies } from './pool.ts';
 
 describe('stock commun', () => {
-  it('contient 18, 15 ou 12 exemplaires selon le coût', () => {
+  it('contient 18, 15, 12, 10 ou 9 exemplaires selon le coût', () => {
     const pool = createPool();
     expect(pool.get('barroth')).toBe(18); // coût 1
     expect(pool.get('anjanath')).toBe(15); // coût 2
     expect(pool.get('rathalos')).toBe(12); // coût 3
     expect(pool.get('zinogre')).toBe(10); // coût 4
-    expect(pool.get('teostra')).toBe(8); // coût 5
-    expect(pool.get('fatalis')).toBe(3); // coût 6 : Dragon noir
+    // Coûts 5 et 6 : 9 exemplaires, juste assez pour un ★3.
+    expect(pool.get('teostra')).toBe(9);
+    expect(pool.get('fatalis')).toBe(9);
   });
 
-  it('ne propose de Dragon noir qu’au niveau 9, environ 3 fois sur 100', () => {
+  it('ne propose de Dragon noir qu’aux niveaux 9 (3 %) et 10 (5 %)', () => {
     const pool = createPool();
     const rng = createRng(17);
     for (let level = 1; level <= 8; level++) {
@@ -24,6 +25,10 @@ describe('stock commun', () => {
     for (let i = 0; i < 6000; i++) if (findUnit(drawUnitId(pool, 9, rng) ?? '')?.cost === 6) blackDragons += 1;
     expect(blackDragons / 6000).toBeGreaterThan(0.02);
     expect(blackDragons / 6000).toBeLessThan(0.04);
+    let atTen = 0;
+    for (let i = 0; i < 6000; i++) if (findUnit(drawUnitId(pool, 10, rng) ?? '')?.cost === 6) atTen += 1;
+    expect(atTen / 6000).toBeGreaterThan(0.04);
+    expect(atTen / 6000).toBeLessThan(0.06);
   });
 
   it('retire et remet des exemplaires, sans descendre sous zéro', () => {

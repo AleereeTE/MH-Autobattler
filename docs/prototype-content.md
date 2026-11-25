@@ -56,6 +56,18 @@ Les chasseurs portent des noms officiels de la série, avec une arme qu'ils util
 | Tigrex | Monstre | Bruiser | — | Wyverne volante, Berserker | 4 | 1 | **Rugissement** : 110/165/250 + 180/225/270 % attaque brute (physique) aux ennemis adjacents |
 | Kirin | Monstre | DPS | Foudre | Dragon ancien | 5 | 3 | **Foudre divine** : 200/300/450 + 280/350/420 % puiss. élém. sur l'ennemi le plus faible et ses voisins |
 
+### Compétences secrètes des Dragons noirs (★3)
+
+Easter egg validé le 2026-11-25 : au ★3, la compétence secrète remplace la compétence habituelle. Elle vise **tous les ennemis**, avec 5 fois les dégâts de la compétence ★3, et reste cachée sur les fiches tant que l'unité n'est pas ★3.
+
+| Dragon noir | Compétence secrète | Effet au ★3 |
+|---|---|---|
+| Fatalis | **Fin des temps** | Incantation de 1,5 s, puis 3375 + 3000 % puiss. élém. à tous les ennemis |
+| Alatreon | **Jugement absolu** | Incantation de 1,5 s, puis 2475 + 2550 % puiss. élém. à tous les ennemis, −30 % de vitesse d'attaque pendant 3 s |
+| Dire Miralis | **Cataclysme** | 2250 + 1875 % puiss. élém. à tous les ennemis, puis bouclier de 565 + 15 % des PV max pendant 5 s |
+
+Au lancement, un bandeau traverse le plateau avec le portrait du monstre et le nom du sort ; son cri se joue si un fichier son est déposé dans `src/assets/sounds/` (voir architecture.md).
+
 ### Rangs ★
 
 Règle validée (voir [game-design.md](game-design.md), section 3.4) : PV et attaque brute ×1,8 à chaque rang, une valeur de base de compétence par rang, durées et pourcentages inchangés.
@@ -220,9 +232,9 @@ Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. �
 | Bonus de victoire | +1 zenny au tour suivant |
 | Intérêts | +1 par tranche de 10 zennys épargnés, 5 au maximum (validé) |
 | Relance | 2 zennys (gratuite au début de chaque tour) |
-| Amélioration de la boutique | 2→3 : 4 · 3→4 : 8 · 4→5 : 12 · 5→6 : 20 · 6→7 : 28 · 7→8 : 36 · 8→9 : 48 |
+| Amélioration de la boutique | 2→3 : 4 · 3→4 : 8 · 4→5 : 12 · 5→6 : 20 · 6→7 : 28 · 7→8 : 36 · 8→9 : 48 · 9→10 : 64 (validé) |
 | Revente | Coût × exemplaires : ★1 = coût, ★2 = 3 × coût, ★3 = 9 × coût |
-| Exemplaires par unité | Coût 1 : 18 · coût 2 : 15 · coût 3 : 12 · coût 4 : 10 · coût 5 : 8 · coût 6 : 3 (validé) |
+| Exemplaires par unité | Coût 1 : 18 · coût 2 : 15 · coût 3 : 12 · coût 4 : 10 · coût 5 : 9 · coût 6 : 9 (validé ; 9 = juste assez pour un ★3) |
 | Réserve | 10 places (validé) |
 
 ### Probabilités de la boutique (en %)
@@ -237,6 +249,7 @@ Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. �
 | 7 | 19 | 30 | 35 | 15 | 1 | 0 |
 | 8 | 18 | 25 | 32 | 22 | 3 | 0 |
 | 9 | 10 | 20 | 25 | 33 | 9 | 3 (validé) |
+| 10 | 5 | 15 | 25 | 35 | 15 | 5 (validé) |
 
 ### Ennemis
 

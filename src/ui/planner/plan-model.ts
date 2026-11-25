@@ -8,7 +8,7 @@ import { BLACK_DRAGON_LIMIT_MESSAGE, exceedsBlackDragonLimit } from '../../rules
  * Il sert à voir ses synergies et à repérer ses unités dans la boutique. Il est gardé d'une run à l'autre.
  */
 
-/** ✅ Jusqu'à 9 unités : la taille maximale du plateau (niveau maximum). */
+/** ✅ Autant d'unités que la taille maximale du plateau (niveau maximum : 10). */
 export const PLAN_CAPACITY = RUN_STRUCTURE.maxLevel;
 export const PLAN_FULL_MESSAGE = `Le plan est complet (${PLAN_CAPACITY} unités).`;
 

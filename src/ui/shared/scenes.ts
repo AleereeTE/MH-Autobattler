@@ -86,5 +86,15 @@ export function frameScene(frame: Frame, portraits: PortraitStore): BoardScene {
       age: area.age,
     })),
     banner,
+    ultimate:
+      frame.ultimate === null
+        ? null
+        : {
+            skillName: frame.ultimate.skillName,
+            unitName: frame.ultimate.unitName,
+            portrait: portraits.get(frame.ultimate.defId),
+            side: frame.ultimate.side,
+            age: frame.ultimate.age,
+          },
   };
 }

@@ -24,9 +24,9 @@ describe('économie', () => {
     expect(sellValue(3, 3)).toBe(27);
   });
 
-  it('a un prix d’amélioration croissant, et aucun au niveau 9', () => {
-    const costs = [2, 3, 4, 5, 6, 7, 8].map(levelUpCost);
-    expect(costs).toEqual([4, 8, 12, 20, 28, 36, 48]);
-    expect(levelUpCost(9)).toBeNull();
+  it('a un prix d’amélioration croissant, et aucun au niveau 10', () => {
+    const costs = [2, 3, 4, 5, 6, 7, 8, 9].map((level) => levelUpCost(level));
+    expect(costs).toEqual([4, 8, 12, 20, 28, 36, 48, 64]);
+    expect(levelUpCost(10)).toBeNull();
   });
 });

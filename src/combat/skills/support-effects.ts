@@ -1,3 +1,4 @@
+import { skillForRank } from '../../rules/ranks.ts';
 import { hexDistance } from '../../core/hex.ts';
 import type { BuffEffect, HealEffect, ShieldEffect } from '../../data/definitions.ts';
 import { scaledAmount } from '../../rules/damage.ts';
@@ -30,6 +31,6 @@ export function applyHealEffect(state: CombatState, caster: CombatUnit, effect: 
 export function applyBuffEffect(state: CombatState, caster: CombatUnit, effect: BuffEffect): void {
   const durationTicks = secondsToTicks(effect.duration);
   pushSkillArea(state, caster, 'buff', caster.position, 0);
-  addModifier(caster, `skill:${caster.def.skill.id}`, effect.attackSpeedPercent, durationTicks);
+  addModifier(caster, `skill:${skillForRank(caster.def, caster.rank).id}`, effect.attackSpeedPercent, durationTicks);
   state.events.push({ type: 'status', tick: state.tick, uid: caster.uid, status: 'haste', durationTicks });
 }

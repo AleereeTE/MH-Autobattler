@@ -52,7 +52,7 @@ describe('boutique', () => {
     expect(reroll(state).ok).toBe(false);
   });
 
-  it('améliore la boutique au prix du niveau, jusqu’au niveau 9', () => {
+  it('améliore la boutique au prix du niveau, jusqu’au niveau 10', () => {
     const state = makeRun({ zennys: 12, level: 2 });
     expect(levelUp(state).ok).toBe(true);
     expect(state).toMatchObject({ level: 3, zennys: 8 });
@@ -60,6 +60,9 @@ describe('boutique', () => {
     expect(state).toMatchObject({ level: 4, zennys: 0 });
     expect(levelUp(state).ok).toBe(false);
     state.level = 9;
+    state.zennys = 64;
+    expect(levelUp(state).ok).toBe(true);
+    expect(state).toMatchObject({ level: 10, zennys: 0 });
     state.zennys = 999;
     expect(levelUp(state).ok).toBe(false);
   });

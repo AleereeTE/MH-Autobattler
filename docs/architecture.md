@@ -227,6 +227,12 @@ Les couleurs sont des variables CSS (`--cost-1` à `--cost-6`, `--side-player`, 
 - Une image carrée est idéale : elle est recadrée dans le cercle. Les parties transparentes laissent voir le fond de la couleur du coût.
 - Vite trouve les images à la compilation (`import.meta.glob`), donc aucune liste à tenir à jour.
 
+### Compétences secrètes et cris des Dragons noirs ★3
+
+- **Données** : `UnitDefinition.masterSkill` (facultatif) remplace `skill` au ★3 ; `skillForRank` (`rules/ranks.ts`) choisit la bonne compétence pour le moteur et les fiches.
+- **Moteur** : l'événement `skillCast` porte `master: true` pour une compétence secrète. Le replay en tire `Frame.ultimate` (2,5 s), que `scenes.ts` transforme en bandeau dessiné par `board-canvas.ts` (portrait, nom de l'unité, nom du sort).
+- **Cri** : déposer un son dans `src/assets/sounds/`, nommé d'après l'identifiant de l'unité (`fatalis.mp3`, `alatreon.ogg`, `dire-miralis.wav`). `ui/shared/roars.ts` les trouve avec `import.meta.glob` et `UltimateCue` joue le cri une fois, au début du bandeau. Sans fichier, pas de son.
+
 ---
 
 ## 6. Mode run

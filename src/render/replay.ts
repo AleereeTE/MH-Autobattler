@@ -1,4 +1,4 @@
-import type { CombatEvent, Side, SkillEffectKind, SnapshotStats, UnitSnapshot, Winner } from '../combat/index.ts';
+import { TICKS_PER_SECOND, type CombatEvent, type Side, type SkillEffectKind, type SnapshotStats, type UnitSnapshot, type Winner } from '../combat/index.ts';
 import type { Equipment } from '../data/items.ts';
 import type { Hex } from '../core/hex.ts';
 import type { Element, StarRank, UnitCost } from '../data/definitions.ts';
@@ -59,11 +59,25 @@ export interface FrameArea {
   readonly age: number;
 }
 
+/** Compétence secrète d'un Dragon noir ★3 qui vient d'être lancée : un bandeau traverse le plateau. */
+export interface FrameUltimate {
+  readonly uid: number;
+  readonly defId: string;
+  readonly unitName: string;
+  readonly skillName: string;
+  readonly side: Side;
+  /** Tick du lancement : identifie le bandeau (le cri ne se joue qu'une fois). */
+  readonly startTick: number;
+  /** 0 = lancement, 1 = le bandeau disparaît. */
+  readonly age: number;
+}
+
 export interface Frame {
   readonly tick: number;
   readonly units: readonly FrameUnit[];
   readonly texts: readonly FloatingText[];
   readonly areas: readonly FrameArea[];
+  readonly ultimate: FrameUltimate | null;
   readonly suddenDeath: boolean;
   readonly winner: Winner | undefined;
 }
@@ -76,6 +90,8 @@ export interface Replay {
 const TEXT_LIFETIME_TICKS = 16;
 /** Durée d'affichage d'une zone d'effet (0,7 s à vitesse normale). */
 export const AREA_LIFETIME_TICKS = 14;
+/** Durée du bandeau d'une compétence secrète (2,5 s). */
+export const ULTIMATE_BANNER_TICKS = Math.round(2.5 * TICKS_PER_SECOND);
 
 interface Tracker {
   unit: FrameUnit;
@@ -135,6 +151,7 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
     const trackers = new Map<number, Tracker>();
     const texts: FloatingText[] = [];
     const areas: FrameArea[] = [];
+    let ultimate: FrameUltimate | null = null;
     let suddenDeath = false;
     let winner: Winner | undefined;
 
@@ -209,6 +226,11 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
             tracker.unit.energy = 0;
             tracker.castingUntil = event.tick + event.castTicks;
             if (age < 1.5) texts.push({ uid: event.uid, text: event.skillName, kind: 'skill', age: age / 1.5 });
+            const bannerAge = (tick - event.tick) / ULTIMATE_BANNER_TICKS;
+            if (event.master === true && bannerAge < 1) {
+              const { defId, name, side } = tracker.unit;
+              ultimate = { uid: event.uid, defId, unitName: name, skillName: event.skillName, side, startTick: event.tick, age: bannerAge };
+            }
           }
           break;
         case 'skillArea': {
@@ -238,7 +260,7 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
     }
 
     for (const tracker of trackers.values()) finalize(tracker, tick);
-    return { tick, units: [...trackers.values()].map((tracker) => tracker.unit), texts, areas, suddenDeath, winner };
+    return { tick, units: [...trackers.values()].map((tracker) => tracker.unit), texts, areas, ultimate, suddenDeath, winner };
   }
 
   return { durationTicks, frameAt };

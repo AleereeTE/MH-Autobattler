@@ -7,6 +7,7 @@ import { boardUnits, talentTraitBonus, unitAt } from '../../run/index.ts';
 import { button, el, select } from '../dom.ts';
 import { BoardView } from '../shared/board-view.ts';
 import { PortraitStore } from '../shared/portraits.ts';
+import { UltimateCue } from '../shared/roars.ts';
 import { ReplayPlayer } from '../shared/replay-player.ts';
 import { ResultsView } from '../shared/results-view.ts';
 import { showPopover } from '../shared/popover.ts';
@@ -69,10 +70,13 @@ export function mountRun(root: HTMLElement): () => void {
     },
   );
   const results = new ResultsView();
+  /** Cri des Dragons noirs ★3 quand leur compétence secrète s'affiche. */
+  const ultimateCue = new UltimateCue();
   const player = new ReplayPlayer(
     (frame) => {
       board.render(frameScene(frame, portraits));
       results.showUntil(frame.tick);
+      ultimateCue.update(frame);
     },
     () => renderPanels(),
   );
@@ -187,6 +191,7 @@ export function mountRun(root: HTMLElement): () => void {
       shownFight = watched;
       lastFight = watched;
       results.show(watched, null, null, 0);
+      ultimateCue.reset();
       player.load(createReplay(watched.events));
     } else if (watched === null && shownFight !== null) {
       // Retour à la préparation : le bilan du dernier combat reste affiché en entier.

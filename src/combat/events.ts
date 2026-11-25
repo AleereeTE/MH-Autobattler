@@ -85,7 +85,8 @@ export type CombatEvent =
   | At<{ type: 'heal'; sourceUid: number; targetUid: number; amount: number; hpAfter: number }>
   | At<{ type: 'shield'; uid: number; amount: number; durationTicks: number }>
   | At<{ type: 'status'; uid: number; status: StatusKind; durationTicks: number }>
-  | At<{ type: 'skillCast'; uid: number; skillId: string; skillName: string; castTicks: number }>
+  /** `master` : compétence secrète du ★3 (Dragons noirs), annoncée par un bandeau au replay. */
+  | At<{ type: 'skillCast'; uid: number; skillId: string; skillName: string; castTicks: number; master?: boolean }>
   | At<{ type: 'skillResolve'; uid: number; skillId: string; skillName: string }>
   | At<{
       type: 'skillArea';
