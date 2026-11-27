@@ -1,4 +1,5 @@
 import type { StarRank, StatBonus, UnitDefinition } from '../../data/definitions.ts';
+import type { Placement } from '../../combat/index.ts';
 import type { Equipment } from '../../data/items.ts';
 import { equipmentBonuses } from '../../rules/equipment.ts';
 import { rankStars, rankedStats, skillForRank } from '../../rules/ranks.ts';
@@ -70,22 +71,36 @@ export function unitHeader(unit: UnitDefinition, rank: StarRank): HTMLElement[] 
   ];
 }
 
+/** Compétence de boss d'une unité en version boss : elle remplace la sienne quand il s'enrage, à mi-vie. */
+export function bossSkillBlock(unit: UnitDefinition): HTMLElement[] {
+  const skill = unit.bossSkill;
+  if (skill === undefined) return [];
+  return [el('p', { className: 'boss-skill' }, [el('strong', { text: `👹 À mi-vie, s’enrage : ${skill.name} : ` }), skill.description])];
+}
+
 /**
  * Fiche d'une unité : nom, rang, coût, traits, compétence et statistiques (au rang, avec l'équipement).
- * `bonus` : renforcement d'un ennemi du mode infini, compté dans les statistiques.
+ * `bonus` : renforcement d'un ennemi (version boss, mode infini), compté dans les statistiques.
+ * `boss` : version boss, avec sa compétence de boss.
  */
-export function unitCard(unit: UnitDefinition, equipment: Equipment, rank: StarRank, bonus?: StatBonus): HTMLElement {
+export function unitCard(unit: UnitDefinition, equipment: Equipment, rank: StarRank, bonus?: StatBonus, boss = false): HTMLElement {
   const extra = bonus === undefined ? [] : [bonus];
+  const note = boss
+    ? 'Statistiques au rang choisi, avec le bonus de la version boss (renforcement du mode infini compris, s’il y a lieu), hors bonus de traits.'
+    : bonus === undefined
+      ? 'Statistiques au rang choisi, avec l’équipement, hors bonus de traits.'
+      : 'Statistiques au rang choisi, avec l’équipement et le renforcement du mode infini, hors bonus de traits.';
   return el('div', { className: 'unit-card' }, [
     ...unitHeader(unit, rank),
+    boss ? el('p', { className: 'boss-tag', text: 'Version boss' }) : null,
     ...skillBlock(unit, rank),
+    ...(boss ? bossSkillBlock(unit) : []),
     statsTable(computeCombatStats(rankedStats(unit.stats, rank), [...equipmentBonuses(equipment), ...extra])),
-    el('p', {
-      className: 'muted small',
-      text:
-        bonus === undefined
-          ? 'Statistiques au rang choisi, avec l’équipement, hors bonus de traits.'
-          : 'Statistiques au rang choisi, avec l’équipement et le renforcement du mode infini, hors bonus de traits.',
-    }),
+    el('p', { className: 'muted small', text: note }),
   ]);
+}
+
+/** Fiche d'un ennemi posé (escouade de la chasse) : rang, équipement, renforcement et version boss. */
+export function placementCard(placement: Placement): HTMLElement {
+  return unitCard(placement.unit, placement.equipment ?? [], placement.rank ?? 1, placement.bonus, placement.boss === true);
 }

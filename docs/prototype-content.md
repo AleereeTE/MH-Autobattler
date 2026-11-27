@@ -264,17 +264,48 @@ Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. �
 | Monstres possibles | Stage 1 : coût 1 et 2, rang ★2 au maximum · stages 2 et 3 : coût 1 à 4, rang ★3 au maximum (jamais de Dragon ancien hors boss) |
 | Utilisation du budget | D'abord recruter des monstres au hasard jusqu'au nombre maximum, puis monter leur rang avec ce qui reste |
 | Placement | Tanks et bruisers devant (rangées 3 puis 2), DPS et supports derrière (rangées 0 puis 1) |
-| Boss (chasses 10 et 20) | Un monstre de coût 3 au ★3, plus une escorte générée avec le budget de la chasse (une place de moins) |
-| Boss (chasse 30) | Un Dragon ancien au ★2, plus une escorte générée de la même façon ; 15 % de chances que ce soit plutôt un Dragon noir au ★1 |
+| Boss (chasses 10 et 20) | Un monstre de coût 3 au ★3 en version boss, plus une escorte réduite (⚠️ moitié des places restantes et moitié du budget de la chasse, au moins 1 monstre) |
+| Boss (chasse 30) | Un Dragon ancien au ★2 en version boss, plus une escorte réduite de la même façon (✅ jamais de Dragon noir depuis le 2026-11-27) |
+
+### Version boss (game-design §9)
+
+✅ Compétences validées le 2026-11-27. ⚠️ Toutes les valeurs sont provisoires. À mi-vie, le boss s'enrage : sa compétence de boss remplace la sienne et son énergie se remplit.
+
+Bonus de statistiques (s'ajoutent au renforcement du mode infini), réglés pour environ 10 points de victoire en moins qu'avec l'ancienne escouade renforcée (équipes de joueur typiques simulées, 500 combats par boss) :
+
+| Boss | PV | Attaque brute et puissance élémentaire | Victoires avant → après |
+|---|---|---|---|
+| Stages 1 et 2 (coût 3 ★3) | +130 % | +35 % | stage 1 : 24 → 16 % · stage 2 : 86 → 75 % |
+| Stage 3 (Dragon ancien ★2) | +500 % | +80 % | 93 → 81 % |
+| Mode infini (Dragon ancien ★2, ou Dragon noir ★1 à 15 %) | +900 % | +120 % | étape 40 : 79 → 66 % |
+
+| Boss | Compétence de boss |
+|---|---|
+| Rathalos | **Triple boule de feu** (incantation 1 s) : trois boules de feu de 90/135/200 + 150 % puiss. élém., sur sa cible, l'ennemi le plus faible et le plus éloigné, chacune avec ses voisins |
+| Legiana | **Blizzard** (1 s) : 60/90/135 + 100 % puiss. élém. à tous les ennemis, −40 % de vitesse d'attaque pendant 4 s |
+| Nargacuga | **Yeux rouges** (0,25 s) : bondit sur l'ennemi le plus faible, 120/180/270 + 240 % attaque brute (physique) sur lui et ses voisins, puis +60 % de vitesse d'attaque et 25 % de vol de vie pendant 5 s |
+| Lagiacrus | **Surcharge** (0,5 s) : 70/105/160 + 120 % puiss. élém. aux ennemis à 3 cases ou moins, −30 % de vitesse d'attaque pendant 3 s, puis bouclier de 20 % de ses PV max pendant 5 s |
+| Kirin | **Charge foudroyante** (0,5 s) : bondit sur l'ennemi le plus éloigné, 180/270/405 + 240 % puiss. élém. sur lui et les ennemis à 2 cases, puis +40 % de vitesse d'attaque pendant 5 s |
+| Namielle | **Raz-de-marée** (0,75 s) : 110/165/250 + 150 % puiss. élém. sur sa cible et les ennemis à 3 cases d'elle, soin de tous les alliés de 150/225/340 + 150 % puiss. élém. |
+| Safi'jiiva | **Étoile de saphir** (2 s) : 400/600/900 + 500 % puiss. élém. sur sa cible et les ennemis à 2 cases d'elle, puis 30 % de vol de vie pendant 6 s |
+| Teostra | **Supernova totale** (2,5 s) : 300/450/675 + 350 % puiss. élém. à tous les ennemis |
+| Fatalis | **Souffle balayant** (2 s) : 350/525/790 + 450 % puiss. élém. à tous les ennemis, puis +40 % de vitesse d'attaque pendant 6 s |
+| Alatreon | **Bascule élémentaire** (1 s, passage en mode feu) : 300/450/675 + 400 % puiss. élém. sur sa cible et les ennemis à 3 cases d'elle, puis +50 % de vitesse d'attaque pendant 6 s |
+| Dire Miralis | **Cœur en fusion** (0,5 s) : bouclier de 30 % de ses PV max pendant 6 s, puis 250/375/565 + 300 % puiss. élém. aux ennemis à 3 cases ou moins, −30 % de vitesse d'attaque pendant 3 s |
 
 ### Récompenses (1 parmi 3)
 
-| Choix | Chasse classique | Boss ou quête urgente |
-|---|---|---|
-| Matériau au hasard | 1 | 2 |
-| Zennys | 4 | 8 |
-| Unité ★1 tirée comme en boutique | 1 exemplaire | 2 exemplaires de la même unité |
-| Retire-objet | — | Boss seulement : +1 garanti, en plus du choix |
+✅ La capture est toujours l'un des 3 choix quand un monstre de l'escouade vaincue peut être capturé (game-design §10). Les autres choix sont tirés au hasard, sans doublon de type, selon les chances ci-dessous. ⚠️ Quantités et chances provisoires.
+
+| Choix | Chances (hors capture) | Chasse classique | Boss ou quête urgente |
+|---|---|---|---|
+| Capture d'un monstre de l'escouade (au choix) | toujours proposée | 1 exemplaire ★1 | 2 exemplaires ★1 |
+| Unité ★1 tirée comme en boutique | 25 % | 1 exemplaire | 2 exemplaires de la même unité |
+| Objet fusionné au hasard (parmi les 36) | 12 % | 1 | 2 |
+| Matériau au hasard | 25 % | 1 | 2 |
+| Retire-objet | 8 % | 1 | 2 |
+| Zennys | 30 % | 4 | 8 |
+| Retire-objet garanti | — | — | Boss seulement : +1, en plus du choix |
 
 ### Talents de chasseur (game-design §11.1)
 
@@ -325,7 +356,7 @@ Validés le 2026-11-24. ⚠️ Toutes les valeurs sont provisoires. « Toute l'�
 | Élément | Valeur |
 |---|---|
 | Renforcement des ennemis | ✅ +5 % de PV, d'attaque brute et de puissance élémentaire par étape après la 30e (étape 40 : +50 %, étape 60 : +150 %) ; quête urgente : comme 3 étapes plus loin |
-| Escouades | Règles du stage 3 : coût 4 et rang ★3 au plus, boss Dragon ancien ★2 (⚠️ 15 % de chances d'un Dragon noir ★1) ; budget et nombre de monstres selon la formule habituelle |
+| Escouades | Règles du stage 3 : coût 4 et rang ★3 au plus, boss Dragon ancien ★2 en version boss (⚠️ 15 % de chances d'un Dragon noir ★1, seulement en mode infini) ; budget et nombre de monstres selon la formule habituelle |
 | Défaites | Compteur de la run conservé (3 au total) |
 
 ---

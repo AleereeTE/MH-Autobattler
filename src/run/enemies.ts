@@ -3,6 +3,7 @@ import { BOARD_COLS, hexKey, type Hex } from '../core/hex.ts';
 import { pickOne } from '../core/random.ts';
 import type { Rng } from '../core/rng.ts';
 import type { StarRank, StatBonus, UnitDefinition } from '../data/definitions.ts';
+import { BOSS_VERSION } from '../data/boss-version.ts';
 import { BOSSES_BY_STAGE, ENEMY_BUDGET } from '../data/run-balance.ts';
 import { UNITS } from '../data/units/index.ts';
 import { copiesForRank } from './economy.ts';
@@ -11,12 +12,15 @@ import { huntInfo } from './structure.ts';
 
 /**
  * ⚠️ Escouades ennemies générées selon un budget (game-design §9, valeurs dans prototype-content.md).
- * Le budget recrute d'abord des monstres, puis monte leur rang. Les boss sont une escouade renforcée.
+ * Le budget recrute d'abord des monstres, puis monte leur rang. Un boss est la version boss d'un grand monstre
+ * (bonus de statistiques et compétence de boss quand il s'enrage), avec une escorte réduite.
  */
 
 interface Member {
   readonly unit: UnitDefinition;
   rank: StarRank;
+  /** Bonus de la version boss (seulement pour le boss). */
+  readonly bossBonus?: StatBonus;
 }
 
 const MONSTERS = UNITS.filter((unit) => unit.kind === 'monster');
@@ -34,9 +38,18 @@ function upgradeCost(member: Member): number {
   return member.unit.cost * (copiesForRank((member.rank + 1) as StarRank) - copiesForRank(member.rank));
 }
 
-/** Règle du stage (coût, rang, boss) ; au-delà du stage 3 (mode infini), celle du stage 3. */
+/** Règle du stage (coût, rang, boss) ; au-delà de la dernière règle (mode infini), la dernière. */
 function stageRule<T>(rules: readonly T[], stageIndex: number): T | undefined {
   return rules[Math.min(stageIndex, rules.length - 1)];
+}
+
+/** Bonus de la version boss (`extra`, selon le stage), ajouté au renforcement du mode infini s'il y en a un. */
+export function bossBonus(infinite: StatBonus | null, extra: StatBonus): StatBonus {
+  return {
+    hpPercent: (infinite?.hpPercent ?? 0) + (extra.hpPercent ?? 0),
+    attackPercent: (infinite?.attackPercent ?? 0) + (extra.attackPercent ?? 0),
+    elementalPowerPercent: (infinite?.elementalPowerPercent ?? 0) + (extra.elementalPowerPercent ?? 0),
+  };
 }
 
 /** Les tanks et bruisers se placent devant (rangée 3, puis 2), les DPS et supports derrière (0, puis 1). */
@@ -56,6 +69,7 @@ function placeMembers(members: readonly Member[], rng: Rng, bonus: StatBonus | n
     }
     taken.add(hexKey(position));
     const placement: Placement = { unit: member.unit, position, equipment: [], rank: member.rank };
+    if (member.bossBonus !== undefined) return { ...placement, boss: true, bonus: bossBonus(bonus, member.bossBonus) };
     return bonus === null ? placement : { ...placement, bonus };
   });
 }
@@ -82,8 +96,10 @@ export function generateSquad(hunt: number, rng: Rng, extraHunts = 0): Placement
     );
     const boss = pickOne(rng, candidates);
     if (boss !== undefined) {
-      members.push({ unit: boss, rank: bossRule.rank as StarRank });
-      slots = Math.max(1, slots - 1);
+      members.push({ unit: boss, rank: bossRule.rank as StarRank, bossBonus: bossRule.bonus });
+      // ⚠️ Escorte réduite : une part des places et du budget habituels.
+      slots = Math.max(1, Math.floor((slots - 1) * BOSS_VERSION.escortShare));
+      budget = Math.floor(budget * BOSS_VERSION.escortBudgetShare);
     }
   }
   const escort: Member[] = [];

@@ -1,48 +1,92 @@
 import { RUN_STRUCTURE } from '../../data/run-balance.ts';
 import { findUnit } from '../../data/units/index.ts';
 import { MATERIALS } from '../../data/items.ts';
+import { objectFor } from '../../rules/equipment.ts';
 import { TOTAL_HUNTS, canContinueInfinite, canTakeReward, infiniteGrowth, type RewardOption } from '../../run/index.ts';
 import { INFINITE_MODE } from '../../data/run-balance.ts';
 import { button, el } from '../dom.ts';
 import type { PortraitStore } from '../shared/portraits.ts';
 import type { RunController } from './controller.ts';
 import { onRightClick } from '../shared/popover.ts';
-import { materialPreview } from '../shared/previews.ts';
+import { materialPreview, objectPreview } from '../shared/previews.ts';
 import { unitCard } from '../shared/unit-card.ts';
 import { unitToken } from '../shared/token.ts';
 
-function rewardCard(controller: RunController, option: RewardOption, index: number, portraits: PortraitStore): HTMLElement {
+type CaptureOption = Extract<RewardOption, { kind: 'capture' }>;
+
+/** Carte « Capture » : un bouton par monstre capturable de l'escouade vaincue (clic droit : sa fiche). */
+function captureCard(controller: RunController, option: CaptureOption, index: number, portraits: PortraitStore): HTMLElement {
+  const choices = option.targets.map((target) => {
+    const unit = findUnit(target.unitId);
+    const name = unit?.name ?? target.unitId;
+    const choice = el('button', { className: 'capture-choice', attrs: { type: 'button' }, onClick: () => controller.chooseReward(index, target.unitId) }, [
+      unitToken(target.unitId, 1, portraits),
+      el('span', { className: 'small', text: target.copies > 1 ? `${target.copies} × ${name}` : name }),
+    ]);
+    choice.disabled = !canTakeReward(controller.state, option, target.unitId);
+    return unit === undefined ? choice : onRightClick(choice, () => unitCard(unit, [], 1));
+  });
   const available = canTakeReward(controller.state, option);
-  let content: (HTMLElement | string)[];
+  return el('div', { className: 'reward-card capture-card' }, [
+    el('strong', { text: 'Capture' }),
+    el('span', { className: 'small muted', text: available ? 'Un monstre de l’escouade rejoint la réserve au ★1 :' : 'Réserve pleine.' }),
+    el('div', { className: 'capture-choices' }, choices),
+  ]);
+}
+
+/** Contenu d'une carte de récompense (hors capture). */
+function rewardContent(option: Exclude<RewardOption, CaptureOption>, available: boolean, portraits: PortraitStore): (HTMLElement | string)[] {
   switch (option.kind) {
-    case 'materials':
-      content = [
-        el('strong', { text: option.materials.length > 1 ? `${option.materials.length} matériaux` : 'Matériau' }),
-        el('span', { text: option.materials.map((material) => MATERIALS[material].name).join(' + ') }),
-        el('span', { className: 'small muted', text: option.materials.map((material) => MATERIALS[material].description).join(' · ') }),
-      ];
-      break;
-    case 'zennys':
-      content = [el('strong', { text: `+${option.amount} zennys` }), el('span', { className: 'small muted', text: 'Tout de suite, avant les revenus du tour.' })];
-      break;
     case 'unit': {
       const name = findUnit(option.unitId)?.name ?? option.unitId;
-      content = [
+      return [
         unitToken(option.unitId, 1, portraits),
         el('strong', { text: option.copies > 1 ? `${option.copies} × ${name}` : name }),
         el('span', { className: 'small muted', text: available ? 'Rejoint la réserve au ★1.' : 'Réserve pleine.' }),
       ];
-      break;
     }
+    case 'object': {
+      const objects = option.objects.map((materials) => objectFor(materials));
+      return [
+        el('strong', { text: objects.length > 1 ? `${objects.length} objets` : 'Objet' }),
+        el('span', { text: objects.map((object) => object.name).join(' + ') }),
+        el('span', { className: 'small muted', text: objects.map((object) => object.description).join(' · ') }),
+      ];
+    }
+    case 'materials':
+      return [
+        el('strong', { text: option.materials.length > 1 ? `${option.materials.length} matériaux` : 'Matériau' }),
+        el('span', { text: option.materials.map((material) => MATERIALS[material].name).join(' + ') }),
+        el('span', { className: 'small muted', text: option.materials.map((material) => MATERIALS[material].description).join(' · ') }),
+      ];
+    case 'itemRemovers':
+      return [
+        el('strong', { text: option.amount > 1 ? `${option.amount} retire-objets` : 'Retire-objet' }),
+        el('span', { className: 'small muted', text: 'Permet de retirer un objet d’une unité.' }),
+      ];
+    case 'zennys':
+      return [el('strong', { text: `+${option.amount} zennys` }), el('span', { className: 'small muted', text: 'Tout de suite, avant les revenus du tour.' })];
   }
-  const card = el('button', { className: 'reward-card', attrs: { type: 'button' }, onClick: () => controller.chooseReward(index) }, content);
-  card.disabled = !available;
-  // Clic droit : fiche de l'unité proposée, ou recettes du matériau proposé.
+}
+
+/** Fiche affichée au clic droit : unité proposée, objet ou recettes du matériau. */
+function rewardPreview(option: RewardOption): (() => HTMLElement) | null {
   const unit = option.kind === 'unit' ? findUnit(option.unitId) : undefined;
-  if (unit !== undefined) return onRightClick(card, () => unitCard(unit, [], 1));
+  if (unit !== undefined) return () => unitCard(unit, [], 1);
+  const object = option.kind === 'object' ? option.objects[0] : undefined;
+  if (object !== undefined) return () => objectPreview(object);
   const material = option.kind === 'materials' ? option.materials[0] : undefined;
-  if (material !== undefined) return onRightClick(card, () => materialPreview(material));
-  return card;
+  if (material !== undefined) return () => materialPreview(material);
+  return null;
+}
+
+function rewardCard(controller: RunController, option: RewardOption, index: number, portraits: PortraitStore): HTMLElement {
+  if (option.kind === 'capture') return captureCard(controller, option, index, portraits);
+  const available = canTakeReward(controller.state, option);
+  const card = el('button', { className: 'reward-card', attrs: { type: 'button' }, onClick: () => controller.chooseReward(index) }, rewardContent(option, available, portraits));
+  card.disabled = !available;
+  const preview = rewardPreview(option);
+  return preview === null ? card : onRightClick(card, preview);
 }
 
 const percent = (ratio: number): string => `${Math.round(ratio * 100)} %`;

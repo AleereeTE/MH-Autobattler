@@ -1,4 +1,4 @@
-import type { UnitCost } from './definitions.ts';
+import type { StatBonus, UnitCost } from './definitions.ts';
 
 /**
  * Constantes du mode run (docs/game-design.md §2, §8 à §11 · valeurs listées dans docs/prototype-content.md).
@@ -72,33 +72,64 @@ export const ENEMY_BUDGET = {
   maxRankByStage: [2, 3, 3] as readonly number[],
 } as const;
 
-/** Boss : un monstre tiré parmi ceux qui ont ce coût (ou ce trait), à ce rang. */
+/** Boss : un monstre tiré parmi ceux qui ont ce coût (ou ce trait), à ce rang, en version boss avec ce bonus. */
 export interface BossRule {
   readonly cost?: UnitCost;
   readonly trait?: string;
   readonly rank: number;
+  /** Bonus de statistiques de la version boss (s'ajoute au renforcement du mode infini). */
+  readonly bonus: StatBonus;
   /** Boss plus rare, tiré à la place du boss habituel avec cette probabilité. */
   readonly rare?: BossRule & { readonly chance: number };
 }
 
 /**
- * ⚠️ Boss de chaque stage (plus une escorte).
- * ✅ Le boss du stage 3 est un Dragon ancien, ou parfois un Dragon noir (⚠️ 15 % de chances).
+ * ⚠️ Bonus de la version boss, réglés par simulation (2026-11-27) : avec une escorte réduite, chaque boss gagne
+ * environ 10 points de difficulté par rapport à l'ancienne « escouade renforcée » (taux de victoire d'équipes
+ * de joueur typiques : stage 1 24 → 16 %, stage 2 86 → 75 %, stage 3 93 → 81 %, étape 40 79 → 68 %).
+ */
+const STAGE_1_2_BOSS_BONUS: StatBonus = { hpPercent: 1.3, attackPercent: 0.35, elementalPowerPercent: 0.35 };
+const STAGE_3_BOSS_BONUS: StatBonus = { hpPercent: 5, attackPercent: 0.8, elementalPowerPercent: 0.8 };
+const INFINITE_BOSS_BONUS: StatBonus = { hpPercent: 9, attackPercent: 1.2, elementalPowerPercent: 1.2 };
+
+/**
+ * ⚠️ Boss de chaque stage (plus une escorte) : stages 1, 2 et 3, puis le mode infini (stages 4 et suivants).
+ * ✅ Le boss du stage 3 est toujours un Dragon ancien (2026-11-27 : plus de Dragon noir au stage 3).
+ * ✅ En mode infini, c'est parfois un Dragon noir (⚠️ 15 % de chances).
  */
 export const BOSSES_BY_STAGE: readonly BossRule[] = [
-  { cost: 3, rank: 3 },
-  { cost: 3, rank: 3 },
-  { trait: 'elder-dragon', rank: 2, rare: { trait: 'black-dragon', rank: 1, chance: 0.15 } },
+  { cost: 3, rank: 3, bonus: STAGE_1_2_BOSS_BONUS },
+  { cost: 3, rank: 3, bonus: STAGE_1_2_BOSS_BONUS },
+  { trait: 'elder-dragon', rank: 2, bonus: STAGE_3_BOSS_BONUS },
+  {
+    trait: 'elder-dragon',
+    rank: 2,
+    bonus: INFINITE_BOSS_BONUS,
+    rare: { trait: 'black-dragon', rank: 1, chance: 0.15, bonus: INFINITE_BOSS_BONUS },
+  },
 ];
 
-/** ⚠️ Récompenses (1 parmi 3) ; quantités multipliées après un boss. */
+/** Types de récompense tirés au hasard à côté de la capture. */
+export type DrawnRewardKind = 'unit' | 'object' | 'materials' | 'itemRemovers' | 'zennys';
+
+/**
+ * Récompenses « 1 parmi 3 » (game-design §11). ✅ La capture est toujours proposée quand un monstre de l'escouade
+ * vaincue peut l'être ; les autres choix sont tirés au hasard, de types différents.
+ * ✅ Quantités multipliées après un boss ou une quête urgente (×2), capture comprise · ⚠️ quantités et poids provisoires.
+ */
 export const REWARDS = {
   materials: 1,
   zennys: 4,
   unitCopies: 1,
+  /** ✅ Exemplaires ★1 d'un monstre capturé (pris dans le stock commun). */
+  captureCopies: 1,
+  objects: 1,
+  itemRemovers: 1,
   bossMultiplier: 2,
   /** ✅ Retire-objets garantis après chaque boss. */
   bossItemRemovers: 1,
+  /** ⚠️ Poids de tirage des autres choix (sur 100). */
+  weights: { unit: 25, object: 12, materials: 25, itemRemovers: 8, zennys: 30 } satisfies Record<DrawnRewardKind, number>,
 } as const;
 
 /**

@@ -13,7 +13,7 @@ import { ResultsView } from '../shared/results-view.ts';
 import { showPopover } from '../shared/popover.ts';
 import { combatUnitPreview } from '../shared/previews.ts';
 import { frameScene, frameUnitAt, staticUnitScene } from '../shared/scenes.ts';
-import { unitCard } from '../shared/unit-card.ts';
+import { placementCard, unitCard } from '../shared/unit-card.ts';
 import { renderTraits } from '../shared/traits-view.ts';
 import { openPlanner } from '../planner/planner-dialog.ts';
 import { renderPlanPanel } from '../planner/plan-panel.ts';
@@ -66,7 +66,7 @@ export function mountRun(root: HTMLElement): () => void {
         return;
       }
       const enemy = run.state.enemy.find((placement) => hexKey(placement.position) === hexKey(hex));
-      if (enemy !== undefined) showPopover(unitCard(enemy.unit, enemy.equipment ?? [], enemy.rank ?? 1, enemy.bonus), x, y);
+      if (enemy !== undefined) showPopover(placementCard(enemy), x, y);
     },
   );
   const results = new ResultsView();
@@ -114,6 +114,7 @@ export function mountRun(root: HTMLElement): () => void {
           side: 'enemy',
           position: placement.position,
           selected: selection?.kind === 'enemy' && selection.index === index,
+          boss: placement.boss === true,
         },
         portraits,
       ),

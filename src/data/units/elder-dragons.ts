@@ -1,4 +1,5 @@
 import type { UnitDefinition } from '../definitions.ts';
+import { TEOSTRA_BOSS_SKILL, NAMIELLE_BOSS_SKILL, SAFI_JIIVA_BOSS_SKILL, KIRIN_BOSS_SKILL } from './boss-skills.ts';
 
 /**
  * Dragons anciens (coût 5, monstres uniquement). Jamais capturables : on ne les obtient qu'en boutique.
@@ -25,6 +26,7 @@ export const TEOSTRA: UnitDefinition = {
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [250, 375, 565], ratios: [{ stat: 'elementalPower', ratio: 2.9 }], radius: 2 },
     ],
   },
+  bossSkill: TEOSTRA_BOSS_SKILL,
 };
 
 export const NAMIELLE: UnitDefinition = {
@@ -47,6 +49,7 @@ export const NAMIELLE: UnitDefinition = {
       { kind: 'heal', base: [100, 150, 225], ratios: [{ stat: 'elementalPower', ratio: 1.1 }], radius: 2 },
     ],
   },
+  bossSkill: NAMIELLE_BOSS_SKILL,
 };
 
 export const SAFI_JIIVA: UnitDefinition = {
@@ -67,6 +70,7 @@ export const SAFI_JIIVA: UnitDefinition = {
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [220, 330, 495], ratios: [{ stat: 'elementalPower', ratio: 3 }], radius: 1 },
     ],
   },
+  bossSkill: SAFI_JIIVA_BOSS_SKILL,
 };
 
 export const KIRIN: UnitDefinition = {
@@ -87,6 +91,7 @@ export const KIRIN: UnitDefinition = {
       { kind: 'damage', target: 'lowestHpEnemy', damageType: 'elemental', base: [200, 300, 450], ratios: [{ stat: 'elementalPower', ratio: 2.8 }], radius: 1 },
     ],
   },
+  bossSkill: KIRIN_BOSS_SKILL,
 };
 
 export const ELDER_DRAGONS: readonly UnitDefinition[] = [TEOSTRA, NAMIELLE, SAFI_JIIVA, KIRIN];

@@ -19,6 +19,9 @@
   /* Statuts des objets : poison (violet) et paralysie (jaune pâle). */
   --status-poison: #9b4dca;
   --status-paralysis: #f2e46b;
+  /* Anneau des boss : doré, puis rouge quand ils s'enragent. */
+  --boss-ring: #d9a441;
+  --boss-enraged: #e0362c;
   /* Barre d'énergie des jetons (grisée quand l'énergie est bloquée). */
   --board-energy: #e0a800;
   --board-energy-blocked: #9aa3ad;
@@ -1036,6 +1039,42 @@ details {
   cursor: not-allowed;
 }
 
+/* Capture : la carte n'est pas cliquable, on choisit un des monstres. */
+.capture-card {
+  cursor: default;
+  border-color: var(--accent);
+}
+
+.capture-choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.capture-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  cursor: pointer;
+}
+
+.capture-choice:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.capture-choice:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* ------------------------------------------------------------------
    Talents de chasseur (argent, or, prismatique)
    ------------------------------------------------------------------ */
@@ -1131,6 +1170,24 @@ details {
     linear-gradient(var(--panel), var(--panel)) padding-box,
     linear-gradient(135deg, var(--prismatic)) border-box;
   border: 2px solid transparent;
+}
+
+/* Version boss : étiquette et compétence de boss (à mi-vie). */
+.boss-tag {
+  display: inline-block;
+  margin: 0;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--boss-ring);
+  color: #1d1408;
+  font-size: 0.8em;
+  font-weight: 700;
+}
+
+.boss-skill {
+  padding: 6px 8px;
+  border: 2px solid var(--boss-enraged);
+  border-radius: 6px;
 }
 
 .trait-talent-bonus {

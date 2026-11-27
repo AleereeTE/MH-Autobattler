@@ -1,4 +1,6 @@
 import type { UnitDefinition } from '../definitions.ts';
+import { FATALIS_BOSS_SKILL, ALATREON_BOSS_SKILL, DIRE_MIRALIS_BOSS_SKILL } from './boss-skills.ts';
+import { WHOLE_BOARD } from './radius.ts';
 
 /**
  * Dragons noirs (coût 6, monstres uniquement) : très difficiles à obtenir (boutique aux niveaux 9 et 10 seulement,
@@ -9,8 +11,6 @@ import type { UnitDefinition } from '../definitions.ts';
  * avec 5 fois les dégâts de leur compétence ★3 ; un bandeau à son nom traverse le plateau au lancement.
  */
 
-/** Rayon qui couvre tout le plateau (la plus grande distance possible est de 10 cases). */
-const WHOLE_BOARD = 10;
 
 export const FATALIS: UnitDefinition = {
   id: 'fatalis',
@@ -39,6 +39,7 @@ export const FATALIS: UnitDefinition = {
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [3375, 3375, 3375], ratios: [{ stat: 'elementalPower', ratio: 20 }], radius: WHOLE_BOARD },
     ],
   },
+  bossSkill: FATALIS_BOSS_SKILL,
 };
 
 export const ALATREON: UnitDefinition = {
@@ -84,6 +85,7 @@ export const ALATREON: UnitDefinition = {
       },
     ],
   },
+  bossSkill: ALATREON_BOSS_SKILL,
 };
 
 export const DIRE_MIRALIS: UnitDefinition = {
@@ -115,6 +117,7 @@ export const DIRE_MIRALIS: UnitDefinition = {
       { kind: 'shield', base: [565, 565, 565], ratios: [{ stat: 'hp', ratio: 0.1 }], duration: 5 },
     ],
   },
+  bossSkill: DIRE_MIRALIS_BOSS_SKILL,
 };
 
 export const BLACK_DRAGONS: readonly UnitDefinition[] = [FATALIS, ALATREON, DIRE_MIRALIS];

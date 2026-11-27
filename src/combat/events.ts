@@ -31,6 +31,8 @@ export interface UnitSnapshot {
   readonly element: Element | null;
   readonly cost: UnitCost;
   readonly rank: StarRank;
+  /** Version boss (absent pour une unité normale). */
+  readonly boss?: boolean;
   readonly position: Hex;
   readonly maxHp: number;
   readonly maxEnergy: number;
@@ -88,6 +90,8 @@ export type CombatEvent =
   /** `master` : compétence secrète du ★3 (Dragons noirs), annoncée par un bandeau au replay. */
   | At<{ type: 'skillCast'; uid: number; skillId: string; skillName: string; castTicks: number; master?: boolean }>
   | At<{ type: 'skillResolve'; uid: number; skillId: string; skillName: string }>
+  /** Un boss s'enrage à mi-vie : sa compétence de boss remplace la sienne. */
+  | At<{ type: 'enrage'; uid: number; skillName: string }>
   | At<{
       type: 'skillArea';
       uid: number;

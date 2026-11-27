@@ -1,6 +1,6 @@
 import type { Hex } from '../core/hex.ts';
 import type { Rng } from '../core/rng.ts';
-import type { StarRank, UnitDefinition } from '../data/definitions.ts';
+import type { SkillDefinition, StarRank, UnitDefinition } from '../data/definitions.ts';
 import type { Equipment } from '../data/items.ts';
 import type { CombatStats } from '../rules/stats.ts';
 import { ticksToSeconds } from './constants.ts';
@@ -52,6 +52,10 @@ export interface CombatUnit {
   /** Rang ★ : il augmente PV et attaque brute, et choisit la valeur de base de la compétence. */
   readonly rank: StarRank;
   readonly side: Side;
+  /** Version boss (game-design §9) : s'enrage à mi-vie et lance alors sa compétence de boss. */
+  readonly boss: boolean;
+  /** Boss enragé : sa compétence de boss remplace la sienne jusqu'à la fin du combat. */
+  enraged: boolean;
   readonly equipment: Equipment;
   /** Statistiques de combat : fiche + matériaux, objets et traits. `stats.hp` = PV max. */
   readonly stats: CombatStats;
@@ -66,8 +70,8 @@ export interface CombatUnit {
   attackProgress: number;
   /** Déplacement en cours vers une case voisine. */
   move: { readonly to: Hex; remainingTicks: number } | null;
-  /** Incantation de compétence en cours. */
-  cast: { remainingTicks: number } | null;
+  /** Incantation de compétence en cours, avec la compétence lancée (elle ne change pas en cours de route). */
+  cast: { remainingTicks: number; readonly skill: SkillDefinition } | null;
   modifiers: TimedModifier[];
   shields: Shield[];
   burn: Burn | null;

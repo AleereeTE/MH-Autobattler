@@ -37,6 +37,9 @@ export interface BoardTheme {
   readonly areas: Readonly<Record<Exclude<AreaTone, 'damage'>, string>>;
   /** Pastilles des statuts apportés par les objets : poison et paralysie. */
   readonly statuses: { readonly poison: string; readonly paralysis: string };
+  /** Anneau extérieur d'un boss, et sa couleur une fois enragé. */
+  readonly boss: string;
+  readonly enraged: string;
 }
 
 /** Image affichée dans le jeton d'une unité. */
@@ -83,12 +86,16 @@ export interface SceneUnit {
   readonly hasted?: boolean;
   readonly poisoned?: boolean;
   readonly paralyzed?: boolean;
+  /** Version boss : anneau extérieur doré, rouge une fois enragé. */
+  readonly boss?: boolean;
+  readonly enraged?: boolean;
 }
 
-/** Bandeau d'une compétence secrète (Dragon noir ★3) : portrait, nom de l'unité et nom du sort. */
+/** Bandeau (compétence secrète d'un Dragon noir ★3, boss qui s'enrage) : portrait, petite ligne et nom du sort. */
 export interface SceneUltimate {
   readonly skillName: string;
-  readonly unitName: string;
+  /** Petite ligne au-dessus du nom du sort. */
+  readonly headline: string;
   readonly portrait: Portrait | null;
   readonly side: 'player' | 'enemy';
   /** 0 = lancement, 1 = fin du bandeau. */
@@ -146,6 +153,7 @@ function drawUnit(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   ctx.lineWidth = 4;
   ctx.strokeStyle = theme.elements[unit.element ?? 'none'];
   ctx.stroke();
+  if (unit.boss === true) drawBossMark(ctx, theme, unit, center, radius);
 
   if (unit.selected === true || unit.casting === true) {
     ctx.beginPath();
@@ -169,6 +177,40 @@ function drawUnit(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme: Boa
   drawRank(ctx, layout, theme, unit, center, radius);
   drawStatusDots(ctx, theme, unit, center, radius);
   ctx.globalAlpha = 1;
+}
+
+/** Boss : anneau extérieur et pastille à couronne (en haut à droite), dorés, puis rouges une fois enragé. */
+function drawBossMark(ctx: CanvasRenderingContext2D, theme: BoardTheme, unit: SceneUnit, center: Point, radius: number): void {
+  const color = unit.enraged === true ? theme.enraged : theme.boss;
+  ctx.beginPath();
+  ctx.arc(center.x, center.y, radius + 3, 0, Math.PI * 2);
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = color;
+  ctx.stroke();
+
+  const badge = { x: center.x + radius * 0.78, y: center.y - radius * 0.78 };
+  const size = Math.max(7, radius * 0.36);
+  ctx.beginPath();
+  ctx.arc(badge.x, badge.y, size, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = theme.rankBadge;
+  ctx.stroke();
+  // Couronne à trois pointes.
+  const w = size * 1.1;
+  const h = size * 0.75;
+  ctx.beginPath();
+  ctx.moveTo(badge.x - w / 2, badge.y + h / 2);
+  ctx.lineTo(badge.x - w / 2, badge.y - h / 2);
+  ctx.lineTo(badge.x - w / 4, badge.y);
+  ctx.lineTo(badge.x, badge.y - h / 2);
+  ctx.lineTo(badge.x + w / 4, badge.y);
+  ctx.lineTo(badge.x + w / 2, badge.y - h / 2);
+  ctx.lineTo(badge.x + w / 2, badge.y + h / 2);
+  ctx.closePath();
+  ctx.fillStyle = theme.rankBadge;
+  ctx.fill();
 }
 
 /** Fond prismatique (coût 6) : un dégradé arc-en-ciel qui fait le tour du jeton. */
@@ -359,7 +401,7 @@ function drawUltimate(ctx: CanvasRenderingContext2D, layout: BoardLayout, theme:
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#f2e6c9';
   ctx.font = `600 ${Math.round(height * 0.16)}px system-ui, sans-serif`;
-  ctx.fillText(`${ultimate.unitName} ★★★`, textX, center.y - height * 0.22);
+  ctx.fillText(ultimate.headline, textX, center.y - height * 0.22);
   ctx.font = `800 ${Math.round(height * 0.32)}px system-ui, sans-serif`;
   ctx.lineWidth = 4;
   ctx.strokeStyle = sideColor;

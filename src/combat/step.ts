@@ -1,6 +1,7 @@
 import { BALANCE } from '../data/balance.ts';
 import { ENERGY_SNAPSHOT_TICKS, SAFETY_LIMIT_TICKS, secondsToTicks } from './constants.ts';
 import type { CombatEndEvent } from './events.ts';
+import { checkEnrage } from './skills/enrage.ts';
 import type { CombatState, Side } from './state.ts';
 import { tickLightning } from './traits/lightning.ts';
 import { updateUnit } from './unit-turn.ts';
@@ -20,6 +21,8 @@ export function step(state: CombatState): CombatEndEvent | null {
   for (const unit of state.units) {
     if (unit.alive) updateUnit(state, unit);
   }
+  // Un boss qui vient de passer sous la mi-vie s'enrage (avant les K.O. : un boss abattu ne s'enrage pas).
+  for (const unit of state.units) checkEnrage(state, unit);
 
   resolveKnockouts(state);
   if (state.tick % ENERGY_SNAPSHOT_TICKS === 0) recordEnergy(state);

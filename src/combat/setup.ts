@@ -18,8 +18,10 @@ export interface Placement {
   readonly equipment?: Equipment;
   /** Rang ★ de l'unité (★1 par défaut). */
   readonly rank?: StarRank;
-  /** Bonus de statistiques en plus des objets et des traits (renforcement des ennemis du mode infini). */
+  /** Bonus de statistiques en plus des objets et des traits (version boss, renforcement du mode infini). */
   readonly bonus?: StatBonus;
+  /** Version boss : l'unité s'enrage à mi-vie et lance alors sa compétence de boss, si elle en a une. */
+  readonly boss?: boolean;
 }
 
 /** Composition, placement et équipement des deux camps au début d'un combat. */
@@ -84,6 +86,8 @@ function createUnit(
     def: unit,
     rank,
     side,
+    boss: placement.boss === true,
+    enraged: false,
     equipment,
     stats,
     onHit: loadout.onHit,
@@ -125,6 +129,7 @@ function snapshot(unit: CombatUnit): UnitSnapshot {
     element: unit.def.element,
     cost: unit.def.cost,
     rank: unit.rank,
+    ...(unit.boss ? { boss: true } : {}),
     position: { ...unit.position },
     maxHp: unit.stats.hp,
     maxEnergy: unit.stats.maxEnergy,

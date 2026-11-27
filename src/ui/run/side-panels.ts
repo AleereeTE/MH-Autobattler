@@ -4,7 +4,7 @@ import { isAtForge, sellValue } from '../../run/index.ts';
 import { button, el } from '../dom.ts';
 import { onRightClick } from '../shared/popover.ts';
 import { looseMaterials, slotPreview } from '../shared/previews.ts';
-import { unitCard } from '../shared/unit-card.ts';
+import { placementCard, unitCard } from '../shared/unit-card.ts';
 import type { RunController } from './controller.ts';
 
 /** Détail de l'unité sélectionnée (la tienne : équipement et vente ; un monstre ennemi : sa fiche). */
@@ -39,7 +39,7 @@ export function renderSelection(controller: RunController): HTMLElement {
   } else if (selection?.kind === 'enemy') {
     const placement = controller.state.enemy[selection.index];
     if (placement !== undefined) {
-      children.push(el('p', { className: 'hint', text: 'Monstre de la prochaine chasse.' }), unitCard(placement.unit, placement.equipment ?? [], placement.rank ?? 1));
+      children.push(el('p', { className: 'hint', text: 'Monstre de la prochaine chasse.' }), placementCard(placement));
     }
   } else {
     children.push(

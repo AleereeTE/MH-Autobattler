@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { hexKey } from '../core/hex.ts';
 import { createRng } from '../core/rng.ts';
+import { BOSS_VERSION } from '../data/boss-version.ts';
 import { copiesForRank } from './economy.ts';
 import { generateSquad, huntBudget, maxEnemyUnits } from './enemies.ts';
 
@@ -39,6 +40,23 @@ describe('escouades ennemies', () => {
     for (const placement of squad) expect(placement.position.row).toBeLessThanOrEqual(3);
   });
 
+  it('le boss est en version boss (bonus de statistiques), avec une escorte réduite', () => {
+    for (const hunt of [10, 20, 30, 40]) {
+      for (const seed of [1, 2, 3]) {
+        const squad = generateSquad(hunt, createRng(seed));
+        const bosses = squad.filter((placement) => placement.boss === true);
+        expect(bosses).toHaveLength(1);
+        expect(squad[0]?.boss).toBe(true);
+        expect(squad[0]?.bonus?.hpPercent).toBeGreaterThan(1);
+        const usualEscort = maxEnemyUnits(hunt) - 1;
+        expect(squad.length - 1).toBe(Math.max(1, Math.floor(usualEscort * BOSS_VERSION.escortShare)));
+        expect(squad.slice(1).every((placement) => placement.boss === undefined)).toBe(true);
+      }
+    }
+    // Les chasses normales n'ont pas de boss.
+    expect(generateSquad(9, createRng(1)).some((placement) => placement.boss === true)).toBe(false);
+  });
+
   it('donne aux boss des stages 1 et 2 un monstre de coût 3 au ★3, avec une escorte', () => {
     for (const hunt of [10, 20]) {
       const squad = generateSquad(hunt, createRng(hunt));
@@ -48,10 +66,18 @@ describe('escouades ennemies', () => {
     }
   });
 
-  it('fait du boss du stage 3 un Dragon ancien ★2, ou parfois (15 %) un Dragon noir ★1', () => {
+  it('fait toujours du boss du stage 3 un Dragon ancien ★2, jamais un Dragon noir', () => {
+    for (let seed = 1; seed <= 200; seed++) {
+      const boss = generateSquad(30, createRng(seed))[0];
+      expect(boss?.unit.traits).toContain('elder-dragon');
+      expect(boss?.rank).toBe(2);
+    }
+  });
+
+  it('en mode infini, le boss est un Dragon ancien ★2, ou parfois (15 %) un Dragon noir ★1', () => {
     let blackDragons = 0;
     for (let seed = 1; seed <= 400; seed++) {
-      const boss = generateSquad(30, createRng(seed))[0];
+      const boss = generateSquad(40, createRng(seed))[0];
       if (boss?.unit.traits.includes('black-dragon')) {
         blackDragons += 1;
         expect(boss.rank).toBe(1);

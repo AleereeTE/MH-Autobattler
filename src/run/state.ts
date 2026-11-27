@@ -25,10 +25,19 @@ export interface RunUnit {
   location: Location;
 }
 
+/** Monstre capturable après une victoire, et nombre d'exemplaires ★1 obtenus. */
+export interface CaptureTarget {
+  readonly unitId: string;
+  readonly copies: number;
+}
+
 export type RewardOption =
+  | { readonly kind: 'capture'; readonly targets: readonly CaptureTarget[] }
+  | { readonly kind: 'unit'; readonly unitId: string; readonly copies: number }
+  | { readonly kind: 'object'; readonly objects: readonly (readonly [MaterialId, MaterialId])[] }
   | { readonly kind: 'materials'; readonly materials: readonly MaterialId[] }
-  | { readonly kind: 'zennys'; readonly amount: number }
-  | { readonly kind: 'unit'; readonly unitId: string; readonly copies: number };
+  | { readonly kind: 'itemRemovers'; readonly amount: number }
+  | { readonly kind: 'zennys'; readonly amount: number };
 
 /** Résumé du dernier combat, pour l'affichage. */
 export interface LastCombat {

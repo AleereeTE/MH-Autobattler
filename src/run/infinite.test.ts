@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../core/rng.ts';
+import { BOSSES_BY_STAGE } from '../data/run-balance.ts';
 import { makeRun } from '../test-utils/run.ts';
-import { generateSquad } from './enemies.ts';
+import { bossBonus, generateSquad } from './enemies.ts';
 import { applyCombatResult, chooseNode, chooseReward, continueInfinite } from './flow.ts';
 import { canContinueInfinite, infiniteEnemyBonus, infiniteGrowth, isInfiniteHunt } from './infinite.ts';
 
@@ -44,10 +45,12 @@ describe('mode infini — renforcement des ennemis', () => {
     }
   });
 
-  it('le moteur compte le renforcement dans les statistiques', () => {
-    const [placement] = generateSquad(40, createRng(5));
-    if (placement === undefined) throw new Error('escouade vide');
-    expect(placement.bonus).toEqual({ hpPercent: 0.5, attackPercent: 0.5, elementalPowerPercent: 0.5 });
+  it('le moteur compte le renforcement dans les statistiques, en plus du bonus de la version boss', () => {
+    const squad = generateSquad(40, createRng(5));
+    const escort = squad.find((placement) => placement.boss !== true);
+    expect(escort?.bonus).toEqual({ hpPercent: 0.5, attackPercent: 0.5, elementalPowerPercent: 0.5 });
+    const boss = squad.find((placement) => placement.boss === true);
+    expect(boss?.bonus).toEqual(bossBonus({ hpPercent: 0.5, attackPercent: 0.5, elementalPowerPercent: 0.5 }, BOSSES_BY_STAGE[3]?.bonus ?? {}));
   });
 });
 
@@ -71,8 +74,7 @@ describe('mode infini — déroulement', () => {
     expect(state.rewards).toHaveLength(3);
     expect(canContinueInfinite(state)).toBe(false);
 
-    const zennys = state.rewards?.findIndex((option) => option.kind === 'zennys') ?? -1;
-    expect(chooseReward(state, Math.max(0, zennys)).ok).toBe(true);
+    expect(chooseReward(state, 0).ok).toBe(true);
     expect(state.phase).toBe('map');
     expect(state.map.stage).toBe(4);
     expect(chooseNode(state, 0).ok).toBe(true);

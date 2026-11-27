@@ -185,13 +185,17 @@ export function continueInfinite(state: RunState): ActionResult {
   return OK;
 }
 
-/** Choisit une des récompenses proposées, puis retourne à la carte. */
-export function chooseReward(state: RunState, index: number): ActionResult {
+/**
+ * Choisit une des récompenses proposées, puis retourne à la carte.
+ * Pour une capture, `unitId` désigne le monstre capturé (par défaut, le premier proposé : le plus fort de l'escouade).
+ */
+export function chooseReward(state: RunState, index: number, unitId?: string): ActionResult {
   if (state.phase !== 'reward' || state.rewards === null) return fail('Aucune récompense à choisir.');
   const option = state.rewards[index];
   if (option === undefined) return fail('Récompense introuvable.');
-  if (!canTakeReward(state, option)) return fail('Pas assez de place en réserve pour cette unité.');
-  const applied = applyReward(state, option);
+  const captured = option.kind === 'capture' ? (unitId ?? option.targets[0]?.unitId) : undefined;
+  if (!canTakeReward(state, option, captured)) return fail('Pas assez de place en réserve pour cette unité.');
+  const applied = applyReward(state, option, captured);
   if (!applied.ok) return applied;
   goToMap(state);
   return OK;

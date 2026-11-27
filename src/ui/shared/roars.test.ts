@@ -9,7 +9,7 @@ const frame = (ultimate: Partial<FrameUltimate> | null): Frame => ({
   areas: [],
   suddenDeath: false,
   winner: undefined,
-  ultimate: ultimate === null ? null : { uid: 1, defId: 'fatalis', unitName: 'Fatalis', skillName: 'Fin des temps', side: 'player', startTick: 40, age: 0, ...ultimate },
+  ultimate: ultimate === null ? null : { uid: 1, defId: 'fatalis', unitName: 'Fatalis', headline: 'Fatalis ★★★', skillName: 'Fin des temps', side: 'player', startTick: 40, age: 0, ...ultimate },
 });
 
 describe('cri des Dragons noirs ★3', () => {

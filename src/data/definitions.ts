@@ -227,4 +227,6 @@ export interface UnitDefinition {
   readonly skill: SkillDefinition;
   /** Compétence secrète qui remplace `skill` au rang ★3 (Dragons noirs : easter egg). */
   readonly masterSkill?: SkillDefinition;
+  /** Compétence de la version boss : elle remplace `skill` quand le boss s'enrage, à mi-vie (game-design §9). */
+  readonly bossSkill?: SkillDefinition;
 }

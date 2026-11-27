@@ -275,8 +275,9 @@ export class RunController {
     this.changed();
   }
 
-  chooseReward(index: number): void {
-    const result = chooseReward(this.state, index);
+  /** Choisit une récompense ; `unitId` désigne le monstre d'une capture. */
+  chooseReward(index: number, unitId?: string): void {
+    const result = chooseReward(this.state, index, unitId);
     if (result.ok) this.watching = null;
     this.apply(result);
   }

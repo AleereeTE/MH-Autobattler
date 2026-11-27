@@ -81,6 +81,8 @@ function readTheme(element: Element): BoardTheme {
     crit: color('--accent'),
     heal: color('--board-hp'),
     statuses: { poison: color('--status-poison'), paralysis: color('--status-paralysis') },
+    boss: color('--boss-ring'),
+    enraged: color('--boss-enraged'),
     elements: {
       fire: color('--element-fire'),
       water: color('--element-water'),

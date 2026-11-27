@@ -34,7 +34,7 @@ describe('dealDamage', () => {
 
   it('ne donne pas d’énergie pendant une incantation', () => {
     const { state, source, target } = duel({ role: 'tank' });
-    target.cast = { remainingTicks: 10 };
+    target.cast = { remainingTicks: 10, skill: target.def.skill };
     dealDamage(state, source, target, { amount: 10, type: 'physical', isCrit: false, cause: 'attack' });
     expect(target.energy).toBe(0);
   });

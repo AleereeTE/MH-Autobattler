@@ -18,6 +18,8 @@ export interface StaticUnit {
   readonly side: Side;
   readonly position: Hex;
   readonly selected?: boolean;
+  /** Version boss : anneau doré. */
+  readonly boss?: boolean;
 }
 
 /** Jeton d'une unité posée, hors combat (PV pleins). */
@@ -34,6 +36,7 @@ export function staticUnitScene(placed: StaticUnit, portraits: PortraitStore): S
     hpRatio: 1,
     alive: true,
     selected: placed.selected === true,
+    boss: placed.boss === true,
   };
 }
 
@@ -76,6 +79,8 @@ export function frameScene(frame: Frame, portraits: PortraitStore): BoardScene {
       hasted: unit.hasted,
       poisoned: unit.poisoned,
       paralyzed: unit.paralyzed,
+      boss: unit.boss,
+      enraged: unit.enraged,
     })),
     texts: frame.texts,
     areas: frame.areas.map((area) => ({
@@ -91,7 +96,7 @@ export function frameScene(frame: Frame, portraits: PortraitStore): BoardScene {
         ? null
         : {
             skillName: frame.ultimate.skillName,
-            unitName: frame.ultimate.unitName,
+            headline: frame.ultimate.headline,
             portrait: portraits.get(frame.ultimate.defId),
             side: frame.ultimate.side,
             age: frame.ultimate.age,

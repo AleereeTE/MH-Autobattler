@@ -6,7 +6,7 @@ import type { FrameUnit } from '../../render/replay.ts';
 import { el } from '../dom.ts';
 import { describeBonuses } from './bonus-text.ts';
 import { energyRatio } from './scenes.ts';
-import { skillBlock, statsTable, unitHeader } from './unit-card.ts';
+import { bossSkillBlock, skillBlock, statsTable, unitHeader } from './unit-card.ts';
 
 /**
  * Contenus des aperçus ouverts au clic droit : une unité en plein combat, un matériau (ses recettes), un objet.
@@ -40,6 +40,7 @@ export function combatUnitPreview(unit: FrameUnit): HTMLElement {
     unit.paralyzed ? 'Paralysé' : null,
     unit.hasted ? 'Accéléré' : null,
     unit.casting ? 'Incante sa compétence' : null,
+    unit.enraged ? 'Enragé' : null,
   ].filter((state): state is string => state !== null);
   const health = `PV : ${Math.max(0, Math.round(unit.hp))} / ${Math.round(unit.maxHp)}${unit.shield > 0 ? ` · bouclier ${Math.round(unit.shield)}` : ''}`;
 
@@ -49,7 +50,9 @@ export function combatUnitPreview(unit: FrameUnit): HTMLElement {
     el('p', {}, [el('strong', { text: health })]),
     el('div', { className: 'energy' }, [el('span', { className: 'small', text: energyLine(unit) }), energyBar(unit)]),
     states.length > 0 ? el('p', { className: 'muted small', text: states.join(' · ') }) : null,
+    unit.boss ? el('p', { className: 'boss-tag', text: 'Version boss' }) : null,
     ...(definition === undefined ? [] : skillBlock(definition, unit.rank)),
+    ...(definition === undefined || !unit.boss ? [] : bossSkillBlock(definition)),
     unit.equipment.length > 0 ? el('p', { className: 'small', text: `Équipement : ${unit.equipment.map(slotName).join(', ')}` }) : null,
     statsTable(unit.stats),
     el('p', { className: 'muted small', text: 'Statistiques au début du combat : rang, objets et traits compris.' }),

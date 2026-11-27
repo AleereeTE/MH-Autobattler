@@ -1,4 +1,5 @@
 import type { UnitDefinition } from '../definitions.ts';
+import { RATHALOS_BOSS_SKILL, LEGIANA_BOSS_SKILL, NARGACUGA_BOSS_SKILL, LAGIACRUS_BOSS_SKILL } from './boss-skills.ts';
 
 /**
  * Monstres du prototype. Les éléments sont ceux de la série.
@@ -102,6 +103,7 @@ export const RATHALOS: UnitDefinition = {
       { kind: 'damage', target: 'currentTarget', damageType: 'elemental', base: [120, 180, 270], ratios: [{ stat: 'elementalPower', ratio: 2 }], radius: 1 },
     ],
   },
+  bossSkill: RATHALOS_BOSS_SKILL,
 };
 
 export const LEGIANA: UnitDefinition = {
@@ -130,6 +132,7 @@ export const LEGIANA: UnitDefinition = {
       },
     ],
   },
+  bossSkill: LEGIANA_BOSS_SKILL,
 };
 
 export const ZINOGRE: UnitDefinition = {
@@ -288,6 +291,7 @@ export const NARGACUGA: UnitDefinition = {
       { kind: 'damage', target: 'lowestHpEnemy', damageType: 'physical', base: [110, 165, 250], ratios: [{ stat: 'attack', ratio: 2.2 }], leap: true },
     ],
   },
+  bossSkill: NARGACUGA_BOSS_SKILL,
 };
 
 export const LAGIACRUS: UnitDefinition = {
@@ -308,6 +312,7 @@ export const LAGIACRUS: UnitDefinition = {
       { kind: 'damage', target: 'self', damageType: 'elemental', base: [45, 70, 100], ratios: [{ stat: 'elementalPower', ratio: 0.8 }], radius: 2 },
     ],
   },
+  bossSkill: LAGIACRUS_BOSS_SKILL,
 };
 
 export const TIGREX: UnitDefinition = {

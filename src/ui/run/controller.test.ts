@@ -71,8 +71,7 @@ describe('RunController', () => {
     expect(controller.canPrepare).toBe(false);
 
     if (controller.state.phase === 'reward') {
-      const zennys = controller.state.rewards?.findIndex((option) => option.kind === 'zennys') ?? -1;
-      controller.chooseReward(zennys);
+      controller.chooseReward(0);
     } else {
       controller.stopWatching();
     }
@@ -109,7 +108,7 @@ describe('RunController', () => {
     Object.assign(state, { phase: 'over', outcome: 'victory', hunt: 30, defeats: 2 });
     controller.continueInfinite();
     expect(state).toMatchObject({ phase: 'reward', infinite: true, hunt: 31 });
-    controller.chooseReward(state.rewards?.findIndex((option) => option.kind === 'zennys') ?? 0);
+    controller.chooseReward(0);
     expect(state.map.stage).toBe(4);
     controller.chooseNode(0);
     giveUnit(state, 'fugen', board(3, 5));

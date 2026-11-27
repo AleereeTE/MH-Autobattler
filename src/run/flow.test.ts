@@ -1,9 +1,45 @@
 import { describe, expect, it } from 'vitest';
+import { REWARDS } from '../data/run-balance.ts';
 import { board, bench, findNode, giveUnit, makeRun, placeOnNode, skipTalentChoice } from '../test-utils/run.ts';
 import { applyCombatResult, chooseNode, chooseReward, createRun, fight, leaveNode } from './flow.ts';
 import { currentNode, reachableNodes } from './map.ts';
 import { buy } from './shop.ts';
 import { moveUnit } from './roster.ts';
+import type { RewardOption, RunState } from './state.ts';
+
+/** Quantité de base de chaque type de récompense (exemplaires, objets, matériaux, retire-objets, zennys). */
+const BASE_QUANTITY: Record<RewardOption['kind'], number> = {
+  capture: REWARDS.captureCopies,
+  unit: REWARDS.unitCopies,
+  object: REWARDS.objects,
+  materials: REWARDS.materials,
+  itemRemovers: REWARDS.itemRemovers,
+  zennys: REWARDS.zennys,
+};
+
+function quantities(option: RewardOption): number[] {
+  switch (option.kind) {
+    case 'capture':
+      return option.targets.map((target) => target.copies);
+    case 'unit':
+      return [option.copies];
+    case 'object':
+      return [option.objects.length];
+    case 'materials':
+      return [option.materials.length];
+    case 'itemRemovers':
+    case 'zennys':
+      return [option.amount];
+  }
+}
+
+/** Toutes les récompenses proposées ont leur quantité de base multipliée par `multiplier`. */
+function expectMultiplied(state: RunState, multiplier: number): void {
+  expect(state.rewards).toHaveLength(3);
+  for (const option of state.rewards ?? []) {
+    for (const quantity of quantities(option)) expect(quantity, option.kind).toBe(BASE_QUANTITY[option.kind] * multiplier);
+  }
+}
 
 describe('déroulement d’une run', () => {
   it('commence par un choix de talent, puis la carte du stage 1, au niveau 2 avec 5 zennys, sans boutique ni escouade', () => {
@@ -39,19 +75,29 @@ describe('déroulement d’une run', () => {
     expect(fight(makeRun())).toMatchObject({ ok: false });
   });
 
-  it('après une victoire : récompense, retour à la carte, puis revenu avec le bonus de victoire', () => {
+  it('après une victoire : capture proposée, retour à la carte, puis revenu avec le bonus de victoire', () => {
     const state = makeRun({ zennys: 0 });
+    const target = currentNode(state)?.squad[0]?.unit.id;
     applyCombatResult(state, 'player');
     expect(state).toMatchObject({ phase: 'reward', hunt: 2, defeats: 0 });
-    expect(state.rewards?.map((option) => option.kind)).toEqual(['materials', 'zennys', 'unit']);
+    const kinds = state.rewards?.map((option) => option.kind) ?? [];
+    expect(kinds).toHaveLength(3);
+    expect(kinds[0]).toBe('capture');
+    expect(new Set(kinds).size).toBe(3);
+    expectMultiplied(state, 1);
 
-    const zennysIndex = state.rewards?.findIndex((option) => option.kind === 'zennys') ?? -1;
-    expect(chooseReward(state, zennysIndex).ok).toBe(true);
-    expect(state).toMatchObject({ phase: 'map', zennys: 4, rewards: null });
+    // La capture prend par défaut le premier monstre proposé (le monstre cible).
+    const capture = state.rewards?.[0];
+    const captured = capture?.kind === 'capture' ? capture.targets[0]?.unitId : undefined;
+    expect(captured).toBeDefined();
+    if (state.enemy.length === 1) expect(captured).toBe(target);
+    expect(chooseReward(state, 0).ok).toBe(true);
+    expect(state).toMatchObject({ phase: 'map', zennys: 0, rewards: null });
+    expect(state.units).toMatchObject([{ unitId: captured, rank: 1, location: { area: 'bench' } }]);
 
     chooseNode(state, currentNode(state)?.next[0] ?? 0);
-    // 4 zennys de récompense, puis revenu : 5 de base + 1 de victoire (intérêts : 0).
-    expect(state).toMatchObject({ phase: 'prep', zennys: 10 });
+    // Revenu : 5 de base + 1 de victoire (intérêts : 0).
+    expect(state).toMatchObject({ phase: 'prep', zennys: 6 });
   });
 
   it('après une défaite contre une chasse : pas de récompense, retour à la carte pour l’étape suivante', () => {
@@ -74,11 +120,15 @@ describe('déroulement d’une run', () => {
     placeOnNode(state, 10, 0);
     applyCombatResult(state, 'player');
     expect(state.itemRemovers).toBe(1);
-    expect(state.rewards?.find((option) => option.kind === 'zennys')).toMatchObject({ amount: 8 });
-    const materials = state.rewards?.find((option) => option.kind === 'materials');
-    expect(materials?.kind === 'materials' ? materials.materials : []).toHaveLength(2);
+    expectMultiplied(state, 2);
+    // ✅ La capture du boss des stages 1 et 2 est toujours proposée : 2 exemplaires ★1, le boss en premier.
+    const boss = state.enemy.find((placement) => placement.rank === 3)?.unit.id;
+    const capture = state.rewards?.[0];
+    expect(capture?.kind).toBe('capture');
+    expect(capture?.kind === 'capture' ? capture.targets[0] : null).toEqual({ unitId: boss, copies: 2 });
 
-    chooseReward(state, state.rewards?.findIndex((option) => option.kind === 'zennys') ?? 0);
+    expect(chooseReward(state, 0).ok).toBe(true);
+    expect(state.units.filter((unit) => unit.unitId === boss)).toHaveLength(2);
     // Le stage 2 s'ouvre sur un choix de talent de chasseur, puis sur sa carte.
     expect(state).toMatchObject({ phase: 'talent', hunt: 11, path: [] });
     expect(state.map.stage).toBe(2);
@@ -93,7 +143,7 @@ describe('déroulement d’une run', () => {
     placeOnNode(state, urgent.step, urgent.index);
     applyCombatResult(state, 'player');
     expect(state.itemRemovers).toBe(0);
-    expect(state.rewards?.find((option) => option.kind === 'zennys')).toMatchObject({ amount: 8 });
+    expectMultiplied(state, 2);
   });
 
   it('une case sans combat se quitte pour reprendre la route, sans combat possible', () => {

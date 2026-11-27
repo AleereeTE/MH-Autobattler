@@ -82,7 +82,8 @@ src/
     merge.ts            Fusion automatique de 3 exemplaires et regroupement de l'équipement
     inventory.ts        Équiper depuis l'inventaire, retirer (retire-objet pour un objet)
     enemies.ts          Escouades ennemies générées selon un budget
-    rewards.ts          Récompenses « 1 parmi 3 »
+    rewards.ts          Récompenses « 1 parmi 3 » : capture, puis choix tirés au hasard
+    capture.ts          Monstres capturables d'une escouade vaincue
   ui/                   Interface HTML/CSS
     app.ts              Coquille : titre et onglets (« Mode run », « Bac à sable »), choisis par l'adresse (#run, #sandbox)
     run/                Page « Mode run » (bandeau, boutique, réserve, inventaire, fin de combat)
@@ -160,6 +161,7 @@ Les statistiques de combat sont calculées au début du combat : statistiques de
 | `lightning` | Éclair du trait Foudre | Effet d'éclair |
 | `skillCast` | Début d'incantation d'une compétence | Animation de préparation |
 | `skillResolve` | La compétence prend effet | Effet visuel de la compétence |
+| `enrage` | Un boss passe sous la mi-vie et s'enrage : sa compétence de boss remplace la sienne | Bandeau « … s'enrage ! », anneau rouge |
 | `skillArea` | Zone touchée par un effet de compétence : centre (cible principale ou lanceur), rayon et type d'effet | Animation de la zone d'effet |
 | `dodge` | Une attaque de base est esquivée (Léviathan) | Texte « Esquive » |
 | `energy` | Relevé de l'énergie des unités en vie, toutes les 2 ticks (0,1 s) : elle change presque à chaque tick, un événement par changement serait trop lourd | Barre d'énergie (remise à 0 dès le `skillCast`, sans attendre le relevé suivant) |
@@ -233,6 +235,13 @@ Les couleurs sont des variables CSS (`--cost-1` à `--cost-6`, `--side-player`, 
 - **Moteur** : l'événement `skillCast` porte `master: true` pour une compétence secrète. Le replay en tire `Frame.ultimate` (2,5 s), que `scenes.ts` transforme en bandeau dessiné par `board-canvas.ts` (portrait, nom de l'unité, nom du sort).
 - **Cri** : déposer un son dans `src/assets/sounds/`, nommé d'après l'identifiant de l'unité (`fatalis.mp3`, `alatreon.ogg`, `dire-miralis.wav`). `ui/shared/roars.ts` les trouve avec `import.meta.glob` et `UltimateCue` joue le cri une fois, au début du bandeau. Sans fichier, pas de son.
 
+### Version boss
+
+- **Données** : `UnitDefinition.bossSkill` (facultatif), dans `data/units/boss-skills.ts` ; réglages communs (mi-vie, escorte) dans `data/boss-version.ts` ; bonus de statistiques par stage dans `BossRule.bonus` (`data/run-balance.ts`).
+- **Escouades** : `run/enemies.ts` pose le boss avec `Placement.boss` et son bonus (ajouté au renforcement du mode infini), puis une escorte réduite.
+- **Moteur** : `CombatUnit.boss` et `enraged`. `combat/skills/enrage.ts` vérifie à chaque tick, après les actions et avant les K.O., si un boss est passé sous la mi-vie : il s'enrage, son énergie se remplit, et l'événement `enrage` part. `currentSkill` (`combat/skills/current-skill.ts`) choisit la compétence : celle de l'incantation en cours (mémorisée dans `cast.skill`, elle ne change pas en route), sinon la compétence de boss d'un boss enragé, sinon celle du rang.
+- **Rendu** : le replay marque `FrameUnit.boss` et `enraged`, et réutilise `Frame.ultimate` pour le bandeau de rage (`headline` : « Rathalos s'enrage ! »). Le jeton du boss porte un anneau et une couronne (`drawBossMark`). Le cri du monstre se joue s'il est fourni.
+
 ---
 
 ## 6. Mode run
@@ -292,4 +301,4 @@ Ces choix ont été nécessaires pour faire tourner le moteur. Ils sont isolés 
 
 - **Événements d'énergie** : pour afficher les barres d'énergie dans le rendu.
 - **Les 36 objets** : codés (prototype-content.md) ; leurs valeurs restent à équilibrer en jouant.
-- **Mode run, suite** : carte (2 ou 3 chasses au choix), récompenses complètes (objet fusionné, retire-objet, capture), vraie « version boss », sauvegarde de la run.
+- **Mode run, suite** : cases Événement, sauvegarde de la run.

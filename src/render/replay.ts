@@ -17,6 +17,9 @@ export interface FrameUnit {
   readonly element: Element | null;
   readonly cost: UnitCost;
   readonly rank: StarRank;
+  /** Version boss : il s'enrage à mi-vie. */
+  readonly boss: boolean;
+  enraged: boolean;
   readonly maxHp: number;
   readonly equipment: Equipment;
   /** Statistiques de combat au début du combat (pour l'aperçu au clic droit). */
@@ -59,11 +62,16 @@ export interface FrameArea {
   readonly age: number;
 }
 
-/** Compétence secrète d'un Dragon noir ★3 qui vient d'être lancée : un bandeau traverse le plateau. */
+/**
+ * Bandeau qui traverse le plateau : compétence secrète d'un Dragon noir ★3 qui vient d'être lancée,
+ * ou boss qui s'enrage (avec le nom de sa compétence de boss).
+ */
 export interface FrameUltimate {
   readonly uid: number;
   readonly defId: string;
   readonly unitName: string;
+  /** Petite ligne au-dessus du nom du sort : « Fatalis ★★★ », « Rathalos s'enrage ! ». */
+  readonly headline: string;
   readonly skillName: string;
   readonly side: Side;
   /** Tick du lancement : identifie le bandeau (le cri ne se joue qu'une fois). */
@@ -115,6 +123,8 @@ function createTracker(snapshot: UnitSnapshot): Tracker {
       element: snapshot.element,
       cost: snapshot.cost,
       rank: snapshot.rank,
+      boss: snapshot.boss === true,
+      enraged: false,
       maxHp: snapshot.maxHp,
       equipment: snapshot.equipment,
       stats: snapshot.stats,
@@ -229,7 +239,19 @@ export function createReplay(events: readonly CombatEvent[]): Replay {
             const bannerAge = (tick - event.tick) / ULTIMATE_BANNER_TICKS;
             if (event.master === true && bannerAge < 1) {
               const { defId, name, side } = tracker.unit;
-              ultimate = { uid: event.uid, defId, unitName: name, skillName: event.skillName, side, startTick: event.tick, age: bannerAge };
+              const headline = `${name} ${'★'.repeat(tracker.unit.rank)}`;
+              ultimate = { uid: event.uid, defId, unitName: name, headline, skillName: event.skillName, side, startTick: event.tick, age: bannerAge };
+            }
+          }
+          break;
+        case 'enrage':
+          if (tracker !== undefined) {
+            tracker.unit.enraged = true;
+            const bannerAge = (tick - event.tick) / ULTIMATE_BANNER_TICKS;
+            if (bannerAge < 1) {
+              const { defId, name, side } = tracker.unit;
+              const headline = `${name} s’enrage !`;
+              ultimate = { uid: event.uid, defId, unitName: name, headline, skillName: event.skillName, side, startTick: event.tick, age: bannerAge };
             }
           }
           break;

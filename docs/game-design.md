@@ -26,7 +26,7 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 | Longueur | 30 chasses réparties en 3 stages |
 | Un stage | 9 chasses classiques, puis 1 boss |
 | Boss des stages 1 et 2 | Tiré au hasard parmi plusieurs grands monstres |
-| Boss du stage 3 | Tiré au hasard parmi plusieurs Dragons anciens ; avec un peu de chance (ou de malchance), un Dragon noir |
+| Boss du stage 3 | Tiré au hasard parmi plusieurs Dragons anciens. ✅ Jamais de Dragon noir (2026-11-27) : il ne peut apparaître en boss qu'en mode infini |
 | Carte | Une **carte visible par stage**, façon Slay the Spire : 9 étapes de 2 à 3 cases reliées par des chemins, puis le boss. On choisit sa route case par case (section 2.1) |
 | Durée visée | 45 à 60 minutes |
 | Défaite de la run | 3 combats perdus (chasses classiques et boss confondus) |
@@ -46,7 +46,7 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 | Marchand (sans combat) | ⚠️ 4 matériaux tirés au hasard à 3 zennys pièce, et un retire-objet à 4 zennys |
 | Boutique | Disponible à chaque étape, y compris à la forge et chez le marchand |
 | Fréquence | ⚠️ Par stage, environ 1 à 2 forges, 1 à 2 marchands et 2 à 3 quêtes urgentes. L'étape 1 n'a que des chasses ; l'étape 9 (avant le boss) propose toujours une forge ou un marchand ; chaque étape garde au moins une chasse normale |
-| Plus tard | Cases « Événement » (une petite situation avec un choix), récompenses variées |
+| Plus tard | Cases « Événement » (une petite situation avec un choix) |
 
 ### 2.2 Mode infini
 
@@ -54,7 +54,7 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 |---|---|
 | Accès | ✅ Proposé à la fin d'une **run gagnée** (bouton « Continuer en mode infini »), à la place de « Nouvelle run » |
 | Déroulement | ✅ Les **stages continuent** (stage 4, 5…) avec la même carte : chasses, quêtes urgentes, forges, marchands, et un boss toutes les 10 étapes. On commence par les récompenses du boss de l'étape 30 (doublées, +1 retire-objet) |
-| Ennemis | ✅ Escouades générées comme au stage 3 (coût 4 et rang ★3 au plus, boss Dragon ancien ou parfois Dragon noir), avec un budget qui continue de grandir. ✅ **+5 % de PV, d'attaque brute et de puissance élémentaire à chaque étape** après la 30e (+50 % à l'étape 40, +150 % à l'étape 60), valeur à ajuster en jouant. Une quête urgente est renforcée comme 3 étapes plus loin |
+| Ennemis | ✅ Escouades générées comme au stage 3 (coût 4 et rang ★3 au plus, boss Dragon ancien ou, ✅ en mode infini seulement, parfois un Dragon noir), avec un budget qui continue de grandir. ✅ **+5 % de PV, d'attaque brute et de puissance élémentaire à chaque étape** après la 30e (+50 % à l'étape 40, +150 % à l'étape 60), valeur à ajuster en jouant. Une quête urgente est renforcée comme 3 étapes plus loin |
 | Fin | ✅ Le **compteur de défaites de la run est conservé** : la 3e défaite (run et mode infini confondus) termine le mode infini |
 | Économie | ✅ Tout continue comme pendant la run : revenus, intérêts, boutique, niveaux, récompenses 1 parmi 3 |
 | Record | La **plus haute étape atteinte** est gardée dans le navigateur et affichée en fin de run |
@@ -80,8 +80,8 @@ Les zennys de base et les intérêts sont gagnés à chaque tour, **même en cas
 |---|---|
 | Enchaînement | Carte par stage (section 2.1). Avant elle, les 30 chasses s'enchaînaient sans choix |
 | Ennemis | Escouades générées selon un budget (section 9) |
-| Boss (chasses 10, 20, 30) | **Escouade renforcée** en attendant la « version boss » (section 9) |
-| Récompenses | **1 parmi 3 simplifié** (section 11) |
+| Boss (chasses 10, 20, 30) | **Version boss** d'un grand monstre avec une escorte réduite (section 9) |
+| Récompenses | **1 parmi 3**, capture toujours proposée (sections 10 et 11) |
 | Fin de la run | Victoire contre le boss de la chasse 30, ou 3 défaites |
 
 ---
@@ -345,8 +345,13 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 ## 9. Ennemis
 
 - **Chasses classiques** : escouades de monstres **générées selon un budget**, qui augmente au fil de la run.
-- **Chasses de boss** : la **version boss** d'un grand monstre, plus puissante que sa version unité **[contenu exact à définir]**.
-- **Première version** : uniquement des monstres. Le budget sert à recruter des monstres (selon leur coût) puis à monter leur rang. Les boss sont une **escouade renforcée** : un grand monstre ★3 entouré d'une escorte aux stages 1 et 2, un **Dragon ancien ★2** entouré d'une escorte au stage 3 — ou, une fois sur quelques-unes, un **Dragon noir ★1**. Les monstres de coût 4 apparaissent dans les escouades des stages 2 et 3 ; les Dragons anciens ne sont que des boss. Les règles de calcul sont dans [prototype-content.md](prototype-content.md) ⚠️.
+- **Chasses de boss** : la **version boss** d'un grand monstre, plus puissante que sa version unité (✅ validée le 2026-11-27), pour tous les boss : monstres de coût 3 ★3 aux stages 1 et 2, Dragon ancien ★2 au stage 3, Dragon ancien ★2 ou parfois Dragon noir ★1 en mode infini.
+  - ✅ **Bonus de statistiques** (PV, attaque brute, puissance élémentaire), ⚠️ réglé par simulation pour que chaque boss soit **un peu plus dur** que l'ancienne escouade renforcée (environ 10 points de victoire en moins) ; valeurs par stage dans prototype-content.md.
+  - ✅ **Rage à mi-vie** : quand ses PV tombent à 50 %, le boss s'enrage, une fois par combat. Sa **compétence de boss**, propre à chaque monstre, remplace sa compétence normale jusqu'à la fin du combat, et son énergie se remplit pour qu'il la lance tout de suite. Un bandeau « … s'enrage ! » traverse le plateau, avec le cri du monstre s'il est fourni.
+  - ✅ **Escorte réduite** : ⚠️ la moitié des places et du budget habituels.
+  - Le jeton du boss porte un anneau et une couronne dorés, rouges une fois enragé ; sa fiche (clic droit) montre sa compétence de boss.
+  - La capture du boss donne sa version unité (sans bonus ni compétence de boss).
+- **Première version** : uniquement des monstres. Le budget sert à recruter des monstres (selon leur coût) puis à monter leur rang. Les boss étaient alors une **escouade renforcée** (un grand monstre entouré d'une escorte complète), remplacée par la version boss le 2026-11-27. Les monstres de coût 4 apparaissent dans les escouades des stages 2 et 3 ; les Dragons anciens ne sont que des boss. Les règles de calcul sont dans [prototype-content.md](prototype-content.md) ⚠️.
 - L'escouade de la prochaine chasse est visible sur le plateau pendant la préparation.
 - Boss sur plusieurs hexagones et parties cassables : reportés à plus tard.
 
@@ -355,18 +360,22 @@ Les valeurs de départ (zennys, relance, amélioration, revente, probabilités, 
 ## 10. Recrutement et capture
 
 - **Boutique** : principale source d'unités.
-- **Capture** (version simple) : après une chasse gagnée, l'une des récompenses proposées peut être la capture d'un monstre affronté, qui rejoint la réserve en ★1.
-- **Boss des stages 1 et 2** : capturables ; on obtient leur version unité en ★1.
-- **Dragons anciens** : jamais capturables ; on ne peut les obtenir qu'en boutique.
+- ✅ **Tous les monstres restent achetables en boutique** : aucun n'est réservé à la capture, pour ne pas limiter la diversité des équipes (2026-11-26).
+- ✅ **Capture ciblée** : après chaque combat gagné, l'une des 3 récompenses est la capture. On choisit **un des monstres de l'escouade vaincue**, qui rejoint la réserve au ★1, quel que soit son rang dans l'escouade. Le plus fort est proposé en premier.
+- ✅ **Stock commun** : les exemplaires capturés sont pris dans le stock, comme un achat. Un monstre dont le stock est vide, ou que le joueur possède déjà au ★3, n'est pas proposé.
+- ✅ Comme pour une unité, il faut de la place en réserve (ou une fusion).
+- ✅ **Boss des stages 1 et 2** : toujours capturables après leur victoire ; on obtient leur version unité, **2 exemplaires ★1** (récompenses doublées).
+- **Dragons anciens et Dragons noirs** : jamais capturables ; on ne peut les obtenir qu'en boutique. Après le boss du stage 3, seule son escorte se capture.
+- Si aucun monstre de l'escouade ne peut être capturé, la capture est remplacée par un autre choix tiré au hasard.
 
 ---
 
 ## 11. Récompenses
 
-- **Après une victoire** : choix d'une récompense parmi 3 : unité, objet (déjà fusionné), matériaux, zennys, retire-objet ou capture.
-- **Après un boss** : récompenses de meilleure qualité que celles des chasses classiques, plus 1 retire-objet garanti.
+- **Après une victoire** : choix d'une récompense parmi 3. ✅ **La capture est toujours proposée** (section 10) ; les 2 autres choix sont tirés au hasard, de types différents, parmi : unité ★1 tirée comme en boutique, objet déjà fusionné, matériaux, retire-objet et zennys (⚠️ quantités et chances dans prototype-content.md).
+- **Après un boss ou une quête urgente** : ✅ toutes les quantités sont doublées, capture comprise ; après un boss, 1 retire-objet garanti en plus.
 - **Après une défaite** : aucune récompense (les zennys de base et les intérêts restent gagnés).
-- **Première version (1 parmi 3 simplifié)** : un matériau au hasard, des zennys, ou une unité ★1 tirée comme en boutique ; pas encore d'objet fusionné, de retire-objet ni de capture parmi les choix. Après un boss, les quantités sont doublées, en plus du retire-objet garanti. Une unité ne peut être choisie que s'il y a de la place en réserve (ou si elle déclenche une fusion).
+- Une unité ou une capture ne peuvent être choisies que s'il y a de la place en réserve (ou si elles déclenchent une fusion).
 
 ### 11.1 Talents de chasseur
 
@@ -427,11 +436,11 @@ L'équivalent des augments de TFT (validé le 2026-11-24).
 
 ### Règles
 1. Les ennemis sont-ils uniquement des monstres ?
-2. Les monstres qui ne sont pas des Dragons anciens sont-ils tous disponibles en boutique **et** par capture, ou certains uniquement par capture ?
+2. ~~Monstres disponibles uniquement par capture ?~~ Tranché le 2026-11-26 : non, tous restent en boutique (section 10).
 3. ~~Les Dragons anciens en boutique : quel coût ?~~ Tranché : coût 5.
-4. La capture du boss fait-elle toujours partie des choix de récompense après un boss ?
+4. ~~La capture du boss fait-elle toujours partie des choix après un boss ?~~ Tranché le 2026-11-26 : oui, aux stages 1 et 2 (section 10).
 5. Formule des ratios de compétence : valeur de base + ratio × statistique, ou pourcentage d'amplification comme la puissance magique de TFT ?
-6. Contenu de la version boss d'un monstre (PV, plusieurs compétences, état enragé ?).
+6. ~~Contenu de la version boss d'un monstre.~~ Tranché le 2026-11-27 (section 9) : bonus de statistiques, rage à mi-vie avec une compétence de boss propre à chaque monstre, escorte réduite.
 7. ~~Informations visibles sur chaque chasse proposée par la carte.~~ Tranché : monstre cible et type de récompense.
 12. ~~Mode infini : renforcement, carte, récompenses, défaites, record.~~ Tranché le 2026-11-24 (section 2.2).
 13. Écart de puissance entre les coûts : une unité de coût 2 ne bat une unité de coût 1 que dans 55 % des cas, et une de coût 3 une de coût 2 dans 55 % des cas aussi (mesure du 2026-11-24). Faut-il renforcer les coûts 2 et 3 (piste testée : PV et attaque +8 % et +12 %) ? Et un Dragon noir bat une unité de coût 5 dans 96 % des cas : est-ce voulu ?
@@ -475,3 +484,6 @@ L'équivalent des augments de TFT (validé le 2026-11-24).
 - **2026-11-24** : talents de chasseur (équivalent des augments de TFT) — un choix au début des stages 1, 2 et 3 (rien en mode infini), rareté argent, or ou prismatique à 1 chance sur 3, 3 propositions de la même rareté relançables une fois chacune ; 24 talents validés (combat, économie, objets, unités, traits), un talent pris n'est plus proposé ; les talents de trait ne comptent que si le trait a au moins une unité sur le plateau.
 - **2026-11-25** : 9 exemplaires pour les unités de coût 5 et 6 (le ★3 devient possible) ; niveau 10 de la boutique (passage 9 → 10 à 64 zennys, chances 5 / 15 / 25 / 35 / 15 / 5 %, 10 unités sur le plateau) ; easter egg des Dragons noirs ★3 : compétence secrète (Fin des temps, Jugement absolu, Cataclysme) sur tout le plateau avec 5 fois les dégâts, cachée jusqu'au ★3, annoncée par un bandeau avec le portrait et le cri du monstre.
 - **2026-11-25** : nouvelle chasseuse de coût 5, **Lea** (リア), Legendary Rasta de Monster Hunter Frontier : Grande épée, DPS Feu, Guilde et Berserker ; compétence « Rage de la chasseuse » (frappe chargée sur la cible et ses voisins, puis furie de 5 s : +40 % de vitesse d'attaque et 20 % de vol de vie). Feu passe à 6 unités et gagne un palier 6 (brûlure de 65 dégâts/s pendant 3 s).
+- **2026-11-26** : récompenses complètes et capture — tous les monstres restent achetables en boutique ; après chaque victoire, la capture est toujours proposée (on choisit un monstre de l'escouade vaincue, qui rejoint la réserve au ★1, exemplaires pris dans le stock commun ; jamais de Dragon ancien ni de Dragon noir), avec 2 autres choix tirés au hasard parmi unité, objet fusionné, matériaux, retire-objet et zennys ; après un boss ou une quête urgente, tout est doublé, capture comprise (boss des stages 1 et 2 : 2 exemplaires ★1).
+- **2026-11-27** : le boss du stage 3 est toujours un Dragon ancien ; le Dragon noir ne peut plus apparaître en boss qu'en mode infini (⚠️ 15 % de chances). Cadre de la version boss : bonus de statistiques et 2e compétence propre à chaque monstre, escorte réduite, pour tous les boss (monstres de coût 3, Dragons anciens, Dragons noirs) ; mécanique et contenu à valider.
+- **2026-11-27** : version boss — à mi-vie, le boss s'enrage (une fois) : sa compétence de boss remplace la sienne et son énergie se remplit, avec un bandeau « … s'enrage ! ». 11 compétences de boss validées (Rathalos, Legiana, Nargacuga, Lagiacrus, Kirin, Namielle, Safi'jiiva, Teostra, Fatalis, Alatreon, Dire Miralis). Bonus de statistiques par stage réglés par simulation pour des boss un peu plus durs qu'avant ; escorte réduite à la moitié des places et du budget.

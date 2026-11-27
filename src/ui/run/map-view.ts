@@ -5,7 +5,7 @@ import { el } from '../dom.ts';
 import { onRightClick, showPopover } from '../shared/popover.ts';
 import type { PortraitStore } from '../shared/portraits.ts';
 import { unitToken } from '../shared/token.ts';
-import { unitCard } from '../shared/unit-card.ts';
+import { placementCard } from '../shared/unit-card.ts';
 import type { RunController } from './controller.ts';
 
 /**
@@ -122,7 +122,7 @@ function mapDrawing(controller: RunController): SVGSVGElement {
       if (target !== null) {
         group.addEventListener('contextmenu', (event) => {
           event.preventDefault();
-          showPopover(unitCard(target.unit, target.equipment ?? [], target.rank ?? 1, target.bonus), event.clientX, event.clientY);
+          showPopover(placementCard(target), event.clientX, event.clientY);
         });
       }
       return group;
@@ -152,7 +152,7 @@ function choiceCard(controller: RunController, node: MapNode, portraits: Portrai
       el('span', { className: 'small muted', text: nodeReward(node.kind) }),
     ],
   );
-  return target === null ? card : onRightClick(card, () => unitCard(target.unit, target.equipment ?? [], target.rank ?? 1, target.bonus));
+  return target === null ? card : onRightClick(card, () => placementCard(target));
 }
 
 export function renderMap(controller: RunController, portraits: PortraitStore): HTMLElement {
