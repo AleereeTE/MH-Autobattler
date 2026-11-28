@@ -149,14 +149,15 @@ export function renderOutcome(
 
   if (state.phase === 'over') return endPanel(controller, onNewRun);
 
-  if (watching === null) return null;
-
+  // Récompense à choisir : aussi après une reprise de sauvegarde, quand plus aucun combat n'est regardé.
   if (state.phase === 'reward' && state.rewards !== null) {
+    const boss = watching?.boss ?? state.lastCombat?.boss ?? false;
+    const urgent = watching?.kind === 'urgent';
     return el('section', { className: 'panel outcome-panel won' }, [
-      el('h2', { text: watching.boss ? 'Boss vaincu !' : watching.kind === 'urgent' ? 'Quête urgente réussie !' : 'Victoire !' }),
-      watching.boss
+      el('h2', { text: boss ? 'Boss vaincu !' : urgent ? 'Quête urgente réussie !' : 'Victoire !' }),
+      boss
         ? el('p', { className: 'small', text: '+1 retire-objet, et des récompenses doublées.' })
-        : watching.kind === 'urgent'
+        : urgent
           ? el('p', { className: 'small', text: 'Récompenses doublées.' })
           : null,
       el('p', { className: 'muted small', text: 'Choisis une récompense :' }),
@@ -167,6 +168,8 @@ export function renderOutcome(
       ),
     ]);
   }
+
+  if (watching === null) return null;
 
   return el('section', { className: 'panel outcome-panel lost' }, [
     el('h2', { text: `Défaite (${state.defeats} / ${RUN_STRUCTURE.maxDefeats})` }),

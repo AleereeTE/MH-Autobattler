@@ -22,6 +22,7 @@ import { renderBench } from './bench-view.ts';
 import { RunController } from './controller.ts';
 import { renderHud } from './hud-view.ts';
 import { renderOutcome } from './outcome-view.ts';
+import { renderResumeScreen } from './resume-view.ts';
 import { renderOwnedTalents, renderTalentChoice } from './talent-view.ts';
 import { renderShop } from './shop-view.ts';
 import { renderMap } from './map-view.ts';
@@ -35,15 +36,33 @@ function newSeed(): number {
   return Date.now() % 2_147_483_647;
 }
 
-/** La run en cours survit aux changements d'onglet (elle n'est pas encore sauvegardée entre deux visites). */
+/** La run en cours survit aux changements d'onglet ; elle est aussi sauvegardée dans le navigateur. */
 let controller: RunController | null = null;
 
 /**
- * Page « Mode run » : préparation (boutique, réserve, plateau, équipement), combat regardé sur le plateau,
- * puis récompense ou défaite, jusqu'à la fin de la run.
+ * Page « Mode run ». Si une run est sauvegardée, un écran propose d'abord de la continuer
+ * ou d'en commencer une nouvelle.
  */
 export function mountRun(root: HTMLElement): () => void {
   const run = (controller ??= new RunController(newSeed()));
+  const saved = run.pendingSave;
+  if (saved === null) return mountRunPage(root, run);
+
+  let cleanup: (() => void) | null = null;
+  const choose = (resume: boolean): void => {
+    if (resume) run.resumeSave();
+    else run.discardSave();
+    cleanup = mountRunPage(root, run);
+  };
+  root.replaceChildren(renderResumeScreen(saved, () => choose(true), () => choose(false)));
+  return () => cleanup?.();
+}
+
+/**
+ * Page de la run : préparation (boutique, réserve, plateau, équipement), combat regardé sur le plateau,
+ * puis récompense ou défaite, jusqu'à la fin de la run.
+ */
+function mountRunPage(root: HTMLElement, run: RunController): () => void {
   const plan = teamPlan();
   let shownFight: CombatResult | null = null;
   let lastFight: CombatResult | null = null;
@@ -175,7 +194,7 @@ export function mountRun(root: HTMLElement): () => void {
     const owned = renderOwnedTalents(run);
     talentsSlot.replaceChildren(...(owned === null ? [] : [owned]));
     mapSlot.replaceChildren(...(run.state.phase === 'over' ? [] : [renderMap(run, portraits)]));
-    const stop = renderStop(run);
+    const stop = renderStop(run, portraits);
     stopSlot.replaceChildren(...(stop === null ? [] : [stop]));
     selectionSlot.replaceChildren(renderSelection(run));
     inventorySlot.replaceChildren(renderInventory(run));

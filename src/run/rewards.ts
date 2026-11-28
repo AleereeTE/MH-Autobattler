@@ -114,7 +114,7 @@ export function applyReward(state: RunState, option: RewardOption, unitId?: stri
 }
 
 /** Exemplaires ★1 pris dans le stock commun, qui rejoignent la réserve (avec les fusions éventuelles). */
-function giveCopies(state: RunState, unitId: string, copies: number): ActionResult {
+export function giveCopies(state: RunState, unitId: string, copies: number): ActionResult {
   if (!canReceive(state, unitId, copies)) return fail('Pas assez de place en réserve pour cette unité.');
   if (!takeCopies(state.pool, unitId, copies)) return fail('Cette unité n’est plus disponible.');
   for (let i = 0; i < copies; i++) receiveUnit(state, unitId);

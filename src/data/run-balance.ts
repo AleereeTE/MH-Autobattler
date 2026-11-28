@@ -147,6 +147,9 @@ export const MAP = {
   urgentQuests: [2, 3] as readonly [number, number],
   /** ⚠️ Première étape où une quête urgente peut apparaître. */
   urgentFromStep: 3,
+  /** ✅ Cases Événement (2026-11-28) : ⚠️ 1 à 2 par stage, entre les étapes 2 et 8. */
+  events: [1, 2] as readonly [number, number],
+  eventsToStep: 8,
 } as const;
 
 /** Quête urgente : ⚠️ escouade générée avec le budget de 3 chasses plus loin ; ✅ récompenses doublées. */

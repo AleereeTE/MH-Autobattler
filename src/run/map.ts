@@ -11,7 +11,7 @@ import type { RunState } from './state.ts';
  * puis le boss. On avance d'une étape à la fois en suivant un chemin.
  */
 
-export type MapNodeKind = 'hunt' | 'urgent' | 'forge' | 'merchant' | 'boss';
+export type MapNodeKind = 'hunt' | 'urgent' | 'forge' | 'merchant' | 'event' | 'boss';
 
 export interface MapNode {
   /** Étape dans le stage, de 1 à 10 (10 = boss). */
@@ -85,10 +85,10 @@ function addBranches(rng: Rng, next: number[][], to: number): void {
 }
 
 /** Place les cases spéciales sur des chasses normales, sans retirer la dernière chasse normale d'une étape. */
-function placeSpecials(rng: Rng, kinds: MapNodeKind[][], kind: MapNodeKind, count: number, fromStep: number): void {
+function placeSpecials(rng: Rng, kinds: MapNodeKind[][], kind: MapNodeKind, count: number, fromStep: number, toStep: number = MAP.stepsBeforeBoss): void {
   for (let placed = 0; placed < count; placed++) {
     const slots: [number, number][] = [];
-    for (let step = fromStep; step <= MAP.stepsBeforeBoss; step++) {
+    for (let step = fromStep; step <= toStep; step++) {
       const row = kinds[step - 1] ?? [];
       const hunts = row.filter((candidate) => candidate === 'hunt').length;
       if (hunts < 2 || row.includes(kind)) continue;
@@ -116,6 +116,7 @@ export function generateStageMap(stage: number, rng: Rng): StageMap {
   let forges = between(rng, MAP.forges);
   let merchants = between(rng, MAP.merchants);
   const urgent = between(rng, MAP.urgentQuests);
+  const events = between(rng, MAP.events);
 
   // ✅ L'étape 9 (juste avant le boss) propose toujours une forge ou un marchand.
   const beforeBoss: MapNodeKind = rng.chance(0.5) ? 'forge' : 'merchant';
@@ -128,6 +129,7 @@ export function generateStageMap(stage: number, rng: Rng): StageMap {
   placeSpecials(rng, kinds, 'urgent', urgent, MAP.urgentFromStep);
   placeSpecials(rng, kinds, 'forge', forges, 2);
   placeSpecials(rng, kinds, 'merchant', merchants, 2);
+  placeSpecials(rng, kinds, 'event', events, 2, MAP.eventsToStep);
 
   const steps: MapNode[][] = kinds.map((row, rowIndex) => {
     const step = rowIndex + 1;

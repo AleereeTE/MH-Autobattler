@@ -9,6 +9,8 @@ export interface Rng {
   next(): number;
   /** Renvoie true avec la probabilité donnée (entre 0 et 1). */
   chance(probability: number): boolean;
+  /** État interne : `createRng(rng.state())` reprend exactement la même suite (sauvegarde d'une run). */
+  state(): number;
 }
 
 export function createRng(seed: number): Rng {
@@ -29,5 +31,6 @@ export function createRng(seed: number): Rng {
       if (probability >= 1) return true;
       return next() < probability;
     },
+    state: () => state,
   };
 }

@@ -4,7 +4,9 @@ import type { MaterialId } from '../../data/items.ts';
 import {
   buy,
   buyItemRemover,
+  canContinueInfinite,
   buyMaterial,
+  chooseEvent,
   chooseNode,
   chooseReward,
   chooseTalent,
@@ -22,7 +24,9 @@ import {
   reforge,
   reroll,
   rerollTalent,
+  restoreRun,
   sellUnit,
+  serializeRun,
   unequip,
   unitAt,
   type ActionResult,
@@ -31,6 +35,7 @@ import {
   type RunUnit,
 } from '../../run/index.ts';
 import { browserRecordStore, type RecordStore } from './infinite-record.ts';
+import { browserRunSaveStore, type RunSaveStore } from './run-save.ts';
 
 /**
  * État de la page « Mode run » : la run, ce qui est sélectionné, le combat regardé.
@@ -59,17 +64,60 @@ export class RunController {
   watching: WatchedFight | null = null;
   /** À la forge : matériau de l'inventaire choisi pour être reforgé (sa position), ou null. */
   reforgeIndex: number | null = null;
+  /**
+   * Sur une case Événement : choix qui demande une précision avant d'être validé (unité à copier, matériaux à donner),
+   * avec les matériaux déjà désignés ; null sinon.
+   */
+  eventSelection: { readonly choice: number; readonly materials: readonly number[] } | null = null;
   /** Record du mode infini : la plus haute étape atteinte (0 = aucun). */
   infiniteRecord: number;
   /** Le mode infini qui vient de se terminer a battu le record. */
   newRecord = false;
+  /**
+   * Run sauvegardée trouvée à l'ouverture, en attendant que le joueur choisisse : la continuer ou en commencer
+   * une nouvelle. Tant qu'elle attend, rien n'est sauvegardé (elle n'est pas écrasée).
+   */
+  pendingSave: RunState | null;
   private readonly listeners = new Set<() => void>();
   private readonly records: RecordStore;
+  private readonly saves: RunSaveStore;
 
-  constructor(seed: number, records: RecordStore = browserRecordStore) {
+  constructor(seed: number, records: RecordStore = browserRecordStore, saves: RunSaveStore = browserRunSaveStore) {
     this.state = createRun(seed);
     this.records = records;
+    this.saves = saves;
     this.infiniteRecord = records.load();
+    this.pendingSave = restoreRun(saves.load());
+  }
+
+  /** Reprend la run sauvegardée, exactement où elle s'était arrêtée. */
+  resumeSave(): void {
+    if (this.pendingSave === null) return;
+    this.state = this.pendingSave;
+    this.pendingSave = null;
+    this.selection = null;
+    this.watching = null;
+    this.notice = null;
+    this.reforgeIndex = null;
+    this.eventSelection = null;
+    this.changed();
+  }
+
+  /** Abandonne la run sauvegardée : la nouvelle run la remplace. */
+  discardSave(): void {
+    this.pendingSave = null;
+    this.saves.clear();
+    this.changed();
+  }
+
+  /**
+   * ✅ Sauvegarde après chaque changement (reprise exacte). Une run finie est effacée, sauf une run gagnée
+   * qui peut encore passer en mode infini.
+   */
+  private persist(): void {
+    if (this.pendingSave !== null) return;
+    if (this.state.phase === 'over' && !canContinueInfinite(this.state)) this.saves.clear();
+    else this.saves.save(serializeRun(this.state));
   }
 
   subscribe(listener: () => void): () => void {
@@ -78,11 +126,14 @@ export class RunController {
   }
 
   private changed(): void {
+    this.persist();
     for (const listener of this.listeners) listener();
   }
 
   private apply(result: ActionResult): void {
     this.notice = result.ok ? null : result.reason;
+    // Toute action ferme la précision d'un choix d'événement (l'inventaire a pu bouger).
+    this.eventSelection = null;
     this.changed();
   }
 
@@ -106,6 +157,7 @@ export class RunController {
     this.watching = null;
     this.notice = null;
     this.reforgeIndex = null;
+    this.eventSelection = null;
     this.newRecord = false;
     this.changed();
   }
@@ -280,5 +332,29 @@ export class RunController {
     const result = chooseReward(this.state, index, unitId);
     if (result.ok) this.watching = null;
     this.apply(result);
+  }
+
+  /** Case Événement : fait un choix (avec l'unité ou les matériaux désignés s'il en faut). */
+  chooseEvent(index: number, params: { readonly unitId?: string; readonly materialIndexes?: readonly number[] } = {}): void {
+    const result = chooseEvent(this.state, index, params);
+    if (result.ok) this.eventSelection = null;
+    this.apply(result);
+  }
+
+  /** Case Événement : ouvre la précision d'un choix (Entraînement, Commission), ou la referme. */
+  selectEventChoice(index: number | null): void {
+    this.eventSelection = index === null ? null : { choice: index, materials: [] };
+    this.changed();
+  }
+
+  /** Commission : désigne (ou retire) un matériau de l'inventaire à donner. */
+  toggleEventMaterial(inventoryIndex: number): void {
+    const selection = this.eventSelection;
+    if (selection === null) return;
+    const materials = selection.materials.includes(inventoryIndex)
+      ? selection.materials.filter((index) => index !== inventoryIndex)
+      : [...selection.materials, inventoryIndex];
+    this.eventSelection = { choice: selection.choice, materials };
+    this.changed();
   }
 }

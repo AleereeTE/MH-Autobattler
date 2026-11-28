@@ -4,11 +4,13 @@ import { isAtForge, isAtMerchant } from '../../run/index.ts';
 import { button, el } from '../dom.ts';
 import { onRightClick } from '../shared/popover.ts';
 import { materialPreview } from '../shared/previews.ts';
+import type { PortraitStore } from '../shared/portraits.ts';
 import type { RunController } from './controller.ts';
+import { renderEvent } from './event-view.ts';
 import { NODE_INFO } from './map-view.ts';
 
 /**
- * Panneaux des cases sans combat (game-design §2.1) : la forge et le marchand.
+ * Panneaux des cases sans combat (game-design §2.1) : la forge, le marchand et l'événement (event-view.ts).
  * La boutique reste ouverte pendant ces étapes ; « Reprendre la route » ramène à la carte.
  */
 
@@ -103,11 +105,11 @@ function renderMerchant(controller: RunController): HTMLElement {
   ]);
 }
 
-/** Panneau de la case actuelle s'il s'agit d'une forge ou d'un marchand (pendant la préparation). */
-export function renderStop(controller: RunController): HTMLElement | null {
+/** Panneau de la case actuelle s'il s'agit d'une forge, d'un marchand ou d'un événement (pendant la préparation). */
+export function renderStop(controller: RunController, portraits: PortraitStore): HTMLElement | null {
   if (controller.watching !== null) return null;
   const { state } = controller;
   if (isAtForge(state)) return renderForge(controller);
   if (isAtMerchant(state)) return renderMerchant(controller);
-  return null;
+  return renderEvent(controller, portraits);
 }

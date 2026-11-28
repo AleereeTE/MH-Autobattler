@@ -3,6 +3,8 @@ import { randomInt } from '../core/random.ts';
 import { createRng } from '../core/rng.ts';
 import { ECONOMY, FORGE, REWARDS, RUN_STRUCTURE, URGENT_QUEST } from '../data/run-balance.ts';
 import { roundIncome } from './economy.ts';
+import { generateSquad } from './enemies.ts';
+import { chooseEventOption, drawEvent, type EventChoiceParams } from './events.ts';
 import { currentNode, generateStageMap, huntNumber, isCombatNode, reachableNodes } from './map.ts';
 import { drawMerchantStock } from './merchant.ts';
 import { canContinueInfinite } from './infinite.ts';
@@ -19,7 +21,7 @@ import { huntInfo } from './structure.ts';
 /**
  * Déroulement d'une run (game-design §2) : choix d'un talent de chasseur au début des stages 1 à 3 →
  * choix d'une case sur la carte → préparation → combat
- * (ou forge, marchand) → résultat (récompense) → case suivante, jusqu'à la victoire contre le boss
+ * (ou forge, marchand, événement) → résultat (récompense) → case suivante, jusqu'à la victoire contre le boss
  * de l'étape 30 ou à la 3e défaite. Une run gagnée peut continuer en mode infini (voir infinite.ts),
  * jusqu'à la 3e défaite.
  */
@@ -48,6 +50,10 @@ export function createRun(seed: number): RunState {
     enemy: [],
     merchant: null,
     reforgesLeft: 0,
+    event: null,
+    seenEvents: [],
+    nextHuntReinforced: false,
+    nextCombatBonus: null,
     combatSeed: 0,
     wonLastCombat: false,
     rewards: null,
@@ -71,7 +77,7 @@ export function chooseNode(state: RunState, index: number): ActionResult {
   return OK;
 }
 
-/** Début d'un tour sur la case choisie : revenus, boutique relancée gratuitement, escouade, forge ou marchand. */
+/** Début d'un tour sur la case choisie : revenus, boutique relancée gratuitement, escouade, forge, marchand ou événement. */
 export function startRound(state: RunState): void {
   state.zennys += roundIncome(state.zennys, state.wonLastCombat, maxInterest(state)) + talentIncome(state);
   state.wonLastCombat = false;
@@ -80,8 +86,16 @@ export function startRound(state: RunState): void {
   const node = currentNode(state);
   // Un boss perdu se réaffronte à l'identique : l'escouade est celle de la case, générée avec la carte.
   state.enemy = node === null ? [] : [...node.squad];
+  // ✅ Œuf de wyverne, Monstre endormi : la prochaine chasse (hors boss) est générée comme une quête urgente.
+  if (state.nextHuntReinforced && (node?.kind === 'hunt' || node?.kind === 'urgent')) {
+    const extra = (node.kind === 'urgent' ? URGENT_QUEST.extraHunts : 0) + URGENT_QUEST.extraHunts;
+    state.enemy = generateSquad(state.hunt, state.rng, extra);
+    state.nextHuntReinforced = false;
+  }
   state.merchant = node?.kind === 'merchant' ? drawMerchantStock(state.rng) : null;
   state.reforgesLeft = node?.kind === 'forge' ? FORGE.reforges : 0;
+  state.event = null;
+  if (node?.kind === 'event') drawEvent(state);
   state.combatSeed = randomInt(state.rng, 2 ** 31);
   state.rewards = null;
   state.phase = 'prep';
@@ -101,14 +115,15 @@ function goToMap(state: RunState): void {
   state.enemy = [];
   state.merchant = null;
   state.reforgesLeft = 0;
+  state.event = null;
   state.rewards = null;
   state.phase = 'map';
   if (newStage && talentChoiceDue(stage)) openTalentChoice(state);
 }
 
-/** Bonus de combat des talents ajoutés au placement d'une unité du joueur. */
+/** Bonus de combat des talents (et du Repas de chasse) ajoutés au placement d'une unité du joueur. */
 function withTalents(state: RunState, placement: Placement): Placement {
-  const bonuses = talentCombatBonuses(state, placement.unit);
+  const bonuses = [...talentCombatBonuses(state, placement.unit), ...(state.nextCombatBonus === null ? [] : [state.nextCombatBonus])];
   return bonuses.length === 0 ? placement : { ...placement, bonus: sumBonuses(bonuses) };
 }
 
@@ -137,6 +152,8 @@ export function applyCombatResult(state: RunState, winner: Winner): void {
   const urgent = currentNode(state)?.kind === 'urgent';
   const won = winner === 'player'; // ✅ une égalité est déjà comptée comme une victoire par le moteur
   state.lastCombat = { hunt: state.hunt, boss: info.isBoss, won };
+  // Le Repas de chasse ne vaut que pour un combat.
+  state.nextCombatBonus = null;
 
   if (won) {
     state.wonLastCombat = true;
@@ -201,7 +218,15 @@ export function chooseReward(state: RunState, index: number, unitId?: string): A
   return OK;
 }
 
-/** Quitte une case sans combat (forge, marchand) pour reprendre la route. */
+/**
+ * Fait un choix sur une case Événement ; `params` précise l'unité (Entraînement) ou les matériaux (Commission).
+ * Un choix « partir » reprend tout de suite la route.
+ */
+export function chooseEvent(state: RunState, index: number, params: EventChoiceParams = {}): ActionResult {
+  return chooseEventOption(state, index, params, () => leaveNode(state));
+}
+
+/** Quitte une case sans combat (forge, marchand, événement) pour reprendre la route. */
 export function leaveNode(state: RunState): ActionResult {
   const node = currentNode(state);
   if (state.phase !== 'prep' || node === null || isCombatNode(node.kind)) return fail('Il faut d’abord livrer le combat de cette case.');

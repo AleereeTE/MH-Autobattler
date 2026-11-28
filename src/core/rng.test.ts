@@ -29,4 +29,11 @@ describe('createRng', () => {
       expect(rng.chance(1)).toBe(true);
     }
   });
+
+  it('state() permet de reprendre exactement la même suite', () => {
+    const rng = createRng(11);
+    for (let i = 0; i < 7; i++) rng.next();
+    const resumed = createRng(rng.state());
+    expect(Array.from({ length: 10 }, () => resumed.next())).toEqual(Array.from({ length: 10 }, () => rng.next()));
+  });
 });

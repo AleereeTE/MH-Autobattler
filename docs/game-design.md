@@ -44,9 +44,9 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 | Quête urgente | Une chasse plus difficile : ⚠️ escouade générée avec le budget de 3 chasses plus loin (sans dépasser les limites de coût et de rang du stage). En cas de victoire, **récompenses doublées** comme après un boss. ⚠️ Une défaite compte comme une défaite normale |
 | Forge (sans combat) | Pendant l'étape, **les objets se retirent des unités sans retire-objet** (on refait ses builds), et on peut **reforger jusqu'à 2 matériaux** de l'inventaire en matériaux au choix |
 | Marchand (sans combat) | ⚠️ 4 matériaux tirés au hasard à 3 zennys pièce, et un retire-objet à 4 zennys |
-| Boutique | Disponible à chaque étape, y compris à la forge et chez le marchand |
-| Fréquence | ⚠️ Par stage, environ 1 à 2 forges, 1 à 2 marchands et 2 à 3 quêtes urgentes. L'étape 1 n'a que des chasses ; l'étape 9 (avant le boss) propose toujours une forge ou un marchand ; chaque étape garde au moins une chasse normale |
-| Plus tard | Cases « Événement » (une petite situation avec un choix) |
+| Événement (sans combat) | ✅ Une petite situation avec un choix (2026-11-28). La carte n'affiche que « ? » : l'événement se découvre en arrivant. Un choix, un compte rendu, puis on reprend la route ; un choix « partir » reprend tout de suite la route. Pas de combat. Un événement ne revient pas dans la run tant qu'il en reste d'autres à rencontrer. Les 10 événements sont dans prototype-content.md |
+| Boutique | Disponible à chaque étape, y compris à la forge, chez le marchand et sur un événement |
+| Fréquence | ⚠️ Par stage, environ 1 à 2 forges, 1 à 2 marchands, 2 à 3 quêtes urgentes et 1 à 2 événements (entre les étapes 2 et 8). L'étape 1 n'a que des chasses ; l'étape 9 (avant le boss) propose toujours une forge ou un marchand ; chaque étape garde au moins une chasse normale |
 
 ### 2.2 Mode infini
 
@@ -58,6 +58,15 @@ Les valeurs numériques sont des valeurs de départ, ajustables pendant l'équil
 | Fin | ✅ Le **compteur de défaites de la run est conservé** : la 3e défaite (run et mode infini confondus) termine le mode infini |
 | Économie | ✅ Tout continue comme pendant la run : revenus, intérêts, boutique, niveaux, récompenses 1 parmi 3 |
 | Record | La **plus haute étape atteinte** est gardée dans le navigateur et affichée en fin de run |
+
+### 2.3 Sauvegarde
+
+| Élément | Décision |
+|---|---|
+| Quand | ✅ **Après chaque action** : la run est gardée dans le navigateur (une seule run sauvegardée) |
+| Reprise | ✅ **Reprise exacte** : même carte, même boutique, même résultat de combat, hasard compris. Recharger la page ne relance pas la boutique et n'annule pas un combat perdu |
+| Ouverture du jeu | ✅ **Écran de choix** : « Continuer la run » (stage, étape, défaites, zennys, niveau, unités) ou « Nouvelle run », qui remplace la sauvegarde |
+| Fin de run | La sauvegarde d'une run perdue est effacée ; celle d'une run gagnée est gardée tant que le mode infini peut être lancé |
 
 ### Déroulement d'un tour
 
@@ -447,8 +456,8 @@ L'équivalent des augments de TFT (validé le 2026-11-24).
 
 
 ### Confort de jeu
-8. Bouton d'accélération ×2 des combats ?
-9. Sauvegarde en cours de run ?
+8. ~~Bouton d'accélération ×2 des combats ?~~ Déjà là : vitesses ×1, ×2 et ×4 en mode run (et ×0,5 dans le bac à sable).
+9. ~~Sauvegarde en cours de run ?~~ Tranché le 2026-11-28 (section 2.3).
 
 ### Contenu
 10. ~~Effets des 36 objets.~~ Tranché le 2026-11-23 (prototype-content.md).
@@ -487,3 +496,5 @@ L'équivalent des augments de TFT (validé le 2026-11-24).
 - **2026-11-26** : récompenses complètes et capture — tous les monstres restent achetables en boutique ; après chaque victoire, la capture est toujours proposée (on choisit un monstre de l'escouade vaincue, qui rejoint la réserve au ★1, exemplaires pris dans le stock commun ; jamais de Dragon ancien ni de Dragon noir), avec 2 autres choix tirés au hasard parmi unité, objet fusionné, matériaux, retire-objet et zennys ; après un boss ou une quête urgente, tout est doublé, capture comprise (boss des stages 1 et 2 : 2 exemplaires ★1).
 - **2026-11-27** : le boss du stage 3 est toujours un Dragon ancien ; le Dragon noir ne peut plus apparaître en boss qu'en mode infini (⚠️ 15 % de chances). Cadre de la version boss : bonus de statistiques et 2e compétence propre à chaque monstre, escorte réduite, pour tous les boss (monstres de coût 3, Dragons anciens, Dragons noirs) ; mécanique et contenu à valider.
 - **2026-11-27** : version boss — à mi-vie, le boss s'enrage (une fois) : sa compétence de boss remplace la sienne et son énergie se remplit, avec un bandeau « … s'enrage ! ». 11 compétences de boss validées (Rathalos, Legiana, Nargacuga, Lagiacrus, Kirin, Namielle, Safi'jiiva, Teostra, Fatalis, Alatreon, Dire Miralis). Bonus de statistiques par stage réglés par simulation pour des boss un peu plus durs qu'avant ; escorte réduite à la moitié des places et du budget.
+- **2026-11-28** : sauvegarde du mode run — après chaque action, une seule run, reprise exacte (hasard compris : recharger n'annule rien) ; à l'ouverture, un écran propose « Continuer la run » ou « Nouvelle run ». Les vitesses ×2 et ×4 des combats existaient déjà (question 8).
+- **2026-11-28** : cases Événement — 1 à 2 par stage (étapes 2 à 8), affichées « ? » et découvertes en arrivant, sans combat, sans répétition dans une run tant qu'il en reste ; 10 événements validés : Boîte du Felyne, Œuf de wyverne, Chasseur blessé, Cantine du campement, Médecin de la Guilde, Commission de recherche, Monstre endormi, Caravane renversée, Pari des Felynes, Stèle ancienne (détail dans prototype-content.md).

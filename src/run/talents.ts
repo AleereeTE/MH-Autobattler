@@ -67,12 +67,15 @@ function drawOffer(state: RunState, tier: TalentTier, current: readonly TalentOf
   return { talentId: talent.id, traitId, unitId, rerolled };
 }
 
-/** Ouvre le choix de talent du stage : rareté tirée au hasard, puis 3 propositions de cette rareté. */
-export function openTalentChoice(state: RunState): void {
-  const tier = TALENT_TIERS[weightedIndex(state.rng, TALENT_TIERS.map((candidate) => TALENT_TIER_WEIGHTS[candidate]))] ?? 'silver';
+/**
+ * Ouvre un choix de talent : au début d'un stage, rareté tirée au hasard, puis 3 propositions de cette rareté.
+ * Une Stèle ancienne impose la rareté et interdit les relances (`rerolls: false`).
+ */
+export function openTalentChoice(state: RunState, options: { readonly tier?: TalentTier; readonly rerolls?: boolean } = {}): void {
+  const tier = options.tier ?? TALENT_TIERS[weightedIndex(state.rng, TALENT_TIERS.map((candidate) => TALENT_TIER_WEIGHTS[candidate]))] ?? 'silver';
   const offers: TalentOffer[] = [];
   for (let i = 0; i < TALENT_CHOICE.offers; i++) {
-    const offer = drawOffer(state, tier, offers, false);
+    const offer = drawOffer(state, tier, offers, options.rerolls === false);
     if (offer !== null) offers.push(offer);
   }
   state.talentChoice = { tier, offers };
@@ -135,7 +138,7 @@ function applyImmediate(state: RunState, effect: TalentEffect, offer: TalentOffe
   }
 }
 
-/** Prend une des propositions : effets immédiats, talent ajouté à la run, puis la carte du stage. */
+/** Prend une des propositions : effets immédiats, talent ajouté à la run, puis la carte du stage (ou la case Événement). */
 export function chooseTalent(state: RunState, index: number): ActionResult {
   const choice = state.talentChoice;
   if (state.phase !== 'talent' || choice === null) return fail('Aucun talent à choisir.');
@@ -151,6 +154,7 @@ export function chooseTalent(state: RunState, index: number): ActionResult {
   }
   state.talents.push({ talentId: offer.talentId, traitId: offer.traitId, unitId: offer.unitId });
   state.talentChoice = null;
-  state.phase = 'map';
+  // Talent d'une Stèle ancienne : retour sur la case Événement, pour reprendre la route.
+  state.phase = state.event !== null ? 'prep' : 'map';
   return OK;
 }

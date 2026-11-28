@@ -3,6 +3,7 @@ import { currentNode, reachableNodes } from '../../run/index.ts';
 import { board, findNode, giveUnit, placeOnNode, skipTalentChoice } from '../../test-utils/run.ts';
 import { RunController } from './controller.ts';
 import { memoryRecordStore, type RecordStore } from './infinite-record.ts';
+import { memoryRunSaveStore } from './run-save.ts';
 
 /** Contrôleur en début de run, choix de talent écarté (sur la carte du stage 1). */
 function newController(): RunController {
@@ -151,5 +152,62 @@ describe('RunController', () => {
     controller.newRun(5);
     expect(controller.state.units).toEqual([]);
     expect(controller.state).toMatchObject({ hunt: 1, zennys: 5, seed: 5, phase: 'talent', talents: [] });
+  });
+});
+
+describe('RunController — sauvegarde de la run', () => {
+  /** Contrôleur avec un stockage de sauvegarde en mémoire, talent pris, sur la première case. */
+  function savedController(saves = memoryRunSaveStore()) {
+    const controller = new RunController(21, memoryRecordStore(), saves);
+    controller.chooseTalent(0);
+    controller.chooseNode(0);
+    controller.buy(0);
+    return { controller, saves };
+  }
+
+  it('sauvegarde après chaque action', () => {
+    const { controller, saves } = savedController();
+    expect(saves.data).not.toBeNull();
+    const zennys = controller.state.zennys;
+    controller.buy(1);
+    expect(saves.data).toContain(`"zennys":${controller.state.zennys}`);
+    expect(controller.state.zennys).not.toBe(zennys);
+  });
+
+  it('à l’ouverture, propose la run sauvegardée sans l’écraser, puis la reprend exactement', () => {
+    const { controller, saves } = savedController();
+    const saved = saves.data;
+    const reopened = new RunController(99, memoryRecordStore(), saves);
+    expect(reopened.pendingSave).not.toBeNull();
+    expect(reopened.state.seed).toBe(99);
+    // Tant que le joueur n'a pas choisi, la sauvegarde reste intacte.
+    reopened.rerollTalent(0);
+    expect(saves.data).toBe(saved);
+
+    reopened.resumeSave();
+    expect(reopened.pendingSave).toBeNull();
+    expect(reopened.state).toMatchObject({ seed: 21, hunt: 1, phase: 'prep', zennys: controller.state.zennys, talents: controller.state.talents });
+    expect(reopened.state.units).toEqual(controller.state.units);
+    expect(reopened.state.shop).toEqual(controller.state.shop);
+  });
+
+  it('« Nouvelle run » abandonne la sauvegarde : la nouvelle run la remplace', () => {
+    const { saves } = savedController();
+    const reopened = new RunController(99, memoryRecordStore(), saves);
+    reopened.discardSave();
+    expect(reopened.pendingSave).toBeNull();
+    expect(reopened.state.seed).toBe(99);
+    expect(saves.data).toContain('"seed":99');
+  });
+
+  it('efface la sauvegarde d’une run perdue, mais garde celle d’une run gagnée (mode infini possible)', () => {
+    const { controller, saves } = savedController();
+    Object.assign(controller.state, { phase: 'over', outcome: 'victory', hunt: 30 });
+    controller.stopWatching();
+    expect(saves.data).not.toBeNull();
+    Object.assign(controller.state, { outcome: 'defeat' });
+    controller.stopWatching();
+    expect(saves.data).toBeNull();
+    expect(new RunController(5, memoryRecordStore(), saves).pendingSave).toBeNull();
   });
 });

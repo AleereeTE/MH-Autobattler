@@ -1,7 +1,8 @@
 /**
  * API publique du mode run. L'interface n'importe que depuis ce fichier.
  */
-export { createRun, chooseNode, chooseReward, combatSetup, continueInfinite, fight, leaveNode, startRound } from './flow.ts';
+export { createRun, chooseEvent, chooseNode, chooseReward, combatSetup, continueInfinite, fight, leaveNode, startRound } from './flow.ts';
+export { currentEvent, eventChoiceBlocker, extraCopyCandidates, looseMaterialIndexes, type EventChoiceParams } from './events.ts';
 export { canContinueInfinite, infiniteGrowth, isInfiniteHunt } from './infinite.ts';
 export { canTakeTalent, chooseTalent, rerollTalent } from './talents.ts';
 export { boardCapacity, maxInterest, talentTraitBonus } from './talent-effects.ts';
@@ -13,7 +14,8 @@ export { boardUnits, canReceive, findRunUnit, isPlayerHex, moveUnit, sellUnit, u
 export { equipFromInventory, unequip } from './inventory.ts';
 export { canTakeReward } from './rewards.ts';
 export { isCapturable } from './capture.ts';
+export { restoreRun, serializeRun } from './save.ts';
 export { copiesForRank, interest, levelUpCost, roundIncome, sellValue } from './economy.ts';
 export { costOdds } from './pool.ts';
 export { TOTAL_HUNTS, huntInfo, type HuntInfo } from './structure.ts';
-export type { ActionResult, CaptureTarget, LastCombat, Location, OwnedTalent, RewardOption, RunPhase, RunState, RunUnit, TalentChoice, TalentOffer } from './state.ts';
+export type { ActionResult, CaptureTarget, EventState, LastCombat, Location, OwnedTalent, RewardOption, RunPhase, RunState, RunUnit, TalentChoice, TalentOffer } from './state.ts';

@@ -18,6 +18,7 @@ export const NODE_INFO: Readonly<Record<MapNodeKind, { readonly symbol: string; 
   urgent: { symbol: '❗', name: 'Quête urgente' },
   forge: { symbol: '🔨', name: 'Forge' },
   merchant: { symbol: '💰', name: 'Marchand' },
+  event: { symbol: '❓', name: 'Événement' },
   boss: { symbol: '👹', name: 'Boss' },
 };
 
@@ -34,6 +35,8 @@ export function nodeReward(kind: MapNodeKind): string {
       return `Objets déplaçables sans retire-objet, ${FORGE.reforges} matériaux à reforger`;
     case 'merchant':
       return `${MERCHANT.materialsOffered} matériaux à ${MERCHANT.materialPrice} zennys, un retire-objet à ${MERCHANT.itemRemoverPrice}`;
+    case 'event':
+      return 'Une situation avec un choix, découverte en arrivant';
   }
 }
 

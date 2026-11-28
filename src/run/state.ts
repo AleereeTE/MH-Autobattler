@@ -1,7 +1,7 @@
 import type { Placement } from '../combat/index.ts';
 import type { Hex } from '../core/hex.ts';
 import type { Rng } from '../core/rng.ts';
-import type { StarRank, TraitId } from '../data/definitions.ts';
+import type { StarRank, StatBonus, TraitId } from '../data/definitions.ts';
 import type { TalentTier } from '../data/talents.ts';
 import type { Equipment, EquipmentSlot, MaterialId } from '../data/items.ts';
 import type { StageMap } from './map.ts';
@@ -61,6 +61,12 @@ export interface TalentChoice {
   offers: TalentOffer[];
 }
 
+/** Événement de la case en cours : son identifiant, et le compte rendu du choix une fois fait (null avant). */
+export interface EventState {
+  readonly eventId: string;
+  result: readonly string[] | null;
+}
+
 /** Talent de chasseur pris pendant la run, avec son trait ou son unité tirés. */
 export interface OwnedTalent {
   readonly talentId: string;
@@ -110,6 +116,14 @@ export interface RunState {
   merchant: MerchantStock | null;
   /** Matériaux qu'il reste à reforger, quand on est sur une forge. */
   reforgesLeft: number;
+  /** Événement de la case en cours, quand on est sur une case Événement. */
+  event: EventState | null;
+  /** Événements déjà rencontrés pendant la run (ils ne reviennent pas tant qu'il en reste d'autres). */
+  seenEvents: string[];
+  /** La prochaine chasse (hors boss) sera renforcée comme une quête urgente (Œuf de wyverne, Monstre endormi). */
+  nextHuntReinforced: boolean;
+  /** Bonus de toute l'équipe au prochain combat (Repas de chasse), ou null. */
+  nextCombatBonus: StatBonus | null;
   /** Graine du prochain combat. */
   combatSeed: number;
   /** Bonus de victoire à verser au début du prochain tour. */

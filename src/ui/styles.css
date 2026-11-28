@@ -1004,6 +1004,65 @@ details {
   gap: 8px;
 }
 
+/* Case Événement : la situation, ses choix et le compte rendu. */
+.event-text {
+  font-style: italic;
+}
+
+.event-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.event-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.event-choice:hover:not(:disabled),
+.event-choice[aria-pressed='true'] {
+  border-color: var(--accent);
+}
+
+.event-choice:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.event-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.event-result {
+  padding: 8px 10px;
+  border-left: 3px solid var(--accent);
+}
+
+.event-result p {
+  margin: 0 0 4px;
+}
+
+/* Écran de choix à l'ouverture, quand une run est sauvegardée. */
+.resume-panel {
+  max-width: 480px;
+  margin: 24px auto;
+  border-color: var(--accent);
+}
+
 .new-record {
   color: var(--accent);
   font-weight: 700;

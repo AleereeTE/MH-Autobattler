@@ -267,6 +267,23 @@ Règles : [game-design.md](game-design.md), sections 2, 3.4, 7.2, 8, 9 et 11. �
 | Boss (chasses 10 et 20) | Un monstre de coût 3 au ★3 en version boss, plus une escorte réduite (⚠️ moitié des places restantes et moitié du budget de la chasse, au moins 1 monstre) |
 | Boss (chasse 30) | Un Dragon ancien au ★2 en version boss, plus une escorte réduite de la même façon (✅ jamais de Dragon noir depuis le 2026-11-27) |
 
+### Cases Événement (game-design §2.1)
+
+✅ Les 10 événements et leurs choix sont validés (2026-11-28). ⚠️ Toutes les valeurs sont provisoires. « Prochaine chasse renforcée » : la prochaine chasse (hors boss) a l'escouade d'une quête urgente (budget de 3 étapes plus loin), sans récompenses doublées.
+
+| Événement | Choix |
+|---|---|
+| Boîte du Felyne | 5 z : un objet complet au hasard (1 chance sur 2), sinon un matériau · Partir |
+| Œuf de wyverne | +12 z, mais prochaine chasse renforcée · Le laisser |
+| Chasseur blessé | 3 z : un chasseur ★1 tiré comme en boutique rejoint la réserve · Passer son chemin |
+| Cantine du campement | Repas de chasse : toute l'équipe +20 % de PV au prochain combat · Entraînement : +1 exemplaire d'une unité possédée, au choix (pris dans le stock) |
+| Médecin de la Guilde | 15 z : efface une défaite (s'il y en a une) · Partir |
+| Commission de recherche | 2 matériaux de l'inventaire, au choix : +12 z · Refuser |
+| Monstre endormi | Tenter la capture : 60 % de chances qu'un monstre de coût 3 au hasard rejoigne la réserve au ★1, sinon prochaine chasse renforcée · Prélever un matériau en douce : +1 matériau |
+| Caravane renversée | Fouiller l'épave : 2 matériaux au hasard · Escorter les marchands : +8 z |
+| Pari des Felynes | Miser 5 z : 1 chance sur 2 d'en gagner 12 · Ne pas jouer |
+| Stèle ancienne | 10 z : un talent de chasseur argent au choix parmi 3, sans relance, en plus de ceux de la run · Partir |
+
 ### Version boss (game-design §9)
 
 ✅ Compétences validées le 2026-11-27. ⚠️ Toutes les valeurs sont provisoires. À mi-vie, le boss s'enrage : sa compétence de boss remplace la sienne et son énergie se remplit.

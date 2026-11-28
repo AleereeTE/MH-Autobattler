@@ -43,6 +43,8 @@ function offerCard(controller: RunController, offer: TalentOffer, index: number,
     ],
   );
   card.disabled = !available;
+  // Stèle ancienne : pas de relance du tout.
+  if (controller.state.event !== null) return el('div', { className: 'talent-offer' }, [withPreview(card, offer)]);
   const reroll = button(offer.rerolled ? 'Déjà relancé' : 'Relancer', () => controller.rerollTalent(index), 'button small');
   reroll.disabled = offer.rerolled;
   return el('div', { className: 'talent-offer' }, [withPreview(card, offer), reroll]);
@@ -57,7 +59,10 @@ export function renderTalentChoice(controller: RunController, portraits: Portrai
     el('h2', { text: `Talent de chasseur · ${TALENT_TIER_NAMES[choice.tier]}` }),
     el('p', {
       className: 'muted small',
-      text: `Début du stage ${huntInfo(state.hunt).stage} : choisis un talent pour le reste de la run. Chaque proposition peut être relancée une fois. Clic droit : unité ou trait concerné.`,
+      text:
+        state.event !== null
+          ? 'Stèle ancienne : choisis un talent pour le reste de la run, en plus des autres. Pas de relance. Clic droit : unité ou trait concerné.'
+          : `Début du stage ${huntInfo(state.hunt).stage} : choisis un talent pour le reste de la run. Chaque proposition peut être relancée une fois. Clic droit : unité ou trait concerné.`,
     }),
     el(
       'div',
